@@ -206,3 +206,5 @@ MIT. See [`LICENSE`](LICENSE).
 Their licenses and notices are in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). If you like ds-lead, go star them too.
 
 `solve` follows the case-interview approach in V. Cheng, _Case Interview Secrets_ (Innovation Press, 2012), and M. P. Cosentino, _Case in Point_, 9th ed. (Burgee Press, 2016); the wording is our own.
+
+Each skill lists its sources in `skills/<name>/SOURCES.md`: which idea, number or quote comes from which source, and the full reference. The skill files carry no citations, so they stay short for the agent.

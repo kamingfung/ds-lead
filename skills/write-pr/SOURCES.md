@@ -6,12 +6,11 @@ The rule "keep a PR small enough to review in about 30 minutes" is the author's 
 
 ## Where each source is used
 
-<!-- prettier-ignore -->
-| Idea, number or quote | Where in the skill | Source | How used |
-| --- | --- | --- | --- |
+| Idea, number or quote                                                         | Where in the skill     | Source                                 | How used          |
+| ----------------------------------------------------------------------------- | ---------------------- | -------------------------------------- | ----------------- |
 | A description is a permanent record; start with a short imperative first line | Write a PR Description | Google, "Writing good CL descriptions" | idea, paraphrased |
-| Keep a change small and split larger work into a stack | Rules per Section | Google, "Small CLs" | idea, paraphrased |
-| What changed, why, and how to test; notes for the reviewer | Template | Microsoft, "Pull Requests" | idea, paraphrased |
+| Keep a change small and split larger work into a stack                        | Rules per Section      | Google, "Small CLs"                    | idea, paraphrased |
+| What changed, why, and how to test; notes for the reviewer                    | Template               | Microsoft, "Pull Requests"             | idea, paraphrased |
 
 ## References
 

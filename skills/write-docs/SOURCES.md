@@ -4,15 +4,14 @@ The wording of `write-docs` is new. This table says which idea, number or quote 
 
 ## Where each source is used
 
-<!-- prettier-ignore -->
-| Idea, number or quote | Where in the skill | Source | How used |
-| --- | --- | --- | --- |
-| Use positive form: say what is rather than what is not | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased |
-| Omit needless words | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased |
-| Use parallel form for coordinate ideas | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased |
-| Keep related words together | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased |
-| Put the emphatic words at the end of the sentence | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased |
-| Short, direct sentences in the active voice; about 20 words per step and 25 per description | 3. Sentences & Steps | ASD-STE100, Simplified Technical English | numbers and idea, paraphrased |
+| Idea, number or quote                                                                       | Where in the skill   | Source                                    | How used                      |
+| ------------------------------------------------------------------------------------------- | -------------------- | ----------------------------------------- | ----------------------------- |
+| Use positive form: say what is rather than what is not                                      | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased             |
+| Omit needless words                                                                         | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased             |
+| Use parallel form for coordinate ideas                                                      | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased             |
+| Keep related words together                                                                 | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased             |
+| Put the emphatic words at the end of the sentence                                           | 3. Sentences & Steps | Strunk and White, _The Elements of Style_ | idea, paraphrased             |
+| Short, direct sentences in the active voice; about 20 words per step and 25 per description | 3. Sentences & Steps | ASD-STE100, Simplified Technical English  | numbers and idea, paraphrased |
 
 ## References
 

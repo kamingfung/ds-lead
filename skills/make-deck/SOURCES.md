@@ -4,11 +4,10 @@ The wording of `make-deck` is new. This table says which idea, number or quote c
 
 ## Where each source is used
 
-<!-- prettier-ignore -->
-| Idea, number or quote | Where in the skill | Source | How used |
-| --- | --- | --- | --- |
-| Write every slide title as a full-sentence claim before any body; the titles alone tell the story | Step 1: Outline Titles First; Content Rules | Minto, _The Pyramid Principle_ | idea, paraphrased |
-| Pick the visual by the relationship in the data: change over time, part of a whole, comparison, bridge | Step 2: Pick the Layout by Relationship | Zelazny, _Say It with Charts_ | idea, paraphrased |
+| Idea, number or quote                                                                                  | Where in the skill                          | Source                         | How used          |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------- | ------------------------------ | ----------------- |
+| Write every slide title as a full-sentence claim before any body; the titles alone tell the story      | Step 1: Outline Titles First; Content Rules | Minto, _The Pyramid Principle_ | idea, paraphrased |
+| Pick the visual by the relationship in the data: change over time, part of a whole, comparison, bridge | Step 2: Pick the Layout by Relationship     | Zelazny, _Say It with Charts_  | idea, paraphrased |
 
 ## References
 

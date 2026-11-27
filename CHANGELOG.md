@@ -4,6 +4,7 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+- `coding`, `debrief`, `review-pr`, `solve`, `workflows`, `write-docs`, `write-pr`, `defaults`, `make-deck`: moved every citation out of the skill files into a `SOURCES.md` beside each skill, which lists which idea, number or quote comes from which source; the skill text no longer carries attributions, so the agent loads less. `write-skill` has the rule.
 - `make-deck`: `render_pptx` writes the same bytes for the same deck, so a rebuild no longer shows `.pptx` files as changed.
 
 ## v1.0.0 (2026-11-27)

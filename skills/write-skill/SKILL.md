@@ -91,6 +91,7 @@ Each tool names and loads a skill in its own way. The rules in this file apply t
 ## Writing Rules
 
 - **Imperative voice.** Write "Format logs with lazy % arguments," not "You may want to format logs lazily."
+- **Cite in `SOURCES.md`, not in the skill.** Put each source in `skills/<name>/SOURCES.md` beside the skill, with the idea, number or quote it supports. Leave attributions out of the skill text, because the agent never needs them.
 - **One rule per bullet.** Split any bullet that joins two rules with "and".
 - **Grep before you add.** Search the existing skills for the rule; if one holds it, point to that file by name.
 - **Examples must justify their length.** Add a good/bad pair only when the rule is truly unclear. Leave examples out of obvious rules, such as "add type hints."

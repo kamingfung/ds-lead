@@ -4,18 +4,17 @@ The wording of `review-pr` is new. This table says which idea, number or quote c
 
 ## Where each source is used
 
-<!-- prettier-ignore -->
-| Idea, number or quote | Where in the skill | Source | How used |
-| --- | --- | --- | --- |
-| Approve a change once it clearly makes the code base better, even if it is not flawless | references/standard.md, Review Standard | Google, "The Standard of Code Review" | idea, paraphrased |
-| Review like a journal referee: value and soundness before style; weigh the limits the author admits | references/standard.md, Review Like a Referee | "The good referee", _Nature Methods_ 15, 91 (2018) | idea, paraphrased |
-| Read the full file for context, not only the diff | references/standard.md | Google, "What to look for in a code review" | idea, paraphrased |
-| Start a polish-level finding with "Nit:" | references/standard.md, Review Like a Referee | Google, "How to write code review comments" | quote, 1 word |
-| Address the work, not the author; raise grammar only when it hides meaning | references/standard.md | Google, "How to write code review comments" | idea, paraphrased |
-| Explain why each finding matters and give a concrete fix | references/format.md | Google, "How to write code review comments" | idea, paraphrased |
-| Group the checklist by review category: design, functionality, complexity, tests, naming, comments, style, documentation | references/checklist.md | Google, "What to look for in a code review" | structure, paraphrased |
-| Reviewer process and etiquette | references/checklist.md; references/standard.md | Microsoft, "Reviewer Guidance" | idea, paraphrased |
-| Check each comment before you act, and reply to every comment | references/answering-a-review.md | "How to write a rebuttal letter", _Nature Methods_ 23, 1919 (2026) | idea, paraphrased |
+| Idea, number or quote                                                                                                    | Where in the skill                              | Source                                                             | How used               |
+| ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| Approve a change once it clearly makes the code base better, even if it is not flawless                                  | references/standard.md, Review Standard         | Google, "The Standard of Code Review"                              | idea, paraphrased      |
+| Review like a journal referee: value and soundness before style; weigh the limits the author admits                      | references/standard.md, Review Like a Referee   | "The good referee", _Nature Methods_ 15, 91 (2018)                 | idea, paraphrased      |
+| Read the full file for context, not only the diff                                                                        | references/standard.md                          | Google, "What to look for in a code review"                        | idea, paraphrased      |
+| Start a polish-level finding with "Nit:"                                                                                 | references/standard.md, Review Like a Referee   | Google, "How to write code review comments"                        | quote, 1 word          |
+| Address the work, not the author; raise grammar only when it hides meaning                                               | references/standard.md                          | Google, "How to write code review comments"                        | idea, paraphrased      |
+| Explain why each finding matters and give a concrete fix                                                                 | references/format.md                            | Google, "How to write code review comments"                        | idea, paraphrased      |
+| Group the checklist by review category: design, functionality, complexity, tests, naming, comments, style, documentation | references/checklist.md                         | Google, "What to look for in a code review"                        | structure, paraphrased |
+| Reviewer process and etiquette                                                                                           | references/checklist.md; references/standard.md | Microsoft, "Reviewer Guidance"                                     | idea, paraphrased      |
+| Check each comment before you act, and reply to every comment                                                            | references/answering-a-review.md                | "How to write a rebuttal letter", _Nature Methods_ 23, 1919 (2026) | idea, paraphrased      |
 
 ## References
 

@@ -4,10 +4,9 @@ The wording of `defaults` is new. This table says which idea, number or quote co
 
 ## Where each source is used
 
-<!-- prettier-ignore -->
-| Idea, number or quote | Where in the skill | Source | How used |
-| --- | --- | --- | --- |
-| Short sentences in the active voice, one command per step | Reply Style | ASD-STE100, Simplified Technical English | idea, paraphrased |
+| Idea, number or quote                                     | Where in the skill | Source                                   | How used          |
+| --------------------------------------------------------- | ------------------ | ---------------------------------------- | ----------------- |
+| Short sentences in the active voice, one command per step | Reply Style        | ASD-STE100, Simplified Technical English | idea, paraphrased |
 
 ## References
 
