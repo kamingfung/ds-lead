@@ -12,13 +12,28 @@ import json
 import re
 import sys
 
-# A command starts at the beginning of the line or after ; & | ( or a newline.
-START = r"(?:^|[;&|(\n])\s*"
+# A shell line is a chain of commands joined by these separators. Each command is checked alone.
+SEPARATORS = re.compile(r"&&|\|\||[;&|(){}\n]")
+# Words that can sit in front of a command without changing what it does.
+WRAPPERS = {
+    "sudo",
+    "time",
+    "command",
+    "exec",
+    "nohup",
+    "env",
+    "then",
+    "do",
+    "else",
+    "!",
+}
+ENV_ASSIGNMENT = re.compile(r"\w+=\S*")
 # git accepts options between "git" and the subcommand, such as -C <dir> or -c k=v.
 GIT_OPTIONS = r"(?:\s+(?:-C|-c)\s+\S+|\s+--[\w-]+(?:=\S+)?)*"
-REMOTE_WRITE = re.compile(
-    START + r"(?:git" + GIT_OPTIONS + r"\s+push|gh\s+(?:pr|issue)\s+"
-    r"(?:create|comment|review|merge|edit|close))\b"
+GIT_PUSH = re.compile(r"git" + GIT_OPTIONS + r"\s+push\b")
+GH_WRITE = re.compile(
+    r"gh\s+(?:pr|issue)\s+"
+    r"(?:create|comment|review|merge|edit|close|ready|reopen|lock|unlock|delete|transfer|pin|unpin)\b"
 )
 # A dry run changes nothing on the server.
 DRY_RUN = re.compile(r"\s(?:-n|--dry-run)\b")
@@ -29,10 +44,21 @@ REASON = (
 )
 
 
+def command_start(segment: str) -> str:
+    """Return the segment without leading env assignments and wrapper words."""
+    words = segment.split()
+    while words and (words[0] in WRAPPERS or ENV_ASSIGNMENT.fullmatch(words[0])):
+        words = words[1:]
+    return " ".join(words)
+
+
 def writes_to_remote(command: str) -> bool:
-    """Return True when the command pushes, or posts to GitHub, and is not a dry run."""
-    match = REMOTE_WRITE.search(command)
-    return match is not None and not DRY_RUN.search(command)
+    """Return True when any command in the line pushes, or posts to GitHub, and is not a dry run."""
+    for segment in SEPARATORS.split(command):
+        text = command_start(segment)
+        if (GIT_PUSH.match(text) or GH_WRITE.match(text)) and not DRY_RUN.search(text):
+            return True
+    return False
 
 
 def decide(event: dict) -> dict | None:
@@ -62,6 +88,13 @@ def selftest() -> int:
         "gh pr create --title x",
         "gh pr comment 7 --body hi",
         "gh issue close 3",
+        "gh pr ready 7",
+        "gh pr reopen 7",
+        "GIT_SSH_COMMAND=ssh git push",
+        "sudo git push",
+        "git push -n && git push",
+        "git push origin main && tail -n 5 log",
+        "if true; then git push; fi",
     ]
     passes = [
         "git status",
@@ -73,6 +106,8 @@ def selftest() -> int:
         "gh pr view 7",
         "gh pr list",
         "grep -rn 'git push' skills",
+        "git push -n && ls -l",
+        "ls -n; git status",
     ]
     for command in asks:
         if decide({"tool_name": "Bash", "tool_input": {"command": command}}) is None:
