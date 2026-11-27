@@ -1,11 +1,9 @@
 """Tests for the native PowerPoint renderer: geometry, native charts, fonts and sources."""
 
-import json
 import time
 import xml.etree.ElementTree as ET
 from dataclasses import fields, is_dataclass
 from io import BytesIO
-from pathlib import Path
 from typing import Iterator
 
 import pytest
@@ -17,8 +15,7 @@ from pptx.enum.shapes import MSO_SHAPE, MSO_SHAPE_TYPE
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Emu, Inches, Pt
 
-from charts import ChartData
-from conftest import TEMPLATE
+from charts import RENDERERS, ChartData
 from layouts import BODY_H, BODY_TOP, LAYOUTS, MARGIN
 from render_pptx import EMU_PER_PX, render_pptx
 from spec import (
@@ -352,14 +349,9 @@ def _chart_kinds(node: object) -> set[str]:
     return set()
 
 
-def test_test_deck_draws_every_kind_in_the_chart_schema() -> None:
-    """Every pptx test renders _deck(), so this proves each schema kind has a pptx builder."""
-    schema: dict = json.loads((Path(TEMPLATE) / "chart.schema.json").read_text())
-    kinds: set[str] = {
-        entry["const"] for entry in schema["properties"]["kind"]["oneOf"]
-    }
-
-    assert _chart_kinds(_deck()) == kinds
+def test_test_deck_draws_every_html_chart_kind() -> None:
+    """Every pptx test renders _deck(), so this proves each HTML chart kind has a pptx builder."""
+    assert _chart_kinds(_deck()) == set(RENDERERS)
 
 
 def test_every_chart_is_native_and_of_the_right_type() -> None:

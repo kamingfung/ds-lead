@@ -4,7 +4,7 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
-- `make-deck`: new `template/chart.schema.json` lists the five deck chart kinds and the `ChartData` fields as a language-neutral JSON Schema. Tests fail when the schema, `ChartData`, the HTML renderer and the pptx renderer disagree on a kind or a field. New `docs/decisions.md` records repository-wide decisions with the options rejected and why. Its first entries explain why deck charts stay native PowerPoint charts and not `make-chart` pictures. ([#14](https://github.com/kamingfung/ds-lead/pull/14))
+- New `docs/decisions.md` records repository-wide decisions with the options rejected and why. Its first entries explain why deck charts stay native PowerPoint charts and not `make-chart` pictures. `make-deck`: new tests fail when a chart kind lacks a label or a pptx builder. ([#14](https://github.com/kamingfung/ds-lead/pull/14))
 
 ## v1.1.0 (2026-11-27)
 

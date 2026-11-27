@@ -25,9 +25,9 @@ Rules:
 
 **Evidence.** https://github.com/kamingfung/ds-lead/pull/14 (Why section); [Python in Excel introduction](https://support.microsoft.com/en-us/office/introduction-to-python-in-excel-55643c2e-ff56-4168-b1ce-9428c8308545).
 
-## 2026-11-27: The deck has the five gallery chart kinds, and a schema guards them
+## 2026-11-27: The deck has the five gallery chart kinds, and tests guard them
 
-**Chosen.** The deck draws five chart kinds: `line`, `column`, `waterfall`, `diverging_bar` and `stacked100`. That is enough for the general case. `skills/make-deck/template/chart.schema.json` lists them with the `ChartData` fields, in a form that does not depend on the language. Tests fail when the schema, `ChartData`, the SVG renderers or the pptx test deck disagree.
+**Chosen.** The deck draws five chart kinds: `line`, `column`, `waterfall`, `diverging_bar` and `stacked100`. That is enough for the general case. Tests fail when the SVG renderers (`RENDERERS` in `charts.py`), the chart labels (`KIND_LABELS`) and the kinds drawn by the pptx test deck differ.
 
 The test for a new kind: would a person change its numbers by hand in PowerPoint?
 
@@ -36,13 +36,14 @@ The test for a new kind: would a person change its numbers by hand in PowerPoint
 
 **Considered and rejected.**
 
-| Option                                                                                                                 | Why it was rejected                                                                                                                                   |
-| ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Map all 15 `make-chart` recipes to native pptx routes (`chart-grammar.md`, drafted in PR #14 and deleted before merge) | It planned 10 kinds nobody needs. Two routes depend on combo charts, which python-pptx has no API for.                                                |
-| A "native but fragile" group: waterfall-style tricks, dumbbells, drawn target lines                                    | Edits in PowerPoint break them. The waterfall stays, because it is built, tested and common. Its hidden base series must be recomputed after an edit. |
-| An image block, so a `make-chart` picture can go on a kit slide                                                        | No deck needs one yet. Add it in its own PR when one does.                                                                                            |
+| Option                                                                                                                                   | Why it was rejected                                                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Map all 15 `make-chart` recipes to native pptx routes (`chart-grammar.md`, drafted in PR #14 and deleted before merge)                   | It planned 10 kinds nobody needs. Two routes depend on combo charts, which python-pptx has no API for.                                                |
+| A "native but fragile" group: waterfall-style tricks, dumbbells, drawn target lines                                                      | Edits in PowerPoint break them. The waterfall stays, because it is built, tested and common. Its hidden base series must be recomputed after an edit. |
+| A language-neutral JSON Schema of the kinds and the `ChartData` fields (`chart.schema.json`, drafted in PR #14 and deleted before merge) | Only tests read it. The kit stays in Python, so no renderer in another language needs a contract.                                                     |
+| An image block, so a `make-chart` picture can go on a kit slide                                                                          | No deck needs one yet. Add it in its own PR when one does.                                                                                            |
 
-**Evidence.** `skills/make-deck/template/tests/test_chart_schema.py`; `test_test_deck_draws_every_kind_in_the_chart_schema` in `skills/make-deck/template/tests/test_render_pptx.py`.
+**Evidence.** `test_every_renderer_has_a_kind_label` in `skills/make-deck/template/tests/test_charts.py`; `test_test_deck_draws_every_html_chart_kind` in `skills/make-deck/template/tests/test_render_pptx.py`.
 
 ## 2026-11-27: Take nothing from think-cell for now
 

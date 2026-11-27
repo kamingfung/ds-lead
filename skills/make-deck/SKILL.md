@@ -76,17 +76,16 @@ The footer source line and the `Backup · Sources` slides come from the `Num` so
 
 ## Files
 
-| File                | Holds                                                                                                                                         |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme.py`          | `Theme` tokens (colors, fonts, type sizes), the `HOUSE` theme and `fit_px`.                                                                   |
-| `spec.py`           | `Num`, the blocks, `Slide`, `Deck`, `validate` and the `Backup · Sources` slides.                                                             |
-| `layouts.py`        | The canvas, the header and footer boxes and the 24 layouts in `LAYOUTS`.                                                                      |
-| `charts.py`         | Chart data and the five SVG chart kinds: `line`, `column`, `waterfall`, `diverging_bar` and `stacked100`.                                     |
-| `chart.schema.json` | The chart grammar as a JSON Schema: each chart kind, its native pptx type, and the `ChartData` fields. Tests keep it equal to both renderers. |
-| `render_html.py`    | `render_html(deck, theme)`, which returns one self-contained HTML page.                                                                       |
-| `deck.css`          | Styles for the HTML deck, including the print styles.                                                                                         |
-| `deck.js`           | Keyboard, swipe and tab navigation for the HTML deck.                                                                                         |
-| `render_pptx.py`    | `render_pptx(deck, theme)`, which returns the bytes of a native `.pptx`.                                                                      |
-| `gallery.py`        | The sample deck with one slide per layout, and the command that writes it.                                                                    |
+| File             | Holds                                                                                                     |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `theme.py`       | `Theme` tokens (colors, fonts, type sizes), the `HOUSE` theme and `fit_px`.                               |
+| `spec.py`        | `Num`, the blocks, `Slide`, `Deck`, `validate` and the `Backup · Sources` slides.                         |
+| `layouts.py`     | The canvas, the header and footer boxes and the 24 layouts in `LAYOUTS`.                                  |
+| `charts.py`      | Chart data and the five SVG chart kinds: `line`, `column`, `waterfall`, `diverging_bar` and `stacked100`. |
+| `render_html.py` | `render_html(deck, theme)`, which returns one self-contained HTML page.                                   |
+| `deck.css`       | Styles for the HTML deck, including the print styles.                                                     |
+| `deck.js`        | Keyboard, swipe and tab navigation for the HTML deck.                                                     |
+| `render_pptx.py` | `render_pptx(deck, theme)`, which returns the bytes of a native `.pptx`.                                  |
+| `gallery.py`     | The sample deck with one slide per layout, and the command that writes it.                                |
 
 The pptx renderer needs `python-pptx`, which installs `lxml` with it. The tests live in `template/tests/`.
