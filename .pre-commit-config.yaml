@@ -38,6 +38,12 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+      - id: check-palette-sync
+        name: deck theme and chart palette share the same colors
+        entry: python3 scripts/check_palette_sync.py
+        language: system
+        pass_filenames: false
+        files: ^skills/(make-chart/palette\.css|make-deck/template/theme\.py)$
       - id: check-changelog
         name: CHANGELOG.md has a line for this branch
         entry: python3 scripts/check_changelog.py --base origin/main
