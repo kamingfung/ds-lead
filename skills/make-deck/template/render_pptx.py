@@ -30,6 +30,7 @@ from pptx.enum.dml import MSO_LINE
 from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
 from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE, PP_ALIGN
 from pptx.oxml.ns import qn
+from pptx.parts.image import Image as PptxImage
 from pptx.shapes.autoshape import Shape
 from pptx.shapes.connector import Connector
 from pptx.shapes.shapetree import GroupShapes, SlideShapes
@@ -59,6 +60,7 @@ from spec import (
     Deck,
     Flow,
     Gantt,
+    Image,
     Matrix,
     Num,
     Panel,
@@ -647,6 +649,7 @@ class _Painter:
             Card: self._card,
             Tile: self._tile,
             Chart: self._chart,
+            Image: self._image,
             Table: self._table,
             Panel: self._panel,
             Flow: self._flow_diagram,
@@ -808,6 +811,21 @@ class _Painter:
         if builder is None:
             raise ValueError(f"unknown chart kind {chart.kind!r}")
         builder(box, chart.data)
+
+    def _image(self, box: Box, image: Image) -> None:
+        """Place a PNG at its own aspect ratio, as large as fits and centered in the box."""
+        width, height = PptxImage.from_file(image.path).size
+        scale: float = min(box.w / width, box.h / height)
+        w: float = width * scale
+        h: float = height * scale
+        picture: Any = self.shapes.add_picture(
+            image.path,
+            emu(box.x + (box.w - w) / 2),
+            emu(box.y + (box.h - h) / 2),
+            emu(w),
+            emu(h),
+        )
+        picture._element.nvPicPr.cNvPr.set("descr", image.alt)
 
     def _add_chart(
         self,

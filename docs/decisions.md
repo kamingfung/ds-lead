@@ -60,3 +60,20 @@ The test for a new kind: would a person change its numbers by hand in PowerPoint
 **Kept for later, not adopted.** Keep only raw numbers in the chart data, and compute each derived number in Python. Write a derived number, such as a growth rate, in the slide's lead line instead of drawing it.
 
 **Evidence.** [think-cell chart decorations](https://www.thinkcell.com/en/resources/manual/chartdecorations); [think-cell compatibility](https://www.thinkcell.com/en/resources/manual/compatibility).
+
+## 2026-11-27: Add an Image block for charts PowerPoint cannot draw
+
+This entry replaces the "image block" row in "2026-11-27: The deck has the five gallery chart kinds, and tests guard them".
+
+**Chosen.** A new `Image` block (`spec.py`) holds a PNG, its alt text and its source. Every chart region accepts it. The HTML embeds the PNG as a data URI, so the page stays self-contained. The pptx places it as a picture at its own aspect ratio, centered in the region. `make-deck/SKILL.md` gains a table of what a pptx reader can edit, block by block.
+
+**Considered and rejected.**
+
+| Option                                       | Why it was rejected                                                                                                     |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Wait until a deck needs a picture            | The maintainer chose to add it now, so a `make-chart` figure such as a histogram has a place on a kit slide.            |
+| A sixth native chart kind for each new chart | Each kind needs an SVG renderer, a pptx builder and tests. A picture covers every chart PowerPoint cannot draw at once. |
+| Accept SVG as well as PNG                    | python-pptx 1.0.2 cannot add an SVG picture. One format keeps both renderers equal.                                     |
+| Stretch the picture to fill the region       | It distorts the chart. A centered fit keeps the aspect ratio.                                                           |
+
+**Evidence.** `skills/make-deck/template/tests/test_image.py`.

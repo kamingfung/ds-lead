@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import math
 import re
 from dataclasses import fields, replace
@@ -20,6 +21,7 @@ from spec import (
     Deck,
     Flow,
     Gantt,
+    Image,
     Matrix,
     Num,
     Panel,
@@ -232,6 +234,12 @@ def _block(value: object, w: int, h: int, theme: Theme, panel: int | None) -> st
             return _tabs(value, w, h, theme, panel)
         case Chart():
             return to_svg(value, w, h, theme).replace(XMLNS, "", 1)
+        case Image():
+            png: str = base64.b64encode(Path(value.path).read_bytes()).decode()
+            return (
+                f'<img src="data:image/png;base64,{png}" alt="{escape(value.alt)}"'
+                f' width="{w}" height="{h}" style="object-fit:contain">'
+            )
         case Num():
             return f'<div class="big">{_num(value, w, 120.0)}</div>'
         case Text():
