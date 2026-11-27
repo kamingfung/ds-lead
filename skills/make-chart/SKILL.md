@@ -41,9 +41,3 @@ license: MIT
 
 - Labels placed at fixed coordinates can collide when new data moves the marks. Render the PNG and move the label with `dy`, `xytext` or the axis limits.
 - Do not keep a four-sided box with a full grid on every plot. The style already hides the top and right spines, so hide the left spine or drop gridlines when they add nothing.
-
-## Sources
-
-- Zelazny, G. _Say It with Charts_, 4th ed. McGraw-Hill, 2001.
-- Okabe, M. and Ito, K. "Color Universal Design (CUD): How to make figures and presentations that are friendly to colorblind people" (2008). https://jfly.uni-koeln.de/color/
-- Wong, B. "Points of view: Color blindness." _Nature Methods_ 8, 441 (2011). https://doi.org/10.1038/nmeth.1618

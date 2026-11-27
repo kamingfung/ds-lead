@@ -4,7 +4,7 @@
 
 ## Where the colors come from
 
-Okabe and Ito (2008) published eight colors chosen to stay distinct for people with the common types of color-vision deficiency. Wong (2011) reprinted them in _Nature Methods_. Only `--yellow` and `--black` are Okabe-Ito values. Every other series color is a darker, muted fall color in the same hue family.
+Okabe and Ito (2008) published eight colors chosen to stay distinct for people with the common types of color-vision deficiency. Wong (2011) reprinted them in _Nature Methods_. Only `--yellow` and `--black` are Okabe-Ito values. Every other series color is a darker, muted fall color in the same hue family. References are in [SOURCES.md](SOURCES.md).
 
 ΔE is the CIE 1976 color difference in CIELAB. A larger number means two colors look more different.
 
@@ -45,8 +45,3 @@ Ink and burnt sienna are hard to tell apart on thin lines and small markers unde
 5. Call `show_all_palettes()` and look at the three simulated rows.
 6. Regenerate the pictures in [`examples/make-chart/`](../../examples/make-chart/) with the command in its README.
 7. Add one line to `CHANGELOG.md` under Unreleased.
-
-## Sources
-
-- Okabe, M. and Ito, K. "Color Universal Design (CUD): How to make figures and presentations that are friendly to colorblind people" (2008). https://jfly.uni-koeln.de/color/
-- Wong, B. "Points of view: Color blindness." _Nature Methods_ 8, 441 (2011). https://doi.org/10.1038/nmeth.1618
