@@ -103,7 +103,7 @@ Treat a skill folder as a small codebase. Each bullet ends on a check you can ru
 
 - **Name what it does.** A skill, file or heading states its job: `SOURCES.md`, `checklist.md`, "Prove It Works". Avoid `misc`, `notes` and `utils`. Check: a reader predicts a file's content from its name.
 - **One source of truth for values.** A color, font, threshold, version or function list lives in one file. Other files link to it, or a test fails when the copies differ. Check: `git grep` the value finds one definition, or a test pins every copy. The chart palette once lived in three files, and the greys disagreed.
-- **No duplicate files.** Check: `git ls-files | xargs shasum | sort | uniq -w40 -d` prints nothing.
+- **No duplicate files.** Check: `git ls-files | xargs shasum | awk '{print $1}' | sort | uniq -d` prints nothing.
 - **Keep reference data with its owner.** A list of functions, flags or options belongs in the code's docstring or in `--help`, and the skill points there.
 - **Use a parameter for what varies.** Size a lecture phase as a share of the session, not as fixed minutes. Give a range when cases differ.
 - **Simplify, and say it once.** Merge rules that overlap. Delete a section that restates its heading (Review Pass 8 and 9).
