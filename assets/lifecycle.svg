@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 390" width="1280" height="390" role="img" aria-labelledby="lc-title lc-desc">
   <title id="lc-title">The ds-lead workflow: Plan, Frame, Build, Review, Deliver</title>
-  <desc id="lc-desc">Five stages from left to right, each with the question it answers and its skills. Plan: what decision does this serve? /plan-work. Frame: what would prove us wrong? /solve. Build: does the code hold up? /coding and /worktrees. Review: is the logic sound, not just the style? /review-pr, /write-pr and /check-backtest. Deliver: what is the answer, and what is the ask? /debrief, /make-report, /make-deck and /make-chart. Below, used at every stage: /defaults, /workflows, /session, /write-docs and /write-skill.</desc>
+  <desc id="lc-desc">Five stages from left to right, each with the question it answers and its skills. Plan: what decision does this serve? /plan-work. Frame: what would prove us wrong? /solve. Build: does the code hold up? /coding and /worktrees. Review: is the logic sound, not just the style? /review-pr and /write-pr. Deliver: what is the answer, and what is the ask? /debrief, /make-report, /make-deck and /make-chart. Below, used at every stage: /defaults, /workflows, /session, /write-docs and /write-skill.</desc>
   <defs>
     <linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#29221E"/>
@@ -72,9 +72,8 @@
       <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
         <text x="20" y="168" fill="#7FB3CC">/review-pr</text>
         <text x="20" y="192" fill="#7FB3CC">/write-pr</text>
-        <text x="20" y="216" fill="#7FB3CC">/check-backtest</text>
       </g>
-      
+
     </g>
 
     <!-- 5 DELIVER -->

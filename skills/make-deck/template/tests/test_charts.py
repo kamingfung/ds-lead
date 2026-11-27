@@ -168,6 +168,26 @@ def test_diverging_bar_sorts_by_value_and_colors_negatives_with_loss() -> None:
     assert _text_fills(svg)["\u22121.5%"] == HOUSE.ink
 
 
+def test_waterfall_labels_increases_above_the_bar_and_decreases_below_it() -> None:
+    root: ET.Element = ET.fromstring(
+        to_svg(Chart("waterfall", WATERFALL_DATA), 640, 360, HOUSE)
+    )
+    bars: dict[str, ET.Element] = {
+        rect.get("fill", ""): rect
+        for rect in root.iter(f"{NS}rect")
+        if rect.get("fill") in (HOUSE.accent, HOUSE.loss)
+    }
+    labels: dict[str, float] = {
+        node.text: float(node.get("y")) for node in root.iter(f"{NS}text") if node.text
+    }
+    loss_bottom: float = float(bars[HOUSE.loss].get("y")) + float(
+        bars[HOUSE.loss].get("height")
+    )
+
+    assert labels["\u221212"] > loss_bottom
+    assert labels["+5"] < float(bars[HOUSE.accent].get("y"))
+
+
 def test_waterfall_labels_totals_inside_and_signed_deltas_outside() -> None:
     svg: str = to_svg(Chart("waterfall", WATERFALL_DATA), 640, 360, HOUSE)
 

@@ -24,32 +24,31 @@ As a data science tech lead, these are the skills I hand my own team and agents:
 Most agent skills are written for software features. Data science work fails in different places: an analysis answers a question nobody asked, a number in the deck cannot be traced, a pipeline has no tests, and the stakeholder reads three paragraphs before the answer. These seventeen skills make an agent work the way a senior data scientist does at each of those points. They are plain Markdown, so they work in Claude Code, Codex, Gemini CLI, Cursor, Grok, Antigravity and other agents that read Agent Skills. No MCP servers, no build step.
 
 <p align="center">
-  <img src="assets/lifecycle.svg" alt="The ds-lead workflow in five stages. Plan: /plan-work. Frame: /solve. Build: /coding and /worktrees. Review: /review-pr, /write-pr and /check-backtest. Deliver: /debrief, /make-report, /make-deck and /make-chart. Used at every stage: /defaults, /workflows, /session, /write-docs and /write-skill." width="100%">
+  <img src="assets/lifecycle.svg" alt="The ds-lead workflow in five stages. Plan: /plan-work. Frame: /solve. Build: /coding and /worktrees. Review: /review-pr and /write-pr. Deliver: /debrief, /make-report, /make-deck and /make-chart. Used at every stage: /defaults, /workflows, /session, /write-docs and /write-skill." width="100%">
 </p>
 
 ## Commands
 
-| What you're doing                   | Command           | Key principle                                 |
-| :---------------------------------- | :---------------- | :-------------------------------------------- |
-| Plan new work                       | `/plan-work`      | Decide before you ticket                      |
-| Plan a workshop or training module  | `/plan-training`  | Backward design from learner outcomes         |
-| Frame a question or find a cause    | `/solve`          | A hypothesis you can prove wrong              |
-| Work on more than one branch        | `/worktrees`      | One folder per branch                         |
-| Review a pull request               | `/review-pr`      | Soundness before style                        |
-| Describe a pull request             | `/write-pr`       | A reviewer can test from it                   |
-| Write a message someone acts on     | `/debrief`        | Answer first, then the evidence               |
-| Write a one-page report             | `/make-report`    | The title is the finding                      |
-| Build a slide deck                  | `/make-deck`      | Code fills every number                       |
-| Make or restyle a chart             | `/make-chart`     | Colorblind-safe, one message                  |
-| Write pipeline code or tests        | `/coding`         | Fail loud, test the logic                     |
-| Write a doc or a changelog          | `/write-docs`     | Short, active, one term per concept           |
-| Check a backtest number             | `/check-backtest` | Beat the noise floor first                    |
-| Order the steps of a task           | `/workflows`      | The right skill at each step                  |
-| Start, hand off or resume a session | `/session`        | State lives in a file                         |
-| Set how the agent works             | `/defaults`       | Challenge, then act                           |
-| Write or fix a skill                | `/write-skill`    | Fix a repeated mistake at its strongest level |
+| What you're doing                   | Command          | Key principle                                 |
+| :---------------------------------- | :--------------- | :-------------------------------------------- |
+| Plan new work                       | `/plan-work`     | Decide before you ticket                      |
+| Plan a workshop or training module  | `/plan-training` | Backward design from learner outcomes         |
+| Frame a question or find a cause    | `/solve`         | A hypothesis you can prove wrong              |
+| Work on more than one branch        | `/worktrees`     | One folder per branch                         |
+| Review a pull request               | `/review-pr`     | Soundness before style                        |
+| Describe a pull request             | `/write-pr`      | A reviewer can test from it                   |
+| Write a message someone acts on     | `/debrief`       | Answer first, then the evidence               |
+| Write a one-page report             | `/make-report`   | The title is the finding                      |
+| Build a slide deck                  | `/make-deck`     | Code fills every number                       |
+| Make or restyle a chart             | `/make-chart`    | Colorblind-safe, one message                  |
+| Write pipeline code or tests        | `/coding`        | Fail loud, test the logic                     |
+| Write a doc or a changelog          | `/write-docs`    | Short, active, one term per concept           |
+| Order the steps of a task           | `/workflows`     | The right skill at each step                  |
+| Start, hand off or resume a session | `/session`       | State lives in a file                         |
+| Set how the agent works             | `/defaults`      | Challenge, then act                           |
+| Write or fix a skill                | `/write-skill`   | Fix a repeated mistake at its strongest level |
 
-Six of these (`coding`, `write-docs`, `session`, `workflows`, `defaults` and `check-backtest`) also load on their own when the work matches, so you rarely type them.
+Five of these (`coding`, `write-docs`, `session`, `workflows` and `defaults`) also load on their own when the work matches, so you rarely type them.
 
 In Claude Code, a plugin skill also answers to its full name, for example `/ds-lead:review-pr`. Use it when a built-in command has the same name.
 
@@ -105,7 +104,7 @@ git -C ~/repos/ds-lead pull     # symlinked installs update at once
 npx skills update               # skills CLI installs
 
 rm ~/.gemini/config/plugins/ds-lead   # Antigravity plugin
-npx skills remove defaults workflows session coding write-docs plan-work plan-training write-pr review-pr check-backtest worktrees debrief make-report make-deck make-chart solve write-skill --global
+npx skills remove defaults workflows session coding write-docs plan-work plan-training write-pr review-pr worktrees debrief make-report make-deck make-chart solve write-skill --global
 ```
 
 </details>
@@ -155,13 +154,12 @@ Each rule lives in one skill; the others name it instead of repeating it.
 
 **Build and review**
 
-| Skill                                              | What it does                                                                                                                                             | Key resources                                                                                                                                                                       |
-| :------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`coding`](skills/coding/SKILL.md)                 | Agree the goal first, build only what was asked, change only what the task needs; Python pipeline style, unit tests and logging                          | [`python-pipeline.md`](skills/coding/references/python-pipeline.md), [`unit-tests.md`](skills/coding/references/unit-tests.md), [`logging.md`](skills/coding/references/logging.md) |
-| [`worktrees`](skills/worktrees/SKILL.md)           | One isolated folder per branch: create, use and clean up git worktrees                                                                                   | —                                                                                                                                                                                   |
-| [`check-backtest`](skills/check-backtest/SKILL.md) | Questions to answer before you report a backtest or experiment number: the expected result, the noise floor, whether the change ran, same inputs, slices | —                                                                                                                                                                                   |
-| [`review-pr`](skills/review-pr/SKILL.md)           | Gated PR review and answering a review: tier from the diff, pre-commit and CI first, referee review, a severity label per finding, a three-round cap     | [`standard.md`](skills/review-pr/references/standard.md), [`answering-a-review.md`](skills/review-pr/references/answering-a-review.md)                                              |
-| [`write-pr`](skills/write-pr/SKILL.md)             | A PR body: summary, changes, why, results, how to test with runnable commands, and reviewer notes led by the merge risk                                  | —                                                                                                                                                                                   |
+| Skill                                    | What it does                                                                                                                                         | Key resources                                                                                                                                                                       |
+| :--------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`coding`](skills/coding/SKILL.md)       | Agree the goal first, build only what was asked, change only what the task needs; Python pipeline style, unit tests and logging                      | [`python-pipeline.md`](skills/coding/references/python-pipeline.md), [`unit-tests.md`](skills/coding/references/unit-tests.md), [`logging.md`](skills/coding/references/logging.md) |
+| [`worktrees`](skills/worktrees/SKILL.md) | One isolated folder per branch: create, use and clean up git worktrees                                                                               | —                                                                                                                                                                                   |
+| [`review-pr`](skills/review-pr/SKILL.md) | Gated PR review and answering a review: tier from the diff, pre-commit and CI first, referee review, a severity label per finding, a three-round cap | [`standard.md`](skills/review-pr/references/standard.md), [`answering-a-review.md`](skills/review-pr/references/answering-a-review.md)                                              |
+| [`write-pr`](skills/write-pr/SKILL.md)   | A PR body: summary, changes, why, results, how to test with runnable commands, and reviewer notes led by the merge risk                              | —                                                                                                                                                                                   |
 
 **How the agent works**
 
@@ -178,11 +176,11 @@ Each rule lives in one skill; the others name it instead of repeating it.
 
 ## Customize colors and fonts
 
-All colors and font stacks live in two `palette.css` files, so you can rebrand decks and charts without touching code.
+Charts and decks keep their colors in two places today, so you can rebrand both without touching other code.
 
-- **Decks:** edit [`skills/make-deck/template/palette.css`](skills/make-deck/template/palette.css), or pass your own file with the same token names to `build(..., palette="my_palette.css")`. The `.pptx` exporter reads its theme colors from the deck's `:root` block.
-- **Charts:** edit [`skills/make-chart/palette.css`](skills/make-chart/palette.css), or set `CHART_STYLE_PALETTE=/path/to/palette.css` before importing `chart_style.py`.
-- **Shared tokens** (`--ink`, `--paper`, `--panel`, `--tint`, `--light`, `--blue`, `--red`, `--orange`, `--green`, `--sky`, `--purple`) must match in both files; [`test_palette.py`](skills/make-deck/template/test_palette.py) checks it.
+- **Decks:** edit the `Theme` fields in [`skills/make-deck/template/theme.py`](skills/make-deck/template/theme.py). Both renderers, HTML and `.pptx`, read the same `HOUSE` theme.
+- **Charts:** edit [`skills/make-chart/palette.css`](skills/make-chart/palette.css), or set `CHART_STYLE_PALETTE=/path/to/palette.css` before importing `chart_style.py`. [`skills/make-chart/README.md`](skills/make-chart/README.md) gives the steps and the color-distance test.
+- **Shared colors:** the deck's `ink`, `accent`, `loss`, `ochre`, `sage`, `sienna`, `highlight`, `light`, `panel`, `tint` and `paper` match the chart tokens of the same role. `scripts/check_palette_sync.py` checks that they match, and runs as a pre-commit hook when either file changes.
 
 ## Releases
 
@@ -195,13 +193,13 @@ MIT. See [`LICENSE`](LICENSE).
 
 **Standing on others' work.** These skills are inspired by, and borrow ideas from, five open-source skill libraries. I rewrote everything in my own words for data science work, but the thinking is theirs as much as mine:
 
-| Project                                                                   | What ds-lead borrows                                                                                                         |
-| :------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------- |
-| [Matt Pocock's skills](https://github.com/mattpocock/skills)              | Grilling before you build, the writing-for-agents review pass in `write-skill`, problem-then-fix framing                     |
-| [pstack](https://github.com/backnotprop/pstack)                           | Task playbooks in `workflows`, the benchmark checklist in `check-backtest`, the repeated-mistake ladder, verification labels |
-| [Superpowers](https://github.com/obra/superpowers)                        | Design before building, verification before completion, receiving a code review                                              |
-| [Agent Skills by Addy Osmani](https://github.com/addyosmani/agent-skills) | Lifecycle stages with one command each, red-flag and verification sections                                                   |
-| [Ponytail](https://github.com/DietrichGebert/ponytail)                    | The smallest change that fully solves the task, the README header and badge style                                            |
+| Project                                                                   | What ds-lead borrows                                                                                     |
+| :------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------- |
+| [Matt Pocock's skills](https://github.com/mattpocock/skills)              | Grilling before you build, the writing-for-agents review pass in `write-skill`, problem-then-fix framing |
+| [pstack](https://github.com/backnotprop/pstack)                           | Task playbooks in `workflows`, the repeated-mistake ladder, verification labels                          |
+| [Superpowers](https://github.com/obra/superpowers)                        | Design before building, verification before completion, receiving a code review                          |
+| [Agent Skills by Addy Osmani](https://github.com/addyosmani/agent-skills) | Lifecycle stages with one command each, red-flag and verification sections                               |
+| [Ponytail](https://github.com/DietrichGebert/ponytail)                    | The smallest change that fully solves the task, the README header and badge style                        |
 
 Their licenses and notices are in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). If you like ds-lead, go star them too.
 

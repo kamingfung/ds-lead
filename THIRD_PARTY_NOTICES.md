@@ -36,7 +36,7 @@ SOFTWARE.
 
 Source: <https://github.com/backnotprop/pstack>
 
-Ideas used: Task playbooks behind `workflows`, the benchmark checklist behind `check-backtest`, the repeated-mistake ladder in `write-skill`, decision entries in `session`, and the verification labels in `review-pr`.
+Ideas used: Task playbooks behind `workflows`, the repeated-mistake ladder in `write-skill`, decision entries in `session`, and the verification labels in `review-pr`.
 
 ```text
 MIT License
