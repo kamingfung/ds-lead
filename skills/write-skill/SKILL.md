@@ -1,6 +1,6 @@
 ---
 name: write-skill
-description: Use when creating, editing or reviewing a skill, steering file or agent rule file - its size, structure, triggers and overlap - or when a mistake an agent repeats needs a fix.
+description: Use when creating, editing or reviewing a skill or agent instruction file - its size, structure, triggers and overlap - or when a mistake an agent repeats needs a fix.
 ---
 
 # Skill Standards
@@ -9,7 +9,7 @@ description: Use when creating, editing or reviewing a skill, steering file or a
 
 A skill is a scoped instruction set that shapes agent behavior. Every matching interaction loads it as context tokens, so every line has a cost.
 
-"Skill" here means any scoped instruction file an agent loads: a Claude skill, a Claude rule file, or a Kiro steering file ("steering file" is Kiro's name for a skill).
+"Skill" here means any scoped instruction file an agent loads, whatever the tool calls it.
 
 ## When to Create a New Skill
 
@@ -31,7 +31,7 @@ When the same mistake happens a second time, use the first fix in this list that
 4. **Write a rule.** A skill line, only for a judgment call that no check can make.
 
 - Run a new check on a real earlier case of the mistake, and show that it fails.
-- Keep one table per repository, in a skill that loads only on request, with one row per rule and what enforces it: a hook, a test, a CI step, or "none: judgment".
+- Keep one table per repository, in a skill that loads only on request, with one row per rule and what enforces it: a hook, a test, a CI step, or "none: judgment". This repository's table is [references/enforcement.md](references/enforcement.md).
 - When a rule marked "none" is broken again, move it to a stronger fix in the same change.
 - Delete a rule when its mistake can no longer happen.
 
@@ -39,7 +39,7 @@ When the same mistake happens a second time, use the first fix in this list that
 
 Every skill must have:
 
-1. **Front matter** in the form of the tool that loads it (table below)
+1. **Front matter** in the form the loading tool needs
 2. **Exactly one `#` heading** that identifies the domain
 3. **Sections** that gather related rules, each no more than 15 lines
 4. **Examples** only where a rule stays unclear without them (a good and a bad pattern)
@@ -70,18 +70,6 @@ paths:
 ...
 \```
 ````
-
-## Front Matter and Loading
-
-Each tool names and loads a skill in its own way. The rules in this file apply to all of them.
-
-| Tool               | File                                                                    | Loads when                                                                                                 |
-| ------------------ | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Claude skill       | `skills/<name>/SKILL.md` with `name` and `description`                  | The description matches the task. The description is always in context; the body loads only after a match. |
-| Claude rule        | `.claude/rules/*.md` with a `paths:` glob list                          | A matching file is in context. With no `paths:`, always.                                                   |
-| Kiro steering file | `.kiro/steering/*.md` with `inclusion: always`, `fileMatch` or `manual` | By that mode; `manual` loads only when the user names it with `#name`.                                     |
-
-- Prefer scoped loading: a specific description, a `paths:` glob, or `fileMatch`. Always-on text costs tokens on every interaction; keep it to one or two files.
 
 ## Sizing Guidelines
 
@@ -114,7 +102,7 @@ Treat a skill folder as a small codebase. Each bullet ends on a check you can ru
 Run this pass on every new or changed skill before you push it, one sentence at a time. Each point ends on a check you can answer yes or no. It follows Matt Pocock's [writing-for-agents](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill; the wording here is our own.
 
 1. **The description is a pointer.** It is always in context, so prune it hardest. It names the skill and lists each distinct case that should trigger it, with the key word first. Give one trigger per case: two words for the same case are one trigger written twice. Check: every word in the description either names the skill or adds a case.
-2. **Choose who invokes it.** Keep a model-facing trigger (a description, a `fileMatch` pattern) only when an agent must reach the skill by itself. A skill people only call by hand loads by name and costs no context. Check: the skill loads the same way in every AI tool the repo supports, or the repo changelog says why not.
+2. **Choose who invokes it.** Keep a model-facing trigger (a description or a file-path trigger) only when an agent must reach the skill by itself. A skill people only call by hand loads by name and costs no context. Check: the skill loads the same way in every AI tool the repo supports, or the repo changelog says why not.
 3. **Rank the content.** Steps come first, in order. Reference that the agent reads on demand comes next. What only some cases need moves to a sibling file behind a pointer. A fact sits in the step that uses it. Check: no reference section comes before the first step.
 4. **End every step on a pass condition** that is checkable and exhaustive: "every changed function is listed", not "list the changes". Check: each stage ends with a `Pass:` line or a step whose result can be counted.
 5. **Use a leading word.** Where a phrase is spelled out in several places, use one word the model already knows, and repeat that word. Coin a word only when you also define it. Check: every coined word has a definition at first use.
@@ -122,11 +110,6 @@ Run this pass on every new or changed skill before you push it, one sentence at 
 7. **One source of truth.** Each meaning lives in one place. Do not copy what one lookup answers: a script name, a config value, a schedule, the output of `--help`. Point to the file that holds it. Check: no environment name, region, job size or schedule time is typed out when a config file holds it.
 8. **Hunt no-ops.** For each sentence, ask whether deleting it changes what the agent does. If not, delete it; history goes in the changelog. Two people who disagree settle it by running the skill, not by debate. Check: every sentence changes an action.
 9. **Cut sprawl.** A file over the size limit moves reference behind pointers or splits by case. Split a run of steps only where the later steps make the agent rush the current one. Check: the file and each section are within the size limits in this file.
-
-### Pointer files
-
-- A pointer skill points straight at the file that holds the rules: the guide, or the steering or agent file. It never points at a file whose only content is an include of another file, and it never teaches one tool's include syntax to another tool.
-- When one guide serves several AI tools, give each tool its own trigger for the same cases, for example a description for one and a `fileMatch` pattern for the other.
 
 ## Anti-Patterns
 
