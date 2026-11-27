@@ -27,6 +27,12 @@ Each workflow gives the order of steps for one kind of task, and the guide each 
 
 ## 1. Bug fix
 
+```
+blame → reproduce → failing test → fix → prove → Opening a PR
+```
+
+- blame finds the break in someone else's open work → send its owner the diagnosis, not a fix; stop.
+
 1. Find the commit or PR that broke it (`git log -S`, `git blame`). If it is in someone else's open work, send its owner the diagnosis, not a fix ([engineering-practice.md](references/engineering-practice.md), section 1).
 2. Reproduce the bug and find its cause ([engineering-practice.md](references/engineering-practice.md), section 3).
 3. Write a test that fails on the bug, before the fix ([unit-tests.md](../coding/references/unit-tests.md)).
@@ -38,6 +44,12 @@ Reply: what broke, the cause, the fix, and the command output before and after t
 
 ## 2. Investigation
 
+```
+question → search → evidence → write up
+```
+
+- The answer needs a code change → go on with Bug fix or Feature.
+
 1. State the question, the key hypothesis, its strongest rival and the subset of data that tells them apart (skill `solve`).
 2. Search earlier work (tickets, pages, changelogs) for the same question or config key.
 3. Collect the evidence with read-only queries and code reads, and test the rival on that subset ([engineering-practice.md](references/engineering-practice.md), section 3).
@@ -47,6 +59,12 @@ Reply: what broke, the cause, the fix, and the command output before and after t
 Reply: the answer, the evidence for and against it, the rival you ruled out, and the asks.
 
 ## 3. Feature
+
+```
+plan → tests → brief → verify → numbers → Opening a PR
+```
+
+- The change cannot move model outputs → skip numbers.
 
 1. Plan the change, with its output contract and one check per step ([engineering-practice.md](references/engineering-practice.md), section 1; [`coding`](../coding/SKILL.md)).
 2. Write the tests first ([engineering-practice.md](references/engineering-practice.md), section 2).
@@ -58,6 +76,10 @@ Reply: the answer, the evidence for and against it, the rival you ruled out, and
 Reply: what you built, each choice with the options you rejected, the run ids, and the open decisions.
 
 ## 4. Opening a PR
+
+```
+check scope → pre-commit → self-review → description → draft PR → ready
+```
 
 1. Check the branch and the scope of the change ([`session`](../session/SKILL.md), Pull requests).
 2. Run pre-commit and commit its fixes (skill `review-pr`, Leave Mechanical Checks to Pre-commit).

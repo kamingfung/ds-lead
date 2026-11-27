@@ -4,6 +4,7 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+- `workflows`: each workflow now opens with an arrow chain of its steps and a line for each branch, so an agent sees the path before the numbered steps.
 - `coding`: the language rule now says to match the repository's English variant instead of requiring American English, and the logging examples say "step" for a pipeline unit. `plugin.json`: the author name is Ka Ming Fung.
 - `plan-training`: the active lecture template sizes each phase as a share of the session, with minutes shown for a 50-minute class as an example.
 - `plan-work`: step 1 now names the approver (the Accountable role in RACI) plus the people to consult and inform, and the plan template has `Consulted` and `Informed` lines.
