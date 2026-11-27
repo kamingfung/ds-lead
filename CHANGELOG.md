@@ -4,6 +4,8 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+- `make-deck`: `render_pptx` writes the same bytes for the same deck, so a rebuild no longer shows `.pptx` files as changed.
+
 ## v1.0.0 (2026-11-27)
 
 First release: 16 agent skills for data science work that ends in a decision.
