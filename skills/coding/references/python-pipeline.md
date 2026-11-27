@@ -47,7 +47,7 @@ def filter_shuttles(df: pd.DataFrame, types: list[str] | None = None) -> pd.Data
 
 - **Descriptive, pronounceable names:** `current_date` instead of `ymdstr`; `company` instead of `item` in loops; `locations` instead of `location_tuple`.
 - **One concept, one name:** do not mix `client`, `customer`, and `account` for the same entity.
-- **All artifacts in American English:** identifiers, docstrings, comments, commit messages, YAML keys, and logs.
+- **One English variant for all artifacts:** identifiers, docstrings, comments, commit messages, YAML keys, and logs follow the repository's variant (see `SKILL.md`, Consistent Language Style).
 - **Keep signatures small (`≤5` arguments):** group related parameters into a `dict` or dataclass when larger.
 - **Keyword arguments for `>2` arguments:** use keyword arguments in both `src/` and `tests/` so signature reordering cannot silently swap values.
 - **No boolean flag parameters:** split `f(x, flag=True)` into two clearly named functions.
