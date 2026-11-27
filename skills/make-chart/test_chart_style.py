@@ -36,7 +36,11 @@ def _drawn_colors(fig: plt.Figure) -> set[str]:
         for coll in ax.collections:
             colors += list(coll.get_facecolors()) + list(coll.get_edgecolors())
         for line in ax.lines:
-            colors += [line.get_color(), line.get_markerfacecolor(), line.get_markeredgecolor()]
+            colors += [
+                line.get_color(),
+                line.get_markerfacecolor(),
+                line.get_markeredgecolor(),
+            ]
         colors += [spine.get_edgecolor() for spine in ax.spines.values()]
         colors += [g.get_color() for g in ax.get_xgridlines() + ax.get_ygridlines()]
     return {to_hex(c) for c in colors if to_rgba(c)[3] > 0}
@@ -44,9 +48,20 @@ def _drawn_colors(fig: plt.Figure) -> set[str]:
 
 def test_public_api_is_present() -> None:
     names: list[str] = [
-        "read_palette", "set_chart_style", "reset_style", "set_chart_seaborn_theme", "show_color_palette",
-        "show_all_palettes", "highlight_bars", "label_bars", "direct_label", "simulate_vision", "chart_header",
-        "align_headers", "create_example_plots", "create_context_demo",
+        "read_palette",
+        "set_chart_style",
+        "reset_style",
+        "set_chart_seaborn_theme",
+        "show_color_palette",
+        "show_all_palettes",
+        "highlight_bars",
+        "label_bars",
+        "direct_label",
+        "simulate_vision",
+        "chart_header",
+        "align_headers",
+        "create_example_plots",
+        "create_context_demo",
     ]
     for name in names:
         assert callable(getattr(cs, name)), name
@@ -221,7 +236,9 @@ def _rendered(recipe) -> tuple[plt.Figure, Axes]:
 @pytest.mark.parametrize(
     ("recipe", "axis"),
     [
-        (cs.example_highlight_bar, "y"), (cs.example_grouped_columns, "y"), (cs.example_stacked_columns, "y"),
+        (cs.example_highlight_bar, "y"),
+        (cs.example_grouped_columns, "y"),
+        (cs.example_stacked_columns, "y"),
         (cs.example_waterfall, "y"),
     ],
     ids=lambda v: getattr(v, "__name__", v),
@@ -237,7 +254,8 @@ def test_bar_recipes_hide_value_axis_and_keep_baseline(recipe, axis: str) -> Non
 
 
 @pytest.mark.parametrize(
-    "recipe", [cs.example_scatter_outlier, cs.example_waterfall, cs.example_ranked_dots],
+    "recipe",
+    [cs.example_scatter_outlier, cs.example_waterfall, cs.example_ranked_dots],
     ids=lambda f: f.__name__,
 )
 def test_no_gridlines_on_point_and_bridge_recipes(recipe) -> None:
@@ -248,8 +266,13 @@ def test_no_gridlines_on_point_and_bridge_recipes(recipe) -> None:
 
 @pytest.mark.parametrize(
     "recipe",
-    [cs.example_lines, cs.example_target_line, cs.example_fan_chart, cs.example_annotated_timeline,
-     cs.example_small_multiples],
+    [
+        cs.example_lines,
+        cs.example_target_line,
+        cs.example_fan_chart,
+        cs.example_annotated_timeline,
+        cs.example_small_multiples,
+    ],
     ids=lambda f: f.__name__,
 )
 def test_line_recipes_have_no_vertical_gridlines(recipe) -> None:
@@ -260,7 +283,9 @@ def test_line_recipes_have_no_vertical_gridlines(recipe) -> None:
 
 def test_small_multiples_bottom_panels_carry_month_initials() -> None:
     fig, ax = _rendered(cs.example_small_multiples)
-    panels = sorted(ax.child_axes, key=lambda a: (a.get_position().y0, a.get_position().x0))
+    panels = sorted(
+        ax.child_axes, key=lambda a: (a.get_position().y0, a.get_position().x0)
+    )
     bottom = [p for p in panels if p.get_position().y0 == panels[0].get_position().y0]
     assert len(bottom) == 2
     for panel in bottom:
