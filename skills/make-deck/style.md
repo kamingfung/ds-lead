@@ -44,6 +44,7 @@ Sizes are in CSS pixels. In pptx, each pixel is 0.75 points (`points()`), so a 1
 
 ## Charts
 
+- Every chart kind draws as a native, editable pptx chart. Add a kind only when pptx can draw it natively. [docs/decisions.md](../../docs/decisions.md) says why.
 - Series use the colors in order: `ink`, `accent`, `ochre`, `sage` and `sienna`.
 - Line charts add a second encoding. Series 1 is solid, series 2 dashed and series 3 dotted. Each point has a circle marker, and each series ends in a label.
 - A gray dashed line marks a reference, such as a target, with its label.

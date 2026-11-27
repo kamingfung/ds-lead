@@ -4,7 +4,16 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from charts import ChartData, fmt_value, nice_ticks, svg_column, svg_line, to_svg
+from charts import (
+    KIND_LABELS,
+    RENDERERS,
+    ChartData,
+    fmt_value,
+    nice_ticks,
+    svg_column,
+    svg_line,
+    to_svg,
+)
 from spec import Chart
 from theme import HOUSE
 
@@ -270,6 +279,10 @@ def test_column_colors_one_bar_as_highlight_and_labels_values() -> None:
 def test_invalid_data_raises_value_error(chart: Chart, message: str) -> None:
     with pytest.raises(ValueError, match=message):
         to_svg(chart, 640, 360, HOUSE)
+
+
+def test_every_renderer_has_a_kind_label() -> None:
+    assert set(RENDERERS) == set(KIND_LABELS)
 
 
 @pytest.mark.parametrize(

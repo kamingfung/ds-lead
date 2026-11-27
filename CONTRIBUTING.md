@@ -12,9 +12,10 @@ These steps are for anyone who changes this repository, a person or an AI agent.
 
 1. Branch from `origin/main`.
 2. Make the change.
-3. Add one changelog line at the top of `## Unreleased`. Write what a user notices, not the files you touched. Gate: the line names the change and the PR link (add it after you open the PR).
-4. Run `python3 scripts/check_changelog.py --base origin/main`. Gate: it prints `OK`. The same check runs on `git push` once you ran `pre-commit install --hook-type pre-push` in your clone.
-5. Open the PR against `main`. Gate: the PR diff shows `CHANGELOG.md`.
+3. If the change chooses between options for the whole repository (architecture, a platform, a data contract), append an entry to [`docs/decisions.md`](docs/decisions.md). Give the options you rejected and why. Gate: the entry has an evidence line that opens.
+4. Add one changelog line at the top of `## Unreleased`. Write what a user notices, not the files you touched. Gate: the line names the change and the PR link (add it after you open the PR).
+5. Run `python3 scripts/check_changelog.py --base origin/main`. Gate: it prints `OK`. The same check runs on `git push` once you ran `pre-commit install --hook-type pre-push` in your clone.
+6. Open the PR against `main`. Gate: the PR diff shows `CHANGELOG.md`.
 
 Decision: a PR with no user-visible effect (a typo, a test) still gets a line; keep it short. Never skip the check with `--no-verify`.
 
