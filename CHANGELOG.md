@@ -4,6 +4,10 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+## v1.2.0 (2026-11-27)
+
+One new `make-deck` block and a decisions log: no skill was removed or renamed.
+
 - `make-deck`: new `Image` block puts a PNG, such as a `make-chart` histogram, in any chart region. The HTML embeds it, and the pptx centers it at its own aspect ratio, with its alt text and its source in the footer. `SKILL.md` gains a table of what a pptx reader can edit: "Edit Data" works only on the five chart kinds. ([#15](https://github.com/kamingfung/ds-lead/pull/15))
 - New `docs/decisions.md` records repository-wide decisions with the options rejected and why. Its first entries explain why deck charts stay native PowerPoint charts and not `make-chart` pictures. `make-deck`: new tests fail when a chart kind lacks a label or a pptx builder. ([#14](https://github.com/kamingfung/ds-lead/pull/14))
 
