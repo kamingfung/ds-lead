@@ -71,7 +71,7 @@ This entry replaces the "image block" row in "2026-11-27: The deck has the five 
 
 | Option                                       | Why it was rejected                                                                                                     |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Wait until a deck needs a picture            | Victor chose to add it now, so a `make-chart` figure such as a histogram has a place on a kit slide.                    |
+| Wait until a deck needs a picture            | The maintainer chose to add it now, so a `make-chart` figure such as a histogram has a place on a kit slide.            |
 | A sixth native chart kind for each new chart | Each kind needs an SVG renderer, a pptx builder and tests. A picture covers every chart PowerPoint cannot draw at once. |
 | Accept SVG as well as PNG                    | python-pptx 1.0.2 cannot add an SVG picture. One format keeps both renderers equal.                                     |
 | Stretch the picture to fill the region       | It distorts the chart. A centered fit keeps the aspect ratio.                                                           |
