@@ -52,7 +52,7 @@ Reply: the answer, the evidence for and against it, the rival you ruled out, and
 2. Write the tests first ([engineering-practice.md](references/engineering-practice.md), section 2).
 3. Brief each sub-agent, one brief per piece ([`defaults`](../defaults/SKILL.md), Briefs).
 4. Verify each result ([engineering-practice.md](references/engineering-practice.md), section 4).
-5. If the change can move model outputs, check the numbers ([`check-backtest`](../check-backtest/SKILL.md)).
+5. If the change can move model outputs, compare the outputs on `main` and on the branch ([`write-pr`](../write-pr/SKILL.md), Results).
 6. Go on with Opening a PR.
 
 Reply: what you built, each choice with the options you rejected, the run ids, and the open decisions.
