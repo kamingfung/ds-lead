@@ -27,18 +27,16 @@ For multi-step work, write a short plan with one check per step.
 - Share code at the second caller when both use it unchanged. Wait for a third caller when sharing needs a new parameter or flag.
 - Handle errors that can happen. Skip handling for states that cannot happen.
 - When a much shorter version works, write the shorter version.
-- PEP 20 says that "simple is better than complex" (Peters, 2004).
-- Google's review guidance asks reviewers to flag code more generic than the task needs (Google, "What to look for in a code review").
 
 ## Change Only What the Task Needs
 
-- Trace every changed line back to the request. Match the style of the file you edit, and follow PEP 8 (van Rossum, Warsaw and Coghlan, 2001) where the file is silent.
+- Trace every changed line back to the request. Match the style of the file you edit, and follow PEP 8 where the file is silent.
 - Leave unrelated code alone, including its comments and formatting. Mention dead code, but do not delete it.
 - Do not refactor working code that the task does not need changed.
 - Remove imports, variables and functions that your change leaves unused.
 - After a deletion, `git grep` each name, config key, fixture and doc link it used. Delete what nothing reads any more.
 - Delete code your change turns into a no-op, such as a fallback that can no longer run.
-- Aim for one self-contained change. Google treats about 100 changed lines as reasonable and about 1000 as usually too many (Google, "Small CLs").
+- Aim for one self-contained change. About 100 changed lines is reasonable; about 1000 is usually too many.
 
 ## Put Each Explanation in the Right Place
 
@@ -59,8 +57,8 @@ The detail sits in [python-pipeline.md, Where explanation belongs](references/py
 
 - A bug fix starts with a test that fails on the current code, then passes after the fix.
 - A refactor passes the same tests before and after.
-- Check that each test fails when the code it covers is broken (Google, "What to look for in a code review").
-- Put new tests in the same change as the logic they cover (Google, "Small CLs").
+- Check that each test fails when the code it covers is broken.
+- Put new tests in the same change as the logic they cover.
 - Compare outputs on `main` and on the branch before review when a change can move them.
 - A pure refactor or deletion shows that outputs are unchanged.
 
@@ -74,10 +72,3 @@ Write American English in code, comments, commit messages and new names.
 - Use -er, as in "center".
 - Words such as analysis, basis, exercise and surprise are spelled the same in both. Do not change them.
 - Keep an existing identifier's spelling, even when British. A rename is a separate change.
-
-## Sources
-
-- Peters, T. PEP 20, "The Zen of Python" (2004). https://peps.python.org/pep-0020/
-- van Rossum, G., Warsaw, B. and Coghlan, N. PEP 8, "Style Guide for Python Code" (2001). https://peps.python.org/pep-0008/
-- Google. "Small CLs", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/developer/small-cls.html (CC BY 3.0)
-- Google. "What to look for in a code review", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/reviewer/looking-for.html (CC BY 3.0)
