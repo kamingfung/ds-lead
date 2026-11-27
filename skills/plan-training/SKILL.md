@@ -137,15 +137,15 @@ See [references/learner-centered-syllabus.md](references/learner-centered-syllab
 
 ---
 
-## 50-Minute Active Lecture Template
+## Active Lecture Template
 
-Use this standard template to design an engaging class session:
+Use this template to design an engaging class session. Set each phase's length as a share of the session, and scale it to the time you have. The minutes in parentheses show a 50-minute class. Keep every lecture chunk within the 15-minute rule above.
 
-| Time          | Phase                       | Instructor Action                                                                                   | Learner Action                                  |
-| ------------- | --------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **00–05 min** | **Hook & Recall**           | Present intriguing real-world paradox or question; activate prior knowledge.                        | Think individually; respond via live poll.      |
-| **05–18 min** | **Mini-Lecture 1**          | Introduce core concept / physical model; unpack key equations or mechanism.                         | Active note-taking; identify questions.         |
-| **18–28 min** | **Active Learning Task**    | Facilitate **Think-Pair-Share** or **Concept Test**; circulate the room to diagnose misconceptions. | Work in pairs; debate and reach consensus.      |
-| **28–38 min** | **Mini-Lecture 2**          | Deconstruct the peer activity findings; extend to real-world edge cases or data.                    | Connect activity results to the broader theory. |
-| **38–46 min** | **Application / Problem**   | Assign a small-group problem or code exercise.                                                      | Collaborate in groups of 3; derive solution.    |
-| **46–50 min** | **Synthesis & Exit Ticket** | Summarize core takeaways; collect "Muddiest Point" 1-minute card.                                   | Complete exit ticket to solidify learning.      |
+| Share of session | Phase                       | Instructor Action                                                                                   | Learner Action                                  |
+| ---------------- | --------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **10%** (5 min)  | **Hook & Recall**           | Present intriguing real-world paradox or question; activate prior knowledge.                        | Think individually; respond via live poll.      |
+| **26%** (13 min) | **Mini-Lecture 1**          | Introduce core concept / physical model; unpack key equations or mechanism.                         | Active note-taking; identify questions.         |
+| **20%** (10 min) | **Active Learning Task**    | Facilitate **Think-Pair-Share** or **Concept Test**; circulate the room to diagnose misconceptions. | Work in pairs; debate and reach consensus.      |
+| **20%** (10 min) | **Mini-Lecture 2**          | Deconstruct the peer activity findings; extend to real-world edge cases or data.                    | Connect activity results to the broader theory. |
+| **16%** (8 min)  | **Application / Problem**   | Assign a small-group problem or code exercise.                                                      | Collaborate in groups of 3; derive solution.    |
+| **8%** (4 min)   | **Synthesis & Exit Ticket** | Summarize core takeaways; collect "Muddiest Point" 1-minute card.                                   | Complete exit ticket to solidify learning.      |
