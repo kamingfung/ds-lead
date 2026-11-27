@@ -76,7 +76,3 @@ Cap the attempts and wait longer after each failure. The suggestion replaces lin
 - Post the round summary as a reply under the reviewer's own summary comment, or as a top-level comment when there is none.
 - Shape the summary: head sha first, one bullet per finding with its fix commit, then whether outputs change (with evidence), the test count and the CI state. See [answering-a-review.md](answering-a-review.md), section 4.
 - Keep replies short. Skip thanks for each comment, say how you read an unclear comment, and point to the change (commit, `file:line` or doc section) instead of pasting it.
-
-## Sources
-
-- Google. "How to write code review comments", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/reviewer/comments.html (CC BY 3.0)
