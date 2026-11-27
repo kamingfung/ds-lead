@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 from dataclasses import dataclass, field, fields, is_dataclass
 from typing import TYPE_CHECKING, Iterator
 
@@ -100,6 +101,18 @@ class Table:
 class Chart:
     kind: str
     data: ChartData
+
+
+@dataclass(frozen=True)
+class Image:
+    """A PNG picture, such as a make-chart figure, for a chart PowerPoint cannot draw natively.
+
+    The pptx shows it as a picture, so it has no "Edit Data". Regenerate the PNG to change it.
+    """
+
+    path: str
+    alt: str
+    source: str
 
 
 @dataclass(frozen=True)
@@ -292,6 +305,12 @@ def _shape_problem(value: object) -> str:
         return "matrix quadrant must be 0 to 3"
     if isinstance(value, Tabs) and any(len(charts) != 2 for _, charts in value.tabs):
         return "each tab needs 2 charts"
+    if isinstance(value, Image) and not (
+        value.path.lower().endswith(".png") and Path(value.path).is_file()
+    ):
+        return f"image needs an existing .png file, not {value.path!r}"
+    if isinstance(value, Image) and not value.alt.strip():
+        return "image needs alt text"
     return ""
 
 

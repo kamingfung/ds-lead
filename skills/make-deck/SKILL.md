@@ -27,6 +27,7 @@ The deck kit lives in `template/`. It takes one `Deck` spec, places each slide i
 | Bridge between two totals           | `chart_2to1`                                                          | `waterfall`                |
 | Part of a whole                     | `chart_1to1`                                                          | `stacked100`               |
 | Gain and loss by item               | `chart_table`                                                         | `diverging_bar`            |
+| A chart PowerPoint cannot draw      | any chart layout                                                      | `Image` (a make-chart PNG) |
 | Scenarios                           | `tabs`                                                                | `column` (two per tab)     |
 | One headline figure                 | `big_number`                                                          | `Num`                      |
 | 3 or 4 headline figures             | `kpi_split` or `cards3`                                               | `Tile` or `Card`           |
@@ -40,6 +41,19 @@ The deck kit lives in `template/`. It takes one `Deck` spec, places each slide i
 | Options                             | `options3`                                                            | `Card` (three)             |
 | Workshop question                   | `discussion`                                                          | `Bullets` and `Panel`      |
 | Opening, divider, prose, references | `cover`, `section`, `brief`, `two_col`, `grid4`, `note`, `references` | Text and bullets, no chart |
+
+## What a pptx Reader Can Edit
+
+The pptx keeps editing where PowerPoint has a native object. "Edit Data" works only on the five chart kinds.
+
+| Block                                                    | In the pptx                                            | To change it                                                                                              |
+| -------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `Chart`: `line`, `column`, `diverging_bar`, `stacked100` | Native chart. "Edit Data" opens its embedded workbook. | Edit the data in PowerPoint, or change the spec and rebuild.                                              |
+| `Chart`: `waterfall`                                     | Native stacked-column chart with a hidden base series. | Change the spec and rebuild. A PowerPoint edit must also recompute the base series, or the bridge breaks. |
+| `Image`                                                  | Picture. No "Edit Data".                               | Redraw the PNG with `make-chart` and rebuild.                                                             |
+| `Table`                                                  | Native table.                                          | Edit the cells in PowerPoint.                                                                             |
+| Text, `Bullets`, `Card`, `Tile`, `Num`, `Panel`          | Text boxes and shapes.                                 | Edit the text in PowerPoint. A number typed there no longer matches its `Num` source.                     |
+| `Flow`, `Cycle`, `Matrix`, `Gantt`, `Tree`, `Timeline`   | Shapes and connectors. No data sheet.                  | Edit the text and move the shapes in PowerPoint. Moving a Gantt bar does not change any date.             |
 
 ## Step 3: Build From Data
 

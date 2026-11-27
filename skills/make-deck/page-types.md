@@ -13,10 +13,10 @@ The canvas is 1280 × 720 CSS pixels. Side margins are 56 px, and the gutter bet
 | `big_number`  | One headline figure with a caption                                          | `number` (Num), `caption` (Text), `note` (Text)                                                |
 | `table`       | Detail in one table                                                         | `table` (Table), `note` (Text)                                                                 |
 | `grid4`       | Four short bullet blocks in a 2 by 2 grid                                   | `blocks` (up to 4 Bullets blocks)                                                              |
-| `chart_3to1`  | A chart with takeaways, three quarters for the chart (use `line`)           | `chart` (Chart), `takeaways` (Bullets, up to 3 items)                                          |
-| `chart_2to1`  | A chart with takeaways, two thirds for the chart (use `waterfall`)          | `chart` (Chart), `takeaways` (Bullets, up to 4 items)                                          |
-| `chart_1to1`  | A chart with takeaways, half for each (use `stacked100`)                    | `chart` (Chart), `takeaways` (Bullets, up to 3 items)                                          |
-| `chart_table` | A chart beside a table, such as gain and loss by item (use `diverging_bar`) | `chart` (Chart), `table` (Table), `note` (Text)                                                |
+| `chart_3to1`  | A chart with takeaways, three quarters for the chart (use `line`)           | `chart` (Chart or Image), `takeaways` (Bullets, up to 3 items)                                 |
+| `chart_2to1`  | A chart with takeaways, two thirds for the chart (use `waterfall`)          | `chart` (Chart or Image), `takeaways` (Bullets, up to 4 items)                                 |
+| `chart_1to1`  | A chart with takeaways, half for each (use `stacked100`)                    | `chart` (Chart or Image), `takeaways` (Bullets, up to 3 items)                                 |
+| `chart_table` | A chart beside a table, such as gain and loss by item (use `diverging_bar`) | `chart` (Chart or Image), `table` (Table), `note` (Text)                                       |
 | `note`        | Prose with a heading, and a print-only note                                 | `heading` (Text), `body` (Text), `print_note` (Text)                                           |
 | `matrix`      | Items placed on two axes in four quadrants, for prioritization              | `diagram` (Matrix)                                                                             |
 | `flow`        | A process of 3 to 6 steps, with a note                                      | `diagram` (Flow), `note` (Text)                                                                |

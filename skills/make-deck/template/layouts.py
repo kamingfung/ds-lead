@@ -56,7 +56,7 @@ def _chart(a: int, b: int, takeaways: int) -> dict[str, Region]:
     left: int = split(a, b)[0]
     text_x: int = MARGIN + left + GUTTER + 24
     return {
-        "chart": Region(MARGIN, BODY_TOP, left, BODY_H, ("Chart",)),
+        "chart": Region(MARGIN, BODY_TOP, left, BODY_H, ("Chart", "Image")),
         "takeaways": Region(
             text_x,
             BODY_TOP,
@@ -113,7 +113,7 @@ LAYOUTS: dict[str, dict[str, Region]] = {
     "chart_2to1": _chart(2, 1, 4),
     "chart_1to1": _chart(1, 1, 3),
     "chart_table": {
-        "chart": Region(MARGIN, BODY_TOP, CHART_W, BODY_H, ("Chart",)),
+        "chart": Region(MARGIN, BODY_TOP, CHART_W, BODY_H, ("Chart", "Image")),
         "table": Region(SIDE_X, BODY_TOP, SIDE_W, TABLE_H, ("Table",)),
         "note": Region(SIDE_X, NOTE_Y, SIDE_W, 32, ("Text",)),
     },
