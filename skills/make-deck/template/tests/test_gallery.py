@@ -43,7 +43,9 @@ def test_each_kicker_names_its_layout_and_each_title_is_a_sentence() -> None:
     deck: Deck = gallery_deck()
 
     # Act
-    pairs: list[tuple[str, str, str]] = [(s.kicker, s.layout, s.title) for s in deck.slides]
+    pairs: list[tuple[str, str, str]] = [
+        (s.kicker, s.layout, s.title) for s in deck.slides
+    ]
 
     # Assert
     assert all(kicker == layout for kicker, layout, _ in pairs)
@@ -102,7 +104,9 @@ def test_sources_slides_list_every_num_once() -> None:
     deck: Deck = gallery_deck()
 
     # Act
-    listed: int = sum(len(slide.regions["table"].rows) for slide in sources_slides(deck))
+    listed: int = sum(
+        len(slide.regions["table"].rows) for slide in sources_slides(deck)
+    )
 
     # Assert
     assert listed == len(all_nums(deck))
@@ -163,7 +167,9 @@ def test_every_slide_but_cover_and_section_has_a_lead() -> None:
 
     # Act
     missing: list[str] = [
-        slide.layout for slide in deck.slides if slide.layout not in ("cover", "section") and not slide.lead
+        slide.layout
+        for slide in deck.slides
+        if slide.layout not in ("cover", "section") and not slide.lead
     ]
 
     # Assert
@@ -175,7 +181,11 @@ def test_card_metrics_and_tile_values_are_at_most_seven_characters() -> None:
     deck: Deck = gallery_deck()
 
     # Act
-    texts: list[str] = [num.text() for _, path, num in all_nums(deck) if path.endswith(("metric", "value"))]
+    texts: list[str] = [
+        num.text()
+        for _, path, num in all_nums(deck)
+        if path.endswith(("metric", "value"))
+    ]
 
     # Assert
     assert len(texts) >= 7
@@ -191,7 +201,9 @@ def test_chart_units_are_at_most_three_characters() -> None:
             if isinstance(value, Chart):
                 units.append(value.data.unit)
             elif isinstance(value, Tabs):
-                units.extend(chart.data.unit for _, charts in value.tabs for chart in charts)
+                units.extend(
+                    chart.data.unit for _, charts in value.tabs for chart in charts
+                )
 
     # Act and Assert
     assert len(units) >= 6

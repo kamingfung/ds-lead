@@ -38,8 +38,11 @@ MIN_PERCENT_LABEL: float = 6.0
 DARK_LUMA: float = 150.0
 DASHES: tuple[str, ...] = ("", "6 4", "2 3")
 KIND_LABELS: dict[str, str] = {
-    "line": "Line", "diverging_bar": "Diverging bar", "waterfall": "Waterfall",
-    "stacked100": "100% stacked bar", "column": "Column",
+    "line": "Line",
+    "diverging_bar": "Diverging bar",
+    "waterfall": "Waterfall",
+    "stacked100": "100% stacked bar",
+    "column": "Column",
 }
 
 
@@ -112,7 +115,13 @@ def _rect(x: float, y: float, width: float, height: float, fill: str) -> str:
 
 
 def _line(
-    x1: float, y1: float, x2: float, y2: float, color: str, dash: str = "", width: float = 1.0
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
+    color: str,
+    dash: str = "",
+    width: float = 1.0,
 ) -> str:
     style: str = f' stroke-dasharray="{dash}"' if dash else ""
     coords: str = f'x1="{_n(x1)}" y1="{_n(y1)}" x2="{_n(x2)}" y2="{_n(y2)}"'
@@ -120,8 +129,13 @@ def _line(
 
 
 def _text(
-    x: float, y: float, label: str, theme: Theme, anchor: str = "middle",
-    bold: bool = False, color: str = "",
+    x: float,
+    y: float,
+    label: str,
+    theme: Theme,
+    anchor: str = "middle",
+    bold: bool = False,
+    color: str = "",
 ) -> str:
     weight: str = ' font-weight="bold"' if bold else ""
     fill: str = color or theme.ink
@@ -135,7 +149,9 @@ def _open(kind: str, data: ChartData, w: int, h: int, theme: Theme) -> list[str]
     """Open an SVG with its viewBox, a title and a paper ground."""
     if w <= 0 or h <= 0:
         raise ValueError(f"chart size must be positive, got {w}x{h}")
-    names: list[str] = [name for name, _ in data.series if name] or list(data.categories)
+    names: list[str] = [name for name, _ in data.series if name] or list(
+        data.categories
+    )
     title: str = f"{KIND_LABELS[kind]} chart: {', '.join(names)}"
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">',
@@ -149,22 +165,32 @@ def _finish(parts: list[str]) -> str:
     return "".join(parts)
 
 
-def _check_shape(data: ChartData, series: tuple[int, int], categories: tuple[int, int]) -> None:
+def _check_shape(
+    data: ChartData, series: tuple[int, int], categories: tuple[int, int]
+) -> None:
     """Raise ValueError when series or category counts fall outside the allowed ranges."""
     count: int = len(data.series)
     points: int = len(data.categories)
     if not series[0] <= count <= series[1]:
         raise ValueError(f"expected {series[0]} to {series[1]} series, got {count}")
     if not categories[0] <= points <= categories[1]:
-        raise ValueError(f"expected {categories[0]} to {categories[1]} categories, got {points}")
+        raise ValueError(
+            f"expected {categories[0]} to {categories[1]} categories, got {points}"
+        )
     for name, values in data.series:
         if len(values) != points:
-            raise ValueError(f"series {name!r} has {len(values)} values for {points} categories")
+            raise ValueError(
+                f"series {name!r} has {len(values)} values for {points} categories"
+            )
 
 
 def _check_highlight(data: ChartData) -> None:
-    if data.highlight != NO_HIGHLIGHT and not 0 <= data.highlight < len(data.categories):
-        raise ValueError(f"highlight {data.highlight} is outside {len(data.categories)} categories")
+    if data.highlight != NO_HIGHLIGHT and not 0 <= data.highlight < len(
+        data.categories
+    ):
+        raise ValueError(
+            f"highlight {data.highlight} is outside {len(data.categories)} categories"
+        )
 
 
 def _check_rows_sum(data: ChartData) -> None:
@@ -176,7 +202,9 @@ def _check_rows_sum(data: ChartData) -> None:
 
 
 def _all_values(data: ChartData) -> list[float]:
-    values: list[float] = [value for _, series_values in data.series for value in series_values]
+    values: list[float] = [
+        value for _, series_values in data.series for value in series_values
+    ]
     if data.reference is not None:
         values.append(data.reference)
     return values
@@ -200,7 +228,9 @@ def nice_ticks(low: float, high: float, count: int = 5) -> list[float]:
     """
     raw: float = (high - low or 1.0) / (count + 1)
     magnitude: float = 10.0 ** math.floor(math.log10(raw))
-    step: float = next(mult * magnitude for mult in NICE_STEPS if mult * magnitude >= raw)
+    step: float = next(
+        mult * magnitude for mult in NICE_STEPS if mult * magnitude >= raw
+    )
     first: int = math.floor(low / step)
     last: int = math.ceil(high / step)
     return [round((first + index) * step, 10) for index in range(last - first + 1)]
@@ -235,7 +265,9 @@ def _grid(frame: Frame, ticks: list[float], theme: Theme) -> list[str]:
     for value in ticks:
         y: float = frame.y(value)
         parts.append(_line(frame.left, y, frame.right, y, theme.grid))
-        parts.append(_text(frame.left - 8, y + 5, fmt_value(value, ""), theme, anchor="end"))
+        parts.append(
+            _text(frame.left - 8, y + 5, fmt_value(value, ""), theme, anchor="end")
+        )
     return parts
 
 
@@ -250,17 +282,26 @@ def label_step(names: Sequence[str], width: float) -> int:
     """Return k so that labeling every k-th category keeps the labels from touching across width px."""
     if not names:
         return 1
-    need: float = max(len(name) for name in names) * 9.0 + 16.0  # about 9 px per character at 16 px
+    need: float = (
+        max(len(name) for name in names) * 9.0 + 16.0
+    )  # about 9 px per character at 16 px
     fits: int = max(2, int(width // need))
     return max(1, math.ceil(len(names) / fits))
 
 
-def _category_labels(names: tuple[str, ...], xs: list[float], y: float, theme: Theme) -> list[str]:
-    width: float = (xs[-1] - xs[0]) * len(xs) / max(1, len(xs) - 1) if len(xs) > 1 else 0.0
+def _category_labels(
+    names: tuple[str, ...], xs: list[float], y: float, theme: Theme
+) -> list[str]:
+    width: float = (
+        (xs[-1] - xs[0]) * len(xs) / max(1, len(xs) - 1) if len(xs) > 1 else 0.0
+    )
     step: int = label_step(names, width) if len(xs) > 1 else 1
     last: int = len(names) - 1
-    return [_text(x, y, name, theme) for i, (name, x) in enumerate(zip(names, xs))
-            if i % step == 0 or (i == last and last % step >= step / 2)]
+    return [
+        _text(x, y, name, theme)
+        for i, (name, x) in enumerate(zip(names, xs))
+        if i % step == 0 or (i == last and last % step >= step / 2)
+    ]
 
 
 def _is_dark(color: str) -> bool:
@@ -317,12 +358,17 @@ def svg_line(data: ChartData, w: int, h: int, theme: Theme) -> str:
     ticks: list[float] = _ticks_for(_all_values(data))
     notes_zero: bool = ticks[0] > 0
     frame: Frame = Frame(
-        MARGIN_LEFT, w - LINE_END_ROOM, MARGIN_TOP,
-        h - MARGIN_BOTTOM - (NOTE_ROOM if notes_zero else 0.0), ticks[0], ticks[-1],
+        MARGIN_LEFT,
+        w - LINE_END_ROOM,
+        MARGIN_TOP,
+        h - MARGIN_BOTTOM - (NOTE_ROOM if notes_zero else 0.0),
+        ticks[0],
+        ticks[-1],
     )
     count: int = len(data.categories)
     xs: list[float] = [
-        frame.left + index * (frame.right - frame.left) / (count - 1) for index in range(count)
+        frame.left + index * (frame.right - frame.left) / (count - 1)
+        for index in range(count)
     ]
     parts: list[str] = _open("line", data, w, h, theme)
     parts.extend(_grid(frame, ticks, theme))
@@ -332,27 +378,33 @@ def svg_line(data: ChartData, w: int, h: int, theme: Theme) -> str:
     parts.extend(_end_labels(data, xs[-1], frame, theme))
     if data.reference is not None:
         y: float = frame.y(data.reference)
-        label: str = f"{data.reference_label} {fmt_value(data.reference, label_unit(data.unit))}"
+        label: str = (
+            f"{data.reference_label} {fmt_value(data.reference, label_unit(data.unit))}"
+        )
         parts.append(_line(frame.left, y, frame.right, y, theme.gray, dash="3 3"))
-        parts.append(_text(frame.left + 4, y - 6, label, theme, anchor="start", color=theme.gray))
+        parts.append(
+            _text(frame.left + 4, y - 6, label, theme, anchor="start", color=theme.gray)
+        )
     if notes_zero:
         note: str = "Axis does not start at zero"
-        parts.append(_text(frame.left, frame.bottom + 48, note, theme, "start", color=theme.gray))
+        parts.append(
+            _text(frame.left, frame.bottom + 48, note, theme, "start", color=theme.gray)
+        )
     parts.extend(_category_labels(data.categories, xs, frame.bottom + 24, theme))
     return _finish(parts)
 
 
 def svg_diverging_bar(data: ChartData, w: int, h: int, theme: Theme) -> str:
-    """Render one series as horizontal bars from a vertical zero line, largest value first.
-
-    """
+    """Render one series as horizontal bars from a vertical zero line, largest value first."""
     _check_shape(data, (1, 1), (1, MAX_ITEMS))
     ranked: list[tuple[str, float]] = sorted(
         zip(data.categories, data.series[0][1]), key=lambda pair: pair[1], reverse=True
     )
     bounds: tuple[float, float] = _diverging_bounds([value for _, value in ranked])
     left: float = _label_plot_left(data.categories)
-    frame: Frame = Frame(left, w - VALUE_ROOM, MARGIN_TOP, h - MARGIN_BOTTOM, bounds[0], bounds[1])
+    frame: Frame = Frame(
+        left, w - VALUE_ROOM, MARGIN_TOP, h - MARGIN_BOTTOM, bounds[0], bounds[1]
+    )
     band: float = (frame.bottom - frame.top) / len(ranked)
     bar_h: float = band * BAR_SHARE
     zero: float = frame.x(0.0)
@@ -366,12 +418,25 @@ def svg_diverging_bar(data: ChartData, w: int, h: int, theme: Theme) -> str:
         label_x: float = end + 6 if positive else end - 6
         anchor: str = "start" if positive else "end"
         parts.append(_text(left - LABEL_GAP, cy + 5, name, theme, anchor="end"))
-        parts.append(_rect(min(zero, end), cy - bar_h / 2, abs(end - zero), bar_h, color))
-        parts.append(_text(label_x, cy + 5, fmt_value(value, label_unit(data.unit)), theme, anchor, True))
+        parts.append(
+            _rect(min(zero, end), cy - bar_h / 2, abs(end - zero), bar_h, color)
+        )
+        parts.append(
+            _text(
+                label_x,
+                cy + 5,
+                fmt_value(value, label_unit(data.unit)),
+                theme,
+                anchor,
+                True,
+            )
+        )
     return _finish(parts)
 
 
-def _waterfall_geometry(values: tuple[float, ...]) -> tuple[list[tuple[float, float]], list[float]]:
+def _waterfall_geometry(
+    values: tuple[float, ...],
+) -> tuple[list[tuple[float, float]], list[float]]:
     """Return each bar's (low, high) span and the running level after each bar."""
     spans: list[tuple[float, float]] = [(min(0.0, values[0]), max(0.0, values[0]))]
     levels: list[float] = [values[0]]
@@ -395,14 +460,21 @@ def svg_waterfall(data: ChartData, w: int, h: int, theme: Theme) -> str:
     values: tuple[float, ...] = data.series[0][1]
     expected_end: float = values[0] + sum(values[1:-1])
     if not math.isclose(values[-1], expected_end, abs_tol=1e-6):
-        raise ValueError(f"waterfall end {values[-1]} is not start plus steps {expected_end}")
+        raise ValueError(
+            f"waterfall end {values[-1]} is not start plus steps {expected_end}"
+        )
     spans: list[tuple[float, float]]
     levels: list[float]
     spans, levels = _waterfall_geometry(values)
     edges: list[float] = [edge for span in spans for edge in span]
     bounds: tuple[float, float] = _zero_bounds(edges)
     frame: Frame = Frame(
-        MARGIN_LEFT, w - MARGIN_RIGHT, MARGIN_TOP + 12, h - MARGIN_BOTTOM, bounds[0], bounds[1]
+        MARGIN_LEFT,
+        w - MARGIN_RIGHT,
+        MARGIN_TOP + 12,
+        h - MARGIN_BOTTOM,
+        bounds[0],
+        bounds[1],
     )
     count: int = len(values)
     slot: float = (frame.right - frame.left) / count
@@ -421,13 +493,23 @@ def svg_waterfall(data: ChartData, w: int, h: int, theme: Theme) -> str:
         if index in (0, count - 1):
             total: str = fmt_value(values[index], label_unit(data.unit))
             parts.append(_rect(x, top_y, bar_w, height, theme.ink))
-            parts.append(_text(center, top_y + 20, total, theme, bold=True, color=theme.paper))
+            parts.append(
+                _text(center, top_y + 20, total, theme, bold=True, color=theme.paper)
+            )
             continue
         step: float = values[index]
         sign: str = "+" if step > 0 else ""
         color: str = theme.accent if step >= 0 else theme.loss
         parts.append(_rect(x, top_y, bar_w, height, color))
-        parts.append(_text(center, top_y - 8, sign + fmt_value(step, label_unit(data.unit)), theme, bold=True))
+        parts.append(
+            _text(
+                center,
+                top_y - 8,
+                sign + fmt_value(step, label_unit(data.unit)),
+                theme,
+                bold=True,
+            )
+        )
     parts.extend(_category_labels(data.categories, centers, frame.bottom + 24, theme))
     return _finish(parts)
 
@@ -459,11 +541,17 @@ def svg_stacked100(data: ChartData, w: int, h: int, theme: Theme) -> str:
             seg_left: float = frame.x(start)
             right: float = frame.x(start + value)
             color: str = theme.series[index]
-            parts.append(_rect(seg_left, cy - bar_h / 2, right - seg_left, bar_h, color))
+            parts.append(
+                _rect(seg_left, cy - bar_h / 2, right - seg_left, bar_h, color)
+            )
             if value >= MIN_PERCENT_LABEL:
                 label_color: str = theme.white if _is_dark(color) else theme.ink
                 label: str = fmt_value(value, "%")
-                parts.append(_text((seg_left + right) / 2, cy + 5, label, theme, color=label_color))
+                parts.append(
+                    _text(
+                        (seg_left + right) / 2, cy + 5, label, theme, color=label_color
+                    )
+                )
             start += value
     return _finish(parts)
 
@@ -479,11 +567,18 @@ def svg_column(data: ChartData, w: int, h: int, theme: Theme) -> str:
     values: tuple[float, ...] = data.series[0][1]
     ticks: list[float] = nice_ticks(*_zero_bounds(list(values)))
     frame: Frame = Frame(
-        MARGIN_LEFT, w - MARGIN_RIGHT, MARGIN_TOP, h - MARGIN_BOTTOM, ticks[0], ticks[-1]
+        MARGIN_LEFT,
+        w - MARGIN_RIGHT,
+        MARGIN_TOP,
+        h - MARGIN_BOTTOM,
+        ticks[0],
+        ticks[-1],
     )
     slot: float = (frame.right - frame.left) / len(values)
     bar_w: float = slot * BAR_SHARE
-    centers: list[float] = [frame.left + (index + 0.5) * slot for index in range(len(values))]
+    centers: list[float] = [
+        frame.left + (index + 0.5) * slot for index in range(len(values))
+    ]
     parts: list[str] = _open("column", data, w, h, theme)
     parts.extend(_grid(frame, ticks, theme))
     zero: float = frame.y(0.0)
@@ -494,14 +589,19 @@ def svg_column(data: ChartData, w: int, h: int, theme: Theme) -> str:
         color: str = theme.highlight if index == data.highlight else theme.ink
         label_y: float = top_y - 8 if value >= 0 else base_y + 18
         parts.append(_rect(center - bar_w / 2, top_y, bar_w, base_y - top_y, color))
-        parts.append(_text(center, label_y, fmt_value(value, label_unit(data.unit)), theme))
+        parts.append(
+            _text(center, label_y, fmt_value(value, label_unit(data.unit)), theme)
+        )
     parts.extend(_category_labels(data.categories, centers, frame.bottom + 24, theme))
     return _finish(parts)
 
 
 RENDERERS: dict[str, Callable[[ChartData, int, int, Theme], str]] = {
-    "line": svg_line, "diverging_bar": svg_diverging_bar, "waterfall": svg_waterfall,
-    "stacked100": svg_stacked100, "column": svg_column,
+    "line": svg_line,
+    "diverging_bar": svg_diverging_bar,
+    "waterfall": svg_waterfall,
+    "stacked100": svg_stacked100,
+    "column": svg_column,
 }
 
 
@@ -511,7 +611,9 @@ def to_svg(chart: Chart, w: int, h: int, theme: Theme) -> str:
     Raises:
         ValueError: If the kind is unknown or the data does not fit the kind.
     """
-    renderer: Callable[[ChartData, int, int, Theme], str] | None = RENDERERS.get(chart.kind)
+    renderer: Callable[[ChartData, int, int, Theme], str] | None = RENDERERS.get(
+        chart.kind
+    )
     if renderer is None:
         raise ValueError(f"unknown chart kind {chart.kind!r}")
     return renderer(chart.data, w, h, theme)

@@ -183,7 +183,9 @@ def _walk(node: object, path: str) -> Iterator[tuple[str, Num]]:
         yield path, node
     elif is_dataclass(node) and not isinstance(node, type):
         for item in fields(node):
-            yield from _walk(getattr(node, item.name), f"{path}.{item.name}" if path else item.name)
+            yield from _walk(
+                getattr(node, item.name), f"{path}.{item.name}" if path else item.name
+            )
     elif isinstance(node, (tuple, list)):
         for index, child in enumerate(node):
             yield from _walk(child, f"{path}[{index}]")
@@ -228,7 +230,9 @@ def item_label(path: str) -> str:
 
     A path ending in an index (a table cell) gives only the region and position.
     """
-    names: list[str] = [part for part in re.split(r"[.\[\]]", path) if part and not part.isdigit()]
+    names: list[str] = [
+        part for part in re.split(r"[.\[\]]", path) if part and not part.isdigit()
+    ]
     indexes: list[str] = re.findall(r"\[(\d+)\]", path)
     head: str = names[1] + (f" {int(indexes[0]) + 1}" if indexes else "")
     if len(names) > 2 and not path.endswith("]"):
@@ -239,7 +243,8 @@ def item_label(path: str) -> str:
 def sources_slides(deck: Deck) -> tuple[Slide, ...]:
     """Build "Backup · Sources" table slides, 12 rows each, for every number in the deck."""
     rows: tuple[tuple[str, str, str, str], ...] = tuple(
-        (str(number), item_label(path), num.text(), num.source) for number, path, num in all_nums(deck)
+        (str(number), item_label(path), num.text(), num.source)
+        for number, path, num in all_nums(deck)
     )
     return tuple(
         Slide(
@@ -267,14 +272,19 @@ def _units(value: object, unit: str) -> int:
     """Count a region value: top-level blocks for "block", else bullet items."""
     if unit == "block":
         return len(_elements(value))
-    return sum(len(e.items) if isinstance(e, Bullets) else 0 if isinstance(e, Text) else 1 for e in _elements(value))
+    return sum(
+        len(e.items) if isinstance(e, Bullets) else 0 if isinstance(e, Text) else 1
+        for e in _elements(value)
+    )
 
 
 def _shape_problem(value: object) -> str:
     """Return the size or shape limit a block breaks, or an empty string."""
     if isinstance(value, Flow) and not 3 <= len(value.steps) <= 6:
         return "flow needs 3 to 6 steps"
-    if isinstance(value, Timeline) and (len(value.nodes) > 6 or any(n[2] not in STATUSES for n in value.nodes)):
+    if isinstance(value, Timeline) and (
+        len(value.nodes) > 6 or any(n[2] not in STATUSES for n in value.nodes)
+    ):
         return "timeline allows up to 6 nodes, each kept, dropped or open"
     if isinstance(value, Gantt) and (len(value.lanes) > 5 or len(value.milestones) > 2):
         return "gantt allows up to 5 lanes and 2 milestones"
@@ -290,11 +300,15 @@ def _check_region(number: int, name: str, region: Region, value: object) -> None
     for element in _elements(value):
         kind: str = type(element).__name__
         if kind not in region.accepts:
-            raise ValueError(f"slide {number}: region {name!r} takes {', '.join(region.accepts)}, not {kind}")
+            raise ValueError(
+                f"slide {number}: region {name!r} takes {', '.join(region.accepts)}, not {kind}"
+            )
         if problem := _shape_problem(element):
             raise ValueError(f"slide {number}: {problem}")
     if _units(value, region.unit) > region.capacity:
-        raise ValueError(f"slide {number}: region {name!r} holds {region.capacity} at most")
+        raise ValueError(
+            f"slide {number}: region {name!r} holds {region.capacity} at most"
+        )
 
 
 def _check_slide(number: int, slide: Slide) -> None:
@@ -304,7 +318,9 @@ def _check_slide(number: int, slide: Slide) -> None:
     regions: dict[str, Region] = LAYOUTS[slide.layout]
     for name in slide.regions:
         if name not in regions:
-            raise ValueError(f"slide {number}: layout {slide.layout!r} has no region {name!r}")
+            raise ValueError(
+                f"slide {number}: layout {slide.layout!r} has no region {name!r}"
+            )
     for name, region in regions.items():
         if name not in slide.regions:
             if region.required:
