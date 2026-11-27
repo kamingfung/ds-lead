@@ -908,7 +908,8 @@ class _Painter:
         top: float = max(TOP_SHARE * max(values[0], values[-1]), peak / (1 - CAP_SHARE))
         last: int = len(values) - 1
         caps: list[float] = [
-            0.0 if i in (0, last) else CAP_SHARE * top for i in range(len(values))
+            0.0 if i in (0, last) or values[i] < 0 else CAP_SHARE * top
+            for i in range(len(values))
         ]
         chart: PptxChart = self._add_chart(
             box,
@@ -941,10 +942,17 @@ class _Painter:
             else:
                 _fill_point(bars.points[index], t.accent if number >= 0 else t.loss)
                 sign: str = "+" if number > 0 else ""
+                # An increase is labeled above its bar (on the cap series); a decrease
+                # below it, at the top end of the hidden base series.
+                holder, position = (
+                    (caps_series, XL_LABEL_POSITION.INSIDE_BASE)
+                    if number >= 0
+                    else (base, XL_LABEL_POSITION.INSIDE_END)
+                )
                 _label(
-                    caps_series.points[index],
+                    holder.points[index],
                     sign + fmt_value(number, _short(data.unit)),
-                    XL_LABEL_POSITION.INSIDE_BASE,
+                    position,
                     Style(t.small_px, t.ink, bold=True),
                 )
 

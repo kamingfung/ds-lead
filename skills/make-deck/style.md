@@ -47,7 +47,7 @@ Sizes are in CSS pixels. In pptx, each pixel is 0.75 points (`points()`), so a 1
 - Series use the colors in order: `ink`, `accent`, `ochre`, `sage` and `sienna`.
 - Line charts add a second encoding. Series 1 is solid, series 2 dashed and series 3 dotted. Each point has a circle marker, and each series ends in a label.
 - A gray dashed line marks a reference, such as a target, with its label.
-- A waterfall shows the start and end totals as ink bars, with each value inside in paper. Each change bar is `accent` when positive and `loss` when negative. Its signed value sits above the bar.
+- A waterfall shows the start and end totals as ink bars, with each value inside in paper. Each change bar is `accent` when positive and `loss` when negative. Its signed value sits above the bar for an increase and below it for a decrease.
 - Put the unit in the lead line, which is the chart title. Value labels carry a unit only when it is `%` or three characters or fewer.
 - HTML line charts also print the unit above the plot. The pptx does not.
 - A line chart whose axis does not start at zero says so. The HTML prints "Axis does not start at zero" under the plot. The pptx prints no such note.

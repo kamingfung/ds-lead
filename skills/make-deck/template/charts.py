@@ -501,10 +501,12 @@ def svg_waterfall(data: ChartData, w: int, h: int, theme: Theme) -> str:
         sign: str = "+" if step > 0 else ""
         color: str = theme.accent if step >= 0 else theme.loss
         parts.append(_rect(x, top_y, bar_w, height, color))
+        # An increase is labeled above its bar and a decrease below it, as in make-chart.
+        label_y: float = top_y - 8 if step >= 0 else top_y + height + 8 + theme.small_px
         parts.append(
             _text(
                 center,
-                top_y - 8,
+                label_y,
                 sign + fmt_value(step, label_unit(data.unit)),
                 theme,
                 bold=True,
