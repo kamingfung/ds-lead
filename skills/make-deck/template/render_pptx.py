@@ -6,6 +6,8 @@ Every region becomes shapes at its layout box, so the slide matches the HTML geo
 from __future__ import annotations
 
 import math
+import re
+import zipfile
 from dataclasses import dataclass, replace
 from io import BytesIO
 from typing import Any, Callable, NamedTuple, Sequence
@@ -1370,4 +1372,31 @@ def render_pptx(deck: Deck, theme: Theme) -> bytes:
         _Painter(presentation.slides.add_slide(blank), theme).draw(spec, page)
     buffer: BytesIO = BytesIO()
     presentation.save(buffer)
-    return buffer.getvalue()
+    return _without_timestamps(buffer.getvalue())
+
+
+_FIXED_ZIP_TIME: tuple[int, int, int, int, int, int] = (1980, 1, 1, 0, 0, 0)
+_CORE_DATE: re.Pattern[bytes] = re.compile(
+    rb"(<dcterms:(?:created|modified)[^>]*>)[^<]*"
+)
+
+
+def _without_timestamps(package: bytes) -> bytes:
+    """Rewrite a zip package with fixed times, so the same deck always gives the same bytes.
+
+    python-pptx stamps each zip entry with the save time, and each embedded chart workbook is
+    itself a zip with a creation date in its core properties.
+    """
+    source: zipfile.ZipFile = zipfile.ZipFile(BytesIO(package))
+    out: BytesIO = BytesIO()
+    with zipfile.ZipFile(out, "w") as target:
+        for info in source.infolist():
+            data: bytes = source.read(info)
+            if info.filename.endswith(".xlsx"):
+                data = _without_timestamps(data)
+            elif info.filename == "docProps/core.xml":
+                data = _CORE_DATE.sub(rb"\g<1>2000-01-01T00:00:00Z", data)
+            fixed: zipfile.ZipInfo = zipfile.ZipInfo(info.filename, _FIXED_ZIP_TIME)
+            fixed.compress_type = info.compress_type
+            target.writestr(fixed, data)
+    return out.getvalue()

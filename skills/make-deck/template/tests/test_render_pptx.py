@@ -1,9 +1,11 @@
 """Tests for the native PowerPoint renderer: geometry, native charts, fonts and sources."""
 
+import time
 import xml.etree.ElementTree as ET
 from io import BytesIO
 from typing import Iterator
 
+import pytest
 from pptx import Presentation
 from lxml import etree
 from pptx.dml.color import RGBColor
@@ -279,6 +281,16 @@ def test_bytes_open_with_widescreen_size() -> None:
 
     assert prs.slide_width == Inches(13.333)
     assert prs.slide_height == Inches(7.5)
+
+
+def test_same_deck_renders_to_identical_bytes(monkeypatch: pytest.MonkeyPatch) -> None:
+    first: bytes = render_pptx(_deck(), HOUSE)
+    monkeypatch.setattr(
+        time,
+        "localtime",
+        lambda *_: time.struct_time((2031, 7, 9, 13, 5, 7, 2, 190, 0)),
+    )
+    assert render_pptx(_deck(), HOUSE) == first
 
 
 def test_slide_count_is_html_slides_plus_extra_tabs_plus_sources() -> None:
