@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" width="1280" height="360" role="img" aria-labelledby="banner-title banner-desc">
+  <title id="banner-title">ds-lead: agent skills for data science work that ends in a decision</title>
+  <desc id="banner-desc">Dark banner in the plugin's colorblind-safe Fall palette. Left: the ds-lead wordmark and the tagline "Frame the question. Build the pipeline. Check the number. Lead with the answer." Right: a forecast line with an uncertainty band, a dashed baseline and one highlighted end point. Bottom: five stages, Plan, Frame, Build, Review and Deliver, each with its slash command.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#29221E"/>
+      <stop offset="0.6" stop-color="#231D1A"/>
+      <stop offset="1" stop-color="#1A242B"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1D4A62"/>
+      <stop offset="0.42" stop-color="#7FB3CC"/>
+      <stop offset="0.74" stop-color="#D69A2E"/>
+      <stop offset="1" stop-color="#A04B2D"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7FB3CC" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#7FB3CC" stop-opacity="0.08"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#FBF8F3" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="360" fill="url(#bg)"/>
+  <rect width="1280" height="360" fill="url(#grid)"/>
+  <rect width="1280" height="6" fill="url(#accent)"/>
+
+  <!-- Left: wordmark and tagline -->
+  <g font-family="'Avenir Next', 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, sans-serif">
+    <text x="72" y="74" fill="#D69A2E" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15" letter-spacing="3">AGENT SKILLS · 16 SKILLS · DATA SCIENCE</text>
+    <text x="68" y="168" fill="#FBF8F3" font-size="104" font-weight="700" letter-spacing="-3">ds-lead</text>
+    <text x="72" y="214" fill="#FBF8F3" fill-opacity="0.92" font-size="24">Frame the question. Build the pipeline.</text>
+    <text x="72" y="246" fill="#FBF8F3" fill-opacity="0.92" font-size="24">Check the number. <tspan fill="#D69A2E" font-weight="600">Lead with the answer.</tspan></text>
+  </g>
+
+  <!-- Right: forecast card -->
+  <g transform="translate(760 44)">
+    <rect width="452" height="214" rx="10" fill="#322A25" stroke="#4D4039"/>
+    <text x="22" y="32" fill="#FBF8F3" fill-opacity="0.65" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="12" letter-spacing="2">HYPOTHESIS → EVIDENCE → DECISION</text>
+    <!-- axes -->
+    <line x1="34" y1="186" x2="430" y2="186" stroke="#6E6259"/>
+    <line x1="34" y1="52" x2="34" y2="186" stroke="#6E6259"/>
+    <!-- baseline -->
+    <path d="M34 150 L430 120" fill="none" stroke="#95A87F" stroke-width="2" stroke-dasharray="6 6"/>
+    <text x="44" y="140" fill="#95A87F" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="11">baseline</text>
+    <!-- uncertainty band -->
+    <path d="M250 104 C300 96 350 80 430 66 L430 132 C350 136 300 138 250 134 Z" fill="url(#band)"/>
+    <!-- actuals -->
+    <path d="M34 168 C70 160 92 150 120 152 S170 128 200 126 S236 118 250 119" fill="none" stroke="#7FB3CC" stroke-width="3" stroke-linecap="round"/>
+    <!-- forecast -->
+    <path d="M250 119 C300 116 350 106 430 98" fill="none" stroke="#7FB3CC" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
+    <line x1="250" y1="52" x2="250" y2="186" stroke="#FBF8F3" stroke-opacity="0.18" stroke-dasharray="3 5"/>
+    <text x="256" y="64" fill="#FBF8F3" fill-opacity="0.55" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="11">today</text>
+    <!-- the answer -->
+    <circle cx="430" cy="98" r="8" fill="#D69A2E" stroke="#29221E" stroke-width="2"/>
+    <text x="34" y="204" fill="#FBF8F3" fill-opacity="0.45" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="10">every number traces to a source</text>
+  </g>
+
+  <!-- Bottom: five stages with commands -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">
+    <line x1="72" y1="300" x2="1212" y2="300" stroke="#4D4039"/>
+    <g transform="translate(72 286)">
+      <circle cx="0" cy="14" r="5" fill="#1D4A62" stroke="#7FB3CC"/>
+      <text x="16" y="10" fill="#FBF8F3" font-size="14" font-weight="700" letter-spacing="2">PLAN</text>
+      <text x="16" y="40" fill="#7FB3CC" font-size="14">/plan-work</text>
+    </g>
+    <g transform="translate(302 286)">
+      <circle cx="0" cy="14" r="5" fill="#1D4A62" stroke="#7FB3CC"/>
+      <text x="16" y="10" fill="#FBF8F3" font-size="14" font-weight="700" letter-spacing="2">FRAME</text>
+      <text x="16" y="40" fill="#7FB3CC" font-size="14">/solve</text>
+    </g>
+    <g transform="translate(532 286)">
+      <circle cx="0" cy="14" r="5" fill="#1D4A62" stroke="#7FB3CC"/>
+      <text x="16" y="10" fill="#FBF8F3" font-size="14" font-weight="700" letter-spacing="2">BUILD</text>
+      <text x="16" y="40" fill="#7FB3CC" font-size="14">/worktrees</text>
+    </g>
+    <g transform="translate(762 286)">
+      <circle cx="0" cy="14" r="5" fill="#1D4A62" stroke="#7FB3CC"/>
+      <text x="16" y="10" fill="#FBF8F3" font-size="14" font-weight="700" letter-spacing="2">REVIEW</text>
+      <text x="16" y="40" fill="#7FB3CC" font-size="14">/review-pr</text>
+    </g>
+    <g transform="translate(992 286)">
+      <circle cx="0" cy="14" r="6" fill="#D69A2E" stroke="#29221E" stroke-width="2"/>
+      <text x="16" y="10" fill="#D69A2E" font-size="14" font-weight="700" letter-spacing="2">DELIVER</text>
+      <text x="16" y="40" fill="#7FB3CC" font-size="14">/debrief</text>
+    </g>
+  </g>
+</svg>

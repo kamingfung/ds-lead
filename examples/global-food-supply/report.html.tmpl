@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global food supply · Interactive one-pager (1961–2024)</title>
+<style>
+:root {
+  --paper: #FBF8F3;
+  --panel: #F2ECE1;
+  --tint: #E6EFF3;
+  --ink: #3B1A18;
+  --blue: #0072B2;
+  --orange: #E69F00;
+  --red: #D55E00;
+  --light: #C6BEB3;
+  --gray: #767676;
+  --slate: #29221E;
+  --disp: Arial, "Helvetica Neue", sans-serif;
+  --body: Arial, "Helvetica Neue", sans-serif;
+  --mono: Arial, "Helvetica Neue", sans-serif; /* labels only; the page has no code, so no monospace */
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.5;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 28px 64px; }
+.hero {
+  background: var(--slate);
+  color: var(--paper);
+  padding: 28px 32px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+.kicker {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin: 0 0 8px;
+}
+h1 {
+  font-family: var(--disp);
+  font-size: 30px;
+  line-height: 1.18;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+.hero p.lead { margin: 0 0 14px; font-size: 16px; color: #EAE2D6; max-width: 78ch; }
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #C6BEB3;
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.kpi {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px 18px;
+  border-top: 3px solid var(--blue);
+}
+.kpi.warn { border-top-color: var(--red); }
+.kpi .lbl {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gray);
+}
+.kpi .val {
+  font-family: var(--disp);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 4px 0;
+  color: var(--ink);
+}
+.kpi.warn .val { color: var(--red); }
+.kpi .sub { font-size: 13px; color: var(--ink); }
+.n { font-variant-numeric: tabular-nums; }
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.tab-btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--light);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.tab-btn[aria-selected="true"] {
+  background: var(--blue);
+  color: var(--paper);
+  border-color: var(--blue);
+}
+.section {
+  background: #FFFFFF;
+  border: 1px solid #E5DDD0;
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+.section[hidden] { display: none; }
+.section h2 {
+  font-family: var(--disp);
+  font-size: 20px;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.section .sec-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  margin: 0 0 4px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-top: 14px;
+}
+@media (max-width: 860px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+.aside {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 14px;
+}
+.aside h3 {
+  font-family: var(--disp);
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+.aside ul { margin: 0; padding-left: 18px; }
+.aside li { margin-bottom: 8px; }
+.region-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.reg-btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--light);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.reg-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.reg-card {
+  background: var(--tint);
+  border-left: 4px solid var(--blue);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.sim-box {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.sim-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+.sim-row input[type="range"] { width: 240px; accent-color: var(--blue); }
+.assume {
+  background: var(--panel);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  margin-top: 14px;
+  color: var(--ink);
+}
+.sec-src {
+  margin: 10px 0 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--gray);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin-top: 12px;
+}
+th, td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #E5DDD0;
+}
+th {
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 10px;
+}
+@media (max-width: 720px) { .cols { grid-template-columns: 1fr; } }
+.cols > div {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+}
+.cols > div:last-child { background: var(--tint); }
+.cols h3 { font-family: var(--disp); font-size: 15px; margin: 0 0 8px; }
+svg { max-width: 100%; height: auto; display: block; }
+svg text { font-family: var(--disp); fill: var(--ink); }
+svg .m { font-family: var(--mono); fill: var(--gray); }
+.s-blue { stroke: var(--blue); }
+.s-orange { stroke: var(--orange); }
+.s-ink { stroke: var(--ink); }
+.s-gray { stroke: var(--gray); }
+.s-light { stroke: var(--light); }
+.f-none { fill: none; }
+.f-blue { fill: var(--blue); }
+.f-orange { fill: var(--orange); }
+.f-red { fill: var(--red); }
+.f-light { fill: var(--light); }
+.dash { stroke-dasharray: 6 4; }
+.hit { fill: transparent; cursor: pointer; }
+.chart-title { font: 600 15.5px/1.25 var(--disp); color: var(--ink); margin: 0 0 6px; }
+.chart-title span { font-weight: 400; color: var(--gray); }
+.xcol .xhair, .xcol .xdot { opacity: 0; pointer-events: none; }
+.xcol:hover .xhair, .xcol:hover .xdot { opacity: 1; }
+#tip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(41, 34, 30, 0.82);
+  backdrop-filter: blur(2px);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: pre-line;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.1s;
+  z-index: 99;
+  max-width: 250px;
+}
+details.sources {
+  margin-top: 24px;
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+details.sources summary {
+  font-family: var(--disp);
+  font-weight: 600;
+  cursor: pointer;
+}
+@media print {
+  .tabs, .region-bar, .sim-box input { display: none; }
+  .section[hidden] { display: block !important; }
+  .hero { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
+  .kicker { color: var(--blue); }
+  .hero p.lead, .meta-row { color: var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">Interactive One-Pager · Global Food Supply (1961–2024)</p>
+    <h1>Global food production outpaced population, yet Africa remains undernourished</h1>
+    <p class="lead">Capital allocation brief for 2027–2030 ag-tech and food-security investment: shift capital from aggregate acreage expansion to regional yield-gap closure and post-harvest storage.</p>
+    <div class="meta-row">
+      <span>Audience: Investment Committee</span>
+      <span>Sources: FAOSTAT &amp; UN WPP via Our World in Data</span>
+      <span>As of 2026-11-21</span>
+    </div>
+  </header>
+
+  <section class="kpis" aria-label="Headline metrics">
+    <div class="kpi">
+      <div class="lbl">Cereal output (1961 = 100)</div>
+      <div class="val">{{num:cereal_prod_idx}}</div>
+      <div class="sub">{{num:cereal_prod_growth_pct}} growth vs. {{num:pop_growth_pct}} population</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Yield share of growth</div>
+      <div class="val">{{num:yield_share_pct}}</div>
+      <div class="sub">Land area expanded only {{num:land_growth_pct}}</div>
+    </div>
+    <div class="kpi warn">
+      <div class="lbl">Africa caloric gap (2023)</div>
+      <div class="val">−{{num:africa_kcal_gap}} kcal/day</div>
+      <div class="sub">{{num:africa_kcal_2023}} vs. {{num:world_kcal_2023}} world average</div>
+    </div>
+    <div class="kpi warn">
+      <div class="lbl">Africa undernourishment (2024)</div>
+      <div class="val">{{num:africa_undernourish_2024}}</div>
+      <div class="sub">Sub-Saharan Africa {{num:ssa_undernourish_2024}} vs. {{num:world_undernourish_2024}} world</div>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Filter report sections">
+    <button class="tab-btn" role="tab" aria-selected="true" data-filter="all">All sections</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-filter="supply">1 · Aggregate supply</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-filter="calories">2 · Caloric divergence</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-filter="access">3 · Access gap</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-filter="capital">4 · Capital plan</button>
+  </nav>
+
+  <section class="section" data-sec="supply">
+    <p class="sec-kicker">1 · Aggregate supply</p>
+    <h2>Global cereal output grew {{num:cereal_prod_growth_pct}} since 1961, driven {{num:yield_share_pct}} by yields rather than land</h2>
+    <div class="grid-2">
+      <div>
+        <p class="chart-title">World cereal production, yield, harvested area, and population, <span>Index (1961 = 100)</span></p>
+        {{chart:cereal_index}}
+      </div>
+      <aside class="aside">
+        <h3>Key takeaways</h3>
+        <ul>
+          <li><b>Beat population:</b> Output grew {{num:cereal_prod_growth_pct}} vs. {{num:pop_growth_pct}} population (1961–2023){{table:c12}}.</li>
+          <li><b>Land spared:</b> Cereal area rose {{num:land_growth_pct}}; yield rose {{num:yield_growth_pct}} to {{num:world_yield_2023}} kg/ha{{table:c1}}.</li>
+          <li><b>Capital signal:</b> Seed and soil productivity beat broad-acre expansion.</li>
+        </ul>
+      </aside>
+    </div>
+    <div class="assume"><b>Assumptions.</b> Yield share uses logarithmic growth decomposition: ln(yield ratio) / ln(production ratio) over 1961–2023, because 2024 historical population is not yet populated in the cereal series.</div>
+    <p class="sec-src">Source: {{table:c1}} FAOSTAT Crops; {{table:c2}} UN WPP.</p>
+  </section>
+
+  <section class="section" data-sec="calories">
+    <p class="sec-kicker">2 · Regional divergence</p>
+    <h2>Per-capita caloric supply rose everywhere, yet Africa sits {{num:africa_kcal_gap}} kcal/day below the global average</h2>
+    <div class="region-bar" id="region-bar" aria-label="Inspect regional metrics"></div>
+    <div class="reg-card" id="region-card">Select a region above to inspect its 1961–2023 caloric gain and 2024 undernourishment rate.</div>
+    <div class="grid-2">
+      <div>
+        <p class="chart-title">Daily per-capita dietary energy supply by FAO region, <span>kcal / person / day (1961–2023)</span></p>
+        {{chart:caloric_supply}}
+      </div>
+      <aside class="aside">
+        <h3>Key takeaways</h3>
+        <ul>
+          <li><b>Asian catch-up:</b> Asia added {{num:asia_kcal_gain}} kcal/day since 1961, reaching {{num:asia_kcal_2023}} kcal/day{{table:c3}}.</li>
+          <li><b>African lag:</b> Africa rose {{num:africa_kcal_gain}} to {{num:africa_kcal_2023}} kcal/day, {{num:africa_kcal_gap}} behind the world{{table:c3}}.</li>
+          <li><b>Demographic drag:</b> Rapid population growth absorbs output before buffers form.</li>
+        </ul>
+      </aside>
+    </div>
+    <div class="assume"><b>Assumptions and limitations.</b> FAO Food Balance Sheets measure national food supply available at retail level (kcal/person/day), not actual household caloric intake.</div>
+    <p class="sec-src">Source: {{table:c3}} FAOSTAT Food Balance Sheets.</p>
+  </section>
+
+  <section class="section" data-sec="access">
+    <p class="sec-kicker">3 · The access gap</p>
+    <h2>Undernourishment fell globally to {{num:world_undernourish_2024}} in 2024, while Africa stayed at {{num:africa_undernourish_2024}}</h2>
+    <div class="grid-2">
+      <div>
+        <p class="chart-title">Prevalence of undernourishment (SDG 2.1.1) by FAO region, <span>Percent of population (2024)</span></p>
+        {{chart:undernourishment}}
+      </div>
+      <aside class="aside">
+        <h3>Key takeaways</h3>
+        <ul>
+          <li><b>Global drop:</b> World rate fell {{num:world_undernourish_drop_pp}} pp, from {{num:world_undernourish_2000}} (2000) to {{num:world_undernourish_2024}} (2024){{table:c4}}.</li>
+          <li><b>Africa outlier:</b> Sub-Saharan Africa is {{num:ssa_undernourish_2024}}, nearly triple the global rate{{table:c4}}.</li>
+          <li><b>Access barriers:</b> Price spikes and storage losses block food access.</li>
+        </ul>
+      </aside>
+    </div>
+    <div class="assume"><b>Assumptions and limitations.</b> FAO reports prevalence below {{num:fao_floor_pct}} at the floor value of {{num:fao_floor_pct}} (Europe). Undernourishment measures habitual dietary energy inadequacy.</div>
+    <p class="sec-src">Source: {{table:c4}} FAO SOFI / SDG 2.1.1.</p>
+  </section>
+
+  <section class="section" data-sec="capital">
+    <p class="sec-kicker">4 · Capital implication</p>
+    <h2>Redirect 2027–2030 capital from aggregate acreage to African yield-gap closure and storage</h2>
+    <div class="sim-box">
+      <strong>Interactive 2027–2030 Portfolio Reallocation Explorer</strong>
+      <div class="sim-row">
+        <label for="shift-slider">Share shifted to African yield &amp; storage: <strong id="shift-val"></strong></label>
+        <input id="shift-slider" type="range" min="20" max="90" step="5" value="75">
+        <span id="shift-summary"></span>
+      </div>
+    </div>
+    {{table:capital_cols}}
+    {{table:decision_matrix}}
+    <div class="assume"><b>Assumptions.</b> Allocation slider illustrates portfolio weighting between regional yield/storage and mature-market maintenance; macro trade policy and local cold-chain reliability govern realized returns.</div>
+  </section>
+
+  <section class="section" data-sec="refs">
+    <p class="sec-kicker">References</p>
+    <h2>Full source list</h2>
+    {{table:references_list}}
+  </section>
+
+  <details class="sources">
+    <summary>Data provenance &amp; computed figures ({{num:num_count}} verified values)</summary>
+    {{table:sources_table}}
+  </details>
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+const REGION_DATA = {{table:region_json}};
+
+(function () {
+  const tip = document.getElementById("tip");
+  document.addEventListener("mouseover", (e) => {
+    const el = e.target.closest("[data-tip]");
+    if (!el) return;
+    tip.textContent = el.getAttribute("data-tip");
+    tip.style.opacity = "1";
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (tip.style.opacity === "1") {
+      tip.style.left = Math.min(window.innerWidth - 260, e.clientX + 14) + "px";
+      tip.style.top = Math.min(window.innerHeight - 80, e.clientY + 14) + "px";
+    }
+  });
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest("[data-tip]")) tip.style.opacity = "0";
+  });
+
+  const tabs = document.querySelectorAll(".tab-btn");
+  const secs = document.querySelectorAll(".section");
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tabs.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+      const f = btn.dataset.filter;
+      secs.forEach((s) => {
+        s.hidden = f !== "all" && s.dataset.sec !== f;
+      });
+    });
+  });
+
+  const bar = document.getElementById("region-bar");
+  const card = document.getElementById("region-card");
+  function showRegion(name) {
+    const d = REGION_DATA[name];
+    bar.querySelectorAll(".reg-btn").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.textContent === name));
+    });
+    card.innerHTML =
+      "<strong>" + name + "</strong> — 2023 supply: <strong>" + d.kcal_2023 +
+      " kcal/day</strong> (" + d.kcal_gain + " vs. 1961) · 2024 undernourishment: <strong>" +
+      d.undernourish_2024 + "</strong>.";
+  }
+  Object.keys(REGION_DATA).forEach((name, idx) => {
+    const b = document.createElement("button");
+    b.className = "reg-btn";
+    b.type = "button";
+    b.textContent = name;
+    b.setAttribute("aria-pressed", String(idx === 0));
+    b.addEventListener("click", () => showRegion(name));
+    bar.appendChild(b);
+  });
+  showRegion(Object.keys(REGION_DATA)[0]);
+
+  const slider = document.getElementById("shift-slider");
+  const shiftVal = document.getElementById("shift-val");
+  const shiftSummary = document.getElementById("shift-summary");
+  function updateShift() {
+    const v = Number(slider.value);
+    const seed = Math.round(v * 0.6);
+    const storage = v - seed;
+    const maint = 100 - v;
+    shiftVal.textContent = v + "%";
+    shiftSummary.textContent =
+      "Yield R&D: " + seed + "% · Storage & cold chain: " + storage +
+      "% · Mature acreage maintenance: " + maint + "%";
+  }
+  slider.addEventListener("input", updateShift);
+  updateShift();
+})();
+</script>
+</body>
+</html>

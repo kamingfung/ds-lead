@@ -1,0 +1,21 @@
+/* Palette: every color of chart_style.py. Edit the values here, or set the environment
+   variable CHART_STYLE_PALETTE to another file with the same token names before the
+   module is imported. Token names match the deck palette where the role is the same. */
+:root {
+  --ink: #3b1a18; /* text, axes, totals, series 1 */
+  --paper: #fbf8f3; /* plot ground */
+  --panel: #f2ece1; /* light fill, second step of the light palette */
+  --tint: #e6eff3; /* light blue fill, second step of the sequential ramp */
+  --light: #c6beb3; /* context marks, gridlines */
+  --blue: #1d4a62; /* indigo: series 2, gain */
+  --red: #a04b2d; /* rust: loss */
+  --orange: #d69a2e; /* ochre: series 3 (matches deck palette) */
+  --highlight: #7fb3cc; /* light blue (sky): the one mark that is the message: a highlighted bar, an outlier, a peak. It must pop against ink, indigo and grey */
+  --green: #95a87f; /* sage: optional series 4 */
+  --sky: #7fb3cc; /* light indigo: highlight / outlier, and light step of the sequential and diverging ramps */
+  --purple: #6c2b27; /* burnt-sienna: optional series 5 */
+  --yellow: #f0e442; /* avoid on thin lines and text */
+  --black: #000000;
+  --grey: #999999;
+  --losstint: #dfb8a6; /* light step between rust and paper in the diverging ramp */
+}

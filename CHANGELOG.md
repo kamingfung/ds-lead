@@ -1,0 +1,18 @@
+# Changelog
+
+What changed for a user of the `ds-lead` plugin, newest release first. A release is a Semantic Versioning tag `vMAJOR.MINOR.PATCH` on `main`; [CONTRIBUTING.md](CONTRIBUTING.md) says which number to bump. "Unreleased" lists what is merged to `main` but not yet tagged. Every pull request (PR) adds one line under Unreleased.
+
+## Unreleased
+
+## v1.0.0 (2026-11-27)
+
+First release: 16 agent skills for data science work that ends in a decision.
+
+- **Plan, frame and deliver:** `plan-work`, `plan-training`, `solve`, `debrief`, `make-report`, `make-chart` and `write-docs`. Each skill cites its public sources in a Sources section.
+- **Decks:** `make-deck` builds a deck from one `Deck` spec with 24 layouts. An HTML renderer and a native, editable `.pptx` renderer (python-pptx) place the same boxes. Every number carries its source into the footer and the `Backup · Sources` slides.
+- **Charts:** `make-chart` gives 15 matplotlib recipes on a colorblind-safe palette, with axis and gridline rules.
+- **Build and review:** `coding`, `worktrees`, `review-pr` and `write-pr`.
+- **How the agent works:** `defaults`, `workflows`, `session` and `write-skill`.
+- Examples: `examples/global-food-supply` (a deck, a `.pptx` and a one-page report built from public Our World in Data CSVs), `examples/deck-gallery` (every layout) and `examples/make-chart` (every recipe).
+- `scripts/check_skill_refs.py`: a pre-commit check that fails when a skill points to a skill that does not exist.
+- pre-commit config: ruff, prettier and gitleaks. MIT license.

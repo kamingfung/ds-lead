@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 390" width="1280" height="390" role="img" aria-labelledby="lc-title lc-desc">
+  <title id="lc-title">The ds-lead workflow: Plan, Frame, Build, Review, Deliver</title>
+  <desc id="lc-desc">Five stages from left to right, each with the question it answers and its skills. Plan: what decision does this serve? /plan-work. Frame: what would prove us wrong? /solve. Build: does the code hold up? /coding and /worktrees. Review: is the logic sound, not just the style? /review-pr, /write-pr and /check-backtest. Deliver: what is the answer, and what is the ask? /debrief, /make-report, /make-deck and /make-chart. Below, used at every stage: /defaults, /workflows, /session, /write-docs and /write-skill.</desc>
+  <defs>
+    <linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#29221E"/>
+      <stop offset="1" stop-color="#1A242B"/>
+    </linearGradient>
+    <linearGradient id="laccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1D4A62"/>
+      <stop offset="0.42" stop-color="#7FB3CC"/>
+      <stop offset="0.74" stop-color="#D69A2E"/>
+      <stop offset="1" stop-color="#A04B2D"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="390" rx="14" fill="url(#lbg)"/>
+  <rect x="0" y="0" width="1280" height="5" fill="url(#laccent)"/>
+
+  <g font-family="'Avenir Next', 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, sans-serif">
+    <!-- 1 PLAN -->
+    <g transform="translate(40 40)">
+      <rect width="226" height="250" rx="10" fill="#322A25" stroke="#4D4039"/>
+      <rect width="226" height="4" rx="2" fill="#1D4A62"/>
+      <text x="20" y="36" fill="#7FB3CC" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">01</text>
+      <text x="20" y="66" fill="#FBF8F3" font-size="26" font-weight="700">Plan</text>
+      <text x="20" y="96" fill="#FBF8F3" fill-opacity="0.7" font-size="15">What decision does</text>
+      <text x="20" y="116" fill="#FBF8F3" fill-opacity="0.7" font-size="15">this serve?</text>
+      <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
+        <text x="20" y="168" fill="#7FB3CC">/plan-work</text>
+      </g>
+      <text x="20" y="228" fill="#FBF8F3" fill-opacity="0.45" font-size="12">goal · approver · options</text>
+    </g>
+
+    <!-- 2 FRAME -->
+    <g transform="translate(284 40)">
+      <rect width="226" height="250" rx="10" fill="#322A25" stroke="#4D4039"/>
+      <rect width="226" height="4" rx="2" fill="#1D4A62"/>
+      <text x="20" y="36" fill="#7FB3CC" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">02</text>
+      <text x="20" y="66" fill="#FBF8F3" font-size="26" font-weight="700">Frame</text>
+      <text x="20" y="96" fill="#FBF8F3" fill-opacity="0.7" font-size="15">What would prove</text>
+      <text x="20" y="116" fill="#FBF8F3" fill-opacity="0.7" font-size="15">us wrong?</text>
+      <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
+        <text x="20" y="168" fill="#7FB3CC">/solve</text>
+      </g>
+      <text x="20" y="228" fill="#FBF8F3" fill-opacity="0.45" font-size="12">hypothesis · MECE tree</text>
+    </g>
+
+    <!-- 3 BUILD -->
+    <g transform="translate(528 40)">
+      <rect width="226" height="250" rx="10" fill="#322A25" stroke="#4D4039"/>
+      <rect width="226" height="4" rx="2" fill="#7FB3CC"/>
+      <text x="20" y="36" fill="#7FB3CC" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">03</text>
+      <text x="20" y="66" fill="#FBF8F3" font-size="26" font-weight="700">Build</text>
+      <text x="20" y="96" fill="#FBF8F3" fill-opacity="0.7" font-size="15">Does the code</text>
+      <text x="20" y="116" fill="#FBF8F3" fill-opacity="0.7" font-size="15">hold up?</text>
+      <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
+        <text x="20" y="168" fill="#7FB3CC">/coding</text>
+        <text x="20" y="192" fill="#7FB3CC">/worktrees</text>
+      </g>
+      <text x="20" y="228" fill="#FBF8F3" fill-opacity="0.45" font-size="12">schemas · tests · logs</text>
+    </g>
+
+    <!-- 4 REVIEW -->
+    <g transform="translate(772 40)">
+      <rect width="226" height="250" rx="10" fill="#322A25" stroke="#4D4039"/>
+      <rect width="226" height="4" rx="2" fill="#D69A2E"/>
+      <text x="20" y="36" fill="#7FB3CC" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">04</text>
+      <text x="20" y="66" fill="#FBF8F3" font-size="26" font-weight="700">Review</text>
+      <text x="20" y="96" fill="#FBF8F3" fill-opacity="0.7" font-size="15">Is the logic sound,</text>
+      <text x="20" y="116" fill="#FBF8F3" fill-opacity="0.7" font-size="15">not just the style?</text>
+      <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
+        <text x="20" y="168" fill="#7FB3CC">/review-pr</text>
+        <text x="20" y="192" fill="#7FB3CC">/write-pr</text>
+        <text x="20" y="216" fill="#7FB3CC">/check-backtest</text>
+      </g>
+      
+    </g>
+
+    <!-- 5 DELIVER -->
+    <g transform="translate(1016 40)">
+      <rect width="226" height="250" rx="10" fill="#3A2E24" stroke="#D69A2E" stroke-opacity="0.7"/>
+      <rect width="226" height="4" rx="2" fill="#A04B2D"/>
+      <text x="20" y="36" fill="#D69A2E" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">05</text>
+      <text x="20" y="66" fill="#D69A2E" font-size="26" font-weight="700">Deliver</text>
+      <text x="20" y="96" fill="#FBF8F3" fill-opacity="0.7" font-size="15">What is the answer,</text>
+      <text x="20" y="116" fill="#FBF8F3" fill-opacity="0.7" font-size="15">and what is the ask?</text>
+      <g font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">
+        <text x="20" y="168" fill="#7FB3CC">/debrief</text>
+        <text x="20" y="192" fill="#7FB3CC">/make-report</text>
+        <text x="20" y="216" fill="#7FB3CC">/make-deck</text>
+        <text x="20" y="240" fill="#7FB3CC">/make-chart</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- always-on strip -->
+  <g transform="translate(40 310)">
+    <rect width="1202" height="50" rx="10" fill="#26211D" stroke="#4D4039" stroke-dasharray="4 4"/>
+    <text x="22" y="31" fill="#95A87F" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="13" letter-spacing="2">EVERY STAGE</text>
+    <text x="160" y="31" xml:space="preserve" fill="#7FB3CC" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="15">/defaults   /workflows   /session   /write-docs   /write-skill</text>
+    <text x="1180" y="31" text-anchor="end" fill="#FBF8F3" fill-opacity="0.45" font-family="'Avenir Next', 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, sans-serif" font-size="12">how the agent works, briefs, hands off and writes</text>
+  </g>
+
+  <!-- chevrons between cards, drawn on top -->
+    <g transform="translate(275 165)"><circle r="13" fill="#29221E" stroke="#6E6259" stroke-width="1.5"/><path d="M-3 -6 L4 0 L-3 6" fill="none" stroke="#D69A2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g transform="translate(519 165)"><circle r="13" fill="#29221E" stroke="#6E6259" stroke-width="1.5"/><path d="M-3 -6 L4 0 L-3 6" fill="none" stroke="#D69A2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g transform="translate(763 165)"><circle r="13" fill="#29221E" stroke="#6E6259" stroke-width="1.5"/><path d="M-3 -6 L4 0 L-3 6" fill="none" stroke="#D69A2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g transform="translate(1007 165)"><circle r="13" fill="#29221E" stroke="#6E6259" stroke-width="1.5"/><path d="M-3 -6 L4 0 L-3 6" fill="none" stroke="#D69A2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>
