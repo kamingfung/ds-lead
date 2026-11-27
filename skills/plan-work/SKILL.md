@@ -30,7 +30,3 @@ Use a short plan to make the goal, decision owner, trade-offs and delivery steps
 - Every open decision has an answer, or the plan names who decides it.
 - Every step maps to a work item after approval.
 - The done checks are pass-or-fail and can be verified by another reader.
-
-## Sources
-
-- Mindtools. "The RACI Matrix" (2024). https://www.mindtools.com/agn584l/the-raci-matrix. It defines the four roles, requires exactly one Accountable person per task, and credits the PMI _PMBOK Guide_, 5th ed. (2013).
