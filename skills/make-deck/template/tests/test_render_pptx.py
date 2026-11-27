@@ -316,8 +316,23 @@ def test_waterfall_has_one_custom_label_per_bar_with_expected_positions() -> Non
     ]
 
     assert len(labels) == 5
-    assert labels.count("inEnd") == 2
-    assert labels.count("inBase") == 3
+    assert labels.count("inEnd") == 3
+    assert labels.count("inBase") == 2
+
+
+def test_waterfall_decrease_label_sits_on_the_hidden_base_series() -> None:
+    prs: Presentation = _open(_deck())
+    waterfall: object = next(
+        c for c in _charts(prs) if c.chart.chart_type == XL_CHART_TYPE.COLUMN_STACKED
+    )
+    chart_ns: str = "{http://schemas.openxmlformats.org/drawingml/2006/chart}"
+
+    per_series: list[list[str]] = [
+        [e.get("val") for e in ser.iter(f"{chart_ns}dLblPos")]
+        for ser in _chart_xml(waterfall).iter(f"{chart_ns}ser")
+    ]
+
+    assert per_series == [["inEnd"], ["inEnd", "inEnd"], ["inBase", "inBase"]]
 
 
 def test_every_chart_is_native_and_of_the_right_type() -> None:
