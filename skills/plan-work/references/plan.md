@@ -5,7 +5,9 @@ Fill in this template to produce a single-page plan. Swap every placeholder for 
 ```text
 Deadline: <milestone or meeting>, dated <YYYY-MM-DD>        (or: Deadline: name the milestone only)
 Goal: <the outcome in one sentence>
-Approver: <one person>
+Approver: <one person; signs off the goal and the result>
+Consulted: <people asked before the decision, or none>
+Informed: <people told after the decision, or none>
 
 Why, with data
 - <number, unit, scope> (source: <query, run, file or page>, <row count>; checked | hypothesis)
