@@ -97,6 +97,18 @@ Each tool names and loads a skill in its own way. The rules in this file apply t
 - **Examples must justify their length.** Add a good/bad pair only when the rule is truly unclear. Leave examples out of obvious rules, such as "add type hints."
 - **Domain-specific over generic.** "Log customer, region, and period in WARNING messages" beats "Include context in log messages."
 
+## Write Skill Files Like Clean Code
+
+Treat a skill folder as a small codebase. Each bullet ends on a check you can run.
+
+- **Name what it does.** A skill, file or heading states its job: `SOURCES.md`, `checklist.md`, "Prove It Works". Avoid `misc`, `notes` and `utils`. Check: a reader predicts a file's content from its name.
+- **One source of truth for values.** A color, font, threshold, version or function list lives in one file. Other files link to it, or a test fails when the copies differ. Check: `git grep` the value finds one definition, or a test pins every copy. The chart palette once lived in three files, and the greys disagreed.
+- **No duplicate files.** Check: `git ls-files | xargs shasum | sort | uniq -w40 -d` prints nothing.
+- **Keep reference data with its owner.** A list of functions, flags or options belongs in the code's docstring or in `--help`, and the skill points there.
+- **Use a parameter for what varies.** Size a lecture phase as a share of the session, not as fixed minutes. Give a range when cases differ.
+- **Simplify, and say it once.** Merge rules that overlap. Delete a section that restates its heading (Review Pass 8 and 9).
+- **Check a claim before you write it.** Test it against the code or the data, and label the rest as unchecked. A doc said the palette "follows Wong (2011)". A measurement showed one pair of series colors was hard to tell apart under protanopia.
+
 ## Review Pass
 
 Run this pass on every new or changed skill before you push it, one sentence at a time. Each point ends on a check you can answer yes or no. It follows Matt Pocock's [writing-for-agents](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill; the wording here is our own.
