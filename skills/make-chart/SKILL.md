@@ -31,25 +31,8 @@ license: MIT
 
 ## Reference
 
-| Function                  | Use                                                                 |
-| ------------------------- | ------------------------------------------------------------------- |
-| `set_chart_style`         | Set matplotlib rcParams for one context                             |
-| `reset_style`             | Restore matplotlib's default rcParams                               |
-| `set_chart_seaborn_theme` | Apply seaborn's white theme, then the house style                   |
-| `chart_header`            | Write the title, subtitle and source line of one axes               |
-| `align_headers`           | Line up subtitles and source lines across a grid of axes            |
-| `highlight_bars`          | Color some bars and mute the rest                                   |
-| `label_bars`              | Write each bar's value at its end                                   |
-| `direct_label`            | Write a label at a data point                                       |
-| `hide_value_axis`         | Hide the value axis and gridlines of a fully labeled bar chart      |
-| `read_palette`            | Read color tokens from a palette CSS file                           |
-| `show_color_palette`      | Draw the swatches of one palette                                    |
-| `show_all_palettes`       | Draw every palette and the color-vision simulations                 |
-| `simulate_vision`         | Return a color as a viewer with one color-vision deficiency sees it |
-| `create_example_plots`    | Draw the 15 recipes on one grid                                     |
-| `create_context_demo`     | Draw one chart in each of the four contexts                         |
-
-- Palette: [`palette.css`](palette.css) holds the color tokens. Set `CHART_STYLE_PALETTE` to another file with the same token names before you import `chart_style`.
+- Functions: the docstring at the top of [`chart_style.py`](chart_style.py) lists every public function and what it does.
+- Palette: [`palette.css`](palette.css) holds the color tokens; [README.md](README.md) gives its provenance and the steps to change it. Set `CHART_STYLE_PALETTE` to another file with the same token names before you import `chart_style`.
 - Tests: run `pytest test_chart_style.py` from `skills/make-chart/`. The tests render every recipe.
 - Rendered recipes: [`examples/make-chart/`](../../examples/make-chart/).
 - Chart choice and encoding: [references/visualization.md](references/visualization.md).
@@ -58,8 +41,3 @@ license: MIT
 
 - Labels placed at fixed coordinates can collide when new data moves the marks. Render the PNG and move the label with `dy`, `xytext` or the axis limits.
 - Do not keep a four-sided box with a full grid on every plot. The style already hides the top and right spines, so hide the left spine or drop gridlines when they add nothing.
-
-## Sources
-
-- Zelazny, G. _Say It with Charts_, 4th ed. McGraw-Hill, 2001.
-- Wong, B. "Points of view: Color blindness." _Nature Methods_ 8, 441 (2011). https://doi.org/10.1038/nmeth.1618

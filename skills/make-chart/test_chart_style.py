@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import re
 from pathlib import Path
 
@@ -11,10 +12,11 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from matplotlib import font_manager  # noqa: E402
 from matplotlib.axes import Axes  # noqa: E402
-from matplotlib.colors import to_hex, to_rgba  # noqa: E402
+from matplotlib.colors import to_hex, to_rgb, to_rgba  # noqa: E402
 from matplotlib.text import Text  # noqa: E402
 
 HEX: re.Pattern[str] = re.compile(r"^#[0-9a-f]{6}$")
@@ -36,7 +38,11 @@ def _drawn_colors(fig: plt.Figure) -> set[str]:
         for coll in ax.collections:
             colors += list(coll.get_facecolors()) + list(coll.get_edgecolors())
         for line in ax.lines:
-            colors += [line.get_color(), line.get_markerfacecolor(), line.get_markeredgecolor()]
+            colors += [
+                line.get_color(),
+                line.get_markerfacecolor(),
+                line.get_markeredgecolor(),
+            ]
         colors += [spine.get_edgecolor() for spine in ax.spines.values()]
         colors += [g.get_color() for g in ax.get_xgridlines() + ax.get_ygridlines()]
     return {to_hex(c) for c in colors if to_rgba(c)[3] > 0}
@@ -44,9 +50,20 @@ def _drawn_colors(fig: plt.Figure) -> set[str]:
 
 def test_public_api_is_present() -> None:
     names: list[str] = [
-        "read_palette", "set_chart_style", "reset_style", "set_chart_seaborn_theme", "show_color_palette",
-        "show_all_palettes", "highlight_bars", "label_bars", "direct_label", "simulate_vision", "chart_header",
-        "align_headers", "create_example_plots", "create_context_demo",
+        "read_palette",
+        "set_chart_style",
+        "reset_style",
+        "set_chart_seaborn_theme",
+        "show_color_palette",
+        "show_all_palettes",
+        "highlight_bars",
+        "label_bars",
+        "direct_label",
+        "simulate_vision",
+        "chart_header",
+        "align_headers",
+        "create_example_plots",
+        "create_context_demo",
     ]
     for name in names:
         assert callable(getattr(cs, name)), name
@@ -221,7 +238,9 @@ def _rendered(recipe) -> tuple[plt.Figure, Axes]:
 @pytest.mark.parametrize(
     ("recipe", "axis"),
     [
-        (cs.example_highlight_bar, "y"), (cs.example_grouped_columns, "y"), (cs.example_stacked_columns, "y"),
+        (cs.example_highlight_bar, "y"),
+        (cs.example_grouped_columns, "y"),
+        (cs.example_stacked_columns, "y"),
         (cs.example_waterfall, "y"),
     ],
     ids=lambda v: getattr(v, "__name__", v),
@@ -237,7 +256,8 @@ def test_bar_recipes_hide_value_axis_and_keep_baseline(recipe, axis: str) -> Non
 
 
 @pytest.mark.parametrize(
-    "recipe", [cs.example_scatter_outlier, cs.example_waterfall, cs.example_ranked_dots],
+    "recipe",
+    [cs.example_scatter_outlier, cs.example_waterfall, cs.example_ranked_dots],
     ids=lambda f: f.__name__,
 )
 def test_no_gridlines_on_point_and_bridge_recipes(recipe) -> None:
@@ -248,8 +268,13 @@ def test_no_gridlines_on_point_and_bridge_recipes(recipe) -> None:
 
 @pytest.mark.parametrize(
     "recipe",
-    [cs.example_lines, cs.example_target_line, cs.example_fan_chart, cs.example_annotated_timeline,
-     cs.example_small_multiples],
+    [
+        cs.example_lines,
+        cs.example_target_line,
+        cs.example_fan_chart,
+        cs.example_annotated_timeline,
+        cs.example_small_multiples,
+    ],
     ids=lambda f: f.__name__,
 )
 def test_line_recipes_have_no_vertical_gridlines(recipe) -> None:
@@ -260,7 +285,9 @@ def test_line_recipes_have_no_vertical_gridlines(recipe) -> None:
 
 def test_small_multiples_bottom_panels_carry_month_initials() -> None:
     fig, ax = _rendered(cs.example_small_multiples)
-    panels = sorted(ax.child_axes, key=lambda a: (a.get_position().y0, a.get_position().x0))
+    panels = sorted(
+        ax.child_axes, key=lambda a: (a.get_position().y0, a.get_position().x0)
+    )
     bottom = [p for p in panels if p.get_position().y0 == panels[0].get_position().y0]
     assert len(bottom) == 2
     for panel in bottom:
@@ -298,3 +325,32 @@ def test_waterfall_labels_decreases_below_their_bar() -> None:
     decreases = [t for t in ax.texts if t.get_text().startswith("\u2212")]
     assert decreases and all(t.get_va() == "top" for t in decreases)
     plt.close(fig)
+
+
+def _lab(hex_color: str) -> np.ndarray:
+    """Convert a hex color to CIELAB (D65 white), to measure color differences."""
+    rgb: np.ndarray = np.array(to_rgb(hex_color))
+    linear: np.ndarray = np.where(
+        rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055) ** 2.4
+    )
+    to_xyz: np.ndarray = np.array(
+        [[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]]
+    )
+    xyz: np.ndarray = to_xyz @ linear / np.array([0.95047, 1.0, 1.08883])
+    f: np.ndarray = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+    return np.array([116 * f[1] - 16, 500 * (f[0] - f[1]), 200 * (f[1] - f[2])])
+
+
+@pytest.mark.parametrize("kind", ["normal", "deutan", "protan", "tritan"])
+def test_categorical_colors_stay_apart_for_every_vision_type(kind: str) -> None:
+    """Every pair of series colors keeps a CIE 1976 color difference of at least 10."""
+    colors: list[str] = (
+        cs.CATEGORICAL
+        if kind == "normal"
+        else [cs.simulate_vision(c, kind) for c in cs.CATEGORICAL]
+    )
+    gaps: list[float] = [
+        float(np.linalg.norm(_lab(a) - _lab(b)))
+        for a, b in itertools.combinations(colors, 2)
+    ]
+    assert min(gaps) >= 10, f"{kind}: closest pair is {min(gaps):.1f} apart"

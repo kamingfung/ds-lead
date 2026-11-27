@@ -7,6 +7,7 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 - `make-chart`: removed `skills/make-chart/LICENSE`, a byte-identical copy of the root `LICENSE`.
 - `write-skill`: new section "Write Skill Files Like Clean Code": name what a file does, keep one source of truth for values, avoid duplicate files, keep reference data with its owner, use a parameter for what varies, simplify, and check a claim before you write it.
 - `coding`, `debrief`, `review-pr`, `solve`, `workflows`, `write-docs`, `write-pr`, `defaults`, `make-deck`: moved every citation out of the skill files into a `SOURCES.md` beside each skill, which lists which idea, number or quote comes from which source; the skill text no longer carries attributions, so the agent loads less. `write-skill` has the rule.
+- `make-chart`: added `README.md` with the palette's provenance (Okabe-Ito hue roles, measured color distances) and the steps to change it; a test now fails when two series colors come too close under any color-vision simulation; the function list moved from `SKILL.md` into the `chart_style.py` docstring.
 - `make-deck`: `render_pptx` writes the same bytes for the same deck, so a rebuild no longer shows `.pptx` files as changed.
 
 ## v1.0.0 (2026-11-27)

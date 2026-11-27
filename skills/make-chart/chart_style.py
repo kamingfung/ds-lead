@@ -4,6 +4,24 @@ Colors come from `palette.css`, or from the file named by the environment variab
 CHART_STYLE_PALETTE when that variable is set before this module is imported.
 Each recipe draws on one axes and calls `chart_header`, so a recipe can be copied
 and given new data.
+
+Public functions:
+
+    set_chart_style          Set matplotlib rcParams for one context
+    reset_style              Restore matplotlib's default rcParams
+    set_chart_seaborn_theme  Apply seaborn's white theme, then the house style
+    chart_header             Write the title, subtitle and source line of one axes
+    align_headers            Line up subtitles and source lines across a grid of axes
+    highlight_bars           Color some bars and mute the rest
+    label_bars               Write each bar's value at its end
+    direct_label             Write a label at a data point
+    hide_value_axis          Hide the value axis and gridlines of a fully labeled bar chart
+    read_palette             Read color tokens from a palette CSS file
+    show_color_palette       Draw the swatches of one palette
+    show_all_palettes        Draw every palette and the color-vision simulations
+    simulate_vision          Return a color as a viewer with one color-vision deficiency sees it
+    create_example_plots     Draw the 15 recipes on one grid
+    create_context_demo      Draw one chart in each of the four contexts
 """
 
 from __future__ import annotations
@@ -28,16 +46,39 @@ SOURCE_PREFIX: str = "Source: "
 SUBTITLE_GID: str = "chart-subtitle"
 SOURCE_GID: str = "chart-source"
 DEFAULT_PALETTE: Path = Path(__file__).with_name("palette.css")
-CONTEXT_SCALE: dict[str, float] = {"paper": 0.8, "notebook": 1.0, "talk": 1.3, "poster": 1.6}
+CONTEXT_SCALE: dict[str, float] = {
+    "paper": 0.8,
+    "notebook": 1.0,
+    "talk": 1.3,
+    "poster": 1.6,
+}
 FONT_FAMILY: list[str] = ["Arial", "Helvetica", "DejaVu Sans"]
 _SOURCE: str = "Source: Synthetic illustrative data"
 _TOKEN: re.Pattern[str] = re.compile(r"--([a-z]+)\s*:\s*(#[0-9a-fA-F]{6})\s*;")
 _COMMENT: re.Pattern[str] = re.compile(r"/\*.*?\*/", re.DOTALL)
 _NEGATIVE: re.Pattern[str] = re.compile(r"(?<!\w)-(?=\d)")
 _MACHADO: dict[str, np.ndarray] = {
-    "protan": np.array([[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]]),
-    "deutan": np.array([[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.011820, 0.042940, 0.968881]]),
-    "tritan": np.array([[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]]),
+    "protan": np.array(
+        [
+            [0.152286, 1.052583, -0.204868],
+            [0.114503, 0.786281, 0.099216],
+            [-0.003882, -0.048116, 1.051998],
+        ]
+    ),
+    "deutan": np.array(
+        [
+            [0.367322, 0.860646, -0.227968],
+            [0.280085, 0.672501, 0.047413],
+            [-0.011820, 0.042940, 0.968881],
+        ]
+    ),
+    "tritan": np.array(
+        [
+            [1.255528, -0.076749, -0.178779],
+            [-0.078411, 0.930809, 0.147602],
+            [0.004733, 0.691367, 0.303900],
+        ]
+    ),
 }
 
 
@@ -55,7 +96,9 @@ def read_palette(path: str | os.PathLike[str] = DEFAULT_PALETTE) -> dict[str, st
     return {name: value.lower() for name, value in _TOKEN.findall(text)}
 
 
-PALETTE: dict[str, str] = read_palette(os.environ.get("CHART_STYLE_PALETTE", DEFAULT_PALETTE))
+PALETTE: dict[str, str] = read_palette(
+    os.environ.get("CHART_STYLE_PALETTE", DEFAULT_PALETTE)
+)
 INK: str = PALETTE["ink"]
 PAPER: str = PALETTE["paper"]
 PANEL: str = PALETTE["panel"]
@@ -78,11 +121,24 @@ LIGHT_PALETTE: list[str] = [PAPER, PANEL, TINT, LIGHT]
 SEQUENTIAL: list[str] = [PAPER, TINT, SKY, INDIGO, INK]
 DIVERGING: list[str] = [RUST, LOSSTINT, PAPER, SKY, INDIGO]
 SEMANTIC: dict[str, str] = {
-    "ink": INK, "paper": PAPER, "panel": PANEL, "tint": TINT, "light": LIGHT, "indigo": INDIGO,
-    "rust": RUST, "ochre": OCHRE, "highlight": HIGHLIGHT_COLOR, "sage": SAGE, "sienna": SIENNA, "grey": GREY,
+    "ink": INK,
+    "paper": PAPER,
+    "panel": PANEL,
+    "tint": TINT,
+    "light": LIGHT,
+    "indigo": INDIGO,
+    "rust": RUST,
+    "ochre": OCHRE,
+    "highlight": HIGHLIGHT_COLOR,
+    "sage": SAGE,
+    "sienna": SIENNA,
+    "grey": GREY,
 }
 PALETTE_SETS: dict[str, list[str]] = {
-    "categorical": CATEGORICAL, "light": LIGHT_PALETTE, "sequential": SEQUENTIAL, "diverging": DIVERGING,
+    "categorical": CATEGORICAL,
+    "light": LIGHT_PALETTE,
+    "sequential": SEQUENTIAL,
+    "diverging": DIVERGING,
 }
 
 
@@ -109,39 +165,43 @@ def set_chart_style(context: str = "notebook", font_scale: float = 1.0) -> None:
         ValueError: If context is not one of the four names.
     """
     if context not in CONTEXT_SCALE:
-        raise ValueError(f"context must be one of {sorted(CONTEXT_SCALE)}, got {context!r}")
+        raise ValueError(
+            f"context must be one of {sorted(CONTEXT_SCALE)}, got {context!r}"
+        )
     k: float = CONTEXT_SCALE[context] * font_scale
-    matplotlib.rcParams.update({
-        "font.family": "sans-serif",
-        "font.sans-serif": FONT_FAMILY,
-        "font.size": 10 * k,
-        "axes.titlesize": 12 * k,
-        "axes.titleweight": "bold",
-        "axes.labelsize": 10 * k,
-        "xtick.labelsize": 9 * k,
-        "ytick.labelsize": 9 * k,
-        "legend.fontsize": 9 * k,
-        "text.color": INK,
-        "axes.labelcolor": INK,
-        "axes.edgecolor": INK,
-        "axes.facecolor": PAPER,
-        "axes.linewidth": 0.8 * k,
-        "axes.grid": False,
-        "axes.axisbelow": True,
-        "axes.spines.top": False,
-        "axes.spines.right": False,
-        "axes.unicode_minus": True,
-        "grid.color": LIGHT,
-        "grid.linewidth": 0.5 * k,
-        "xtick.color": INK,
-        "ytick.color": INK,
-        "lines.linewidth": 1.6 * k,
-        "lines.markersize": 5 * k,
-        "patch.linewidth": 0.8 * k,
-        "patch.edgecolor": INK,
-        "figure.facecolor": PAPER,
-        "savefig.facecolor": PAPER,
-    })
+    matplotlib.rcParams.update(
+        {
+            "font.family": "sans-serif",
+            "font.sans-serif": FONT_FAMILY,
+            "font.size": 10 * k,
+            "axes.titlesize": 12 * k,
+            "axes.titleweight": "bold",
+            "axes.labelsize": 10 * k,
+            "xtick.labelsize": 9 * k,
+            "ytick.labelsize": 9 * k,
+            "legend.fontsize": 9 * k,
+            "text.color": INK,
+            "axes.labelcolor": INK,
+            "axes.edgecolor": INK,
+            "axes.facecolor": PAPER,
+            "axes.linewidth": 0.8 * k,
+            "axes.grid": False,
+            "axes.axisbelow": True,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.unicode_minus": True,
+            "grid.color": LIGHT,
+            "grid.linewidth": 0.5 * k,
+            "xtick.color": INK,
+            "ytick.color": INK,
+            "lines.linewidth": 1.6 * k,
+            "lines.markersize": 5 * k,
+            "patch.linewidth": 0.8 * k,
+            "patch.edgecolor": INK,
+            "figure.facecolor": PAPER,
+            "savefig.facecolor": PAPER,
+        }
+    )
 
 
 def reset_style() -> None:
@@ -167,14 +227,18 @@ def set_chart_seaborn_theme(context: str = "notebook", font_scale: float = 1.0) 
 def _swatch_row(ax: Axes, colors: Sequence[str], labels: Sequence[str]) -> None:
     """Draw one row of color swatches with a hex or name label under each."""
     for i, (color, label) in enumerate(zip(colors, labels)):
-        ax.add_patch(Rectangle((i, 0), 0.9, 1, facecolor=color, edgecolor=INK, linewidth=0.6))
+        ax.add_patch(
+            Rectangle((i, 0), 0.9, 1, facecolor=color, edgecolor=INK, linewidth=0.6)
+        )
         ax.text(i + 0.45, -0.15, label, ha="center", va="top", fontsize=8, color=INK)
     ax.set_xlim(-0.1, len(colors))
     ax.set_ylim(-0.6, 1.1)
     ax.set_axis_off()
 
 
-def show_color_palette(palette_name: str = "categorical", figsize: tuple[float, float] = (12, 2)) -> Figure:
+def show_color_palette(
+    palette_name: str = "categorical", figsize: tuple[float, float] = (12, 2)
+) -> Figure:
     """Draw the swatches of one palette.
 
     Args:
@@ -188,7 +252,9 @@ def show_color_palette(palette_name: str = "categorical", figsize: tuple[float, 
         ValueError: If palette_name is unknown.
     """
     if palette_name not in PALETTE_SETS:
-        raise ValueError(f"palette_name must be one of {sorted(PALETTE_SETS)}, got {palette_name!r}")
+        raise ValueError(
+            f"palette_name must be one of {sorted(PALETTE_SETS)}, got {palette_name!r}"
+        )
     colors: list[str] = PALETTE_SETS[palette_name]
     fig, ax = plt.subplots(figsize=figsize, facecolor=PAPER)
     _swatch_row(ax, colors, colors)
@@ -242,14 +308,22 @@ def simulate_vision(hex_color: str, kind: str) -> str:
     if kind not in _MACHADO:
         raise ValueError(f"kind must be one of {sorted(_MACHADO)}, got {kind!r}")
     linear: np.ndarray = np.array(to_rgb(hex_color))
-    linear = np.where(linear <= 0.04045, linear / 12.92, ((linear + 0.055) / 1.055) ** 2.4)
+    linear = np.where(
+        linear <= 0.04045, linear / 12.92, ((linear + 0.055) / 1.055) ** 2.4
+    )
     out: np.ndarray = np.clip(_MACHADO[kind] @ linear, 0, 1)
-    srgb: np.ndarray = np.where(out <= 0.0031308, 12.92 * out, 1.055 * out ** (1 / 2.4) - 0.055)
+    srgb: np.ndarray = np.where(
+        out <= 0.0031308, 12.92 * out, 1.055 * out ** (1 / 2.4) - 0.055
+    )
     return to_hex(np.clip(srgb, 0, 1))
 
 
 def chart_header(
-    ax: Axes, title: str, subtitle: str | None = None, source: str | None = None, source_dy: float = 30
+    ax: Axes,
+    title: str,
+    subtitle: str | None = None,
+    source: str | None = None,
+    source_dy: float = 30,
 ) -> None:
     """Write a flush-left title, a subtitle above the axes, and a source line below.
 
@@ -270,13 +344,29 @@ def chart_header(
     ax.set_title(title, loc="left", fontweight="bold", color=INK, pad=pad)
     if subtitle is not None:
         ax.text(
-            0, 1, subtitle, transform=offset_copy(ax.transAxes, ax.figure, y=4, units="points"),
-            ha="left", va="bottom", fontsize=font_size, color=INK, gid=SUBTITLE_GID,
+            0,
+            1,
+            subtitle,
+            transform=offset_copy(ax.transAxes, ax.figure, y=4, units="points"),
+            ha="left",
+            va="bottom",
+            fontsize=font_size,
+            color=INK,
+            gid=SUBTITLE_GID,
         )
     if source is not None:
         ax.text(
-            0, 0, source, transform=offset_copy(ax.transAxes, ax.figure, y=-source_dy, units="points"),
-            ha="left", va="top", fontsize=0.8 * font_size, color=INK, gid=SOURCE_GID,
+            0,
+            0,
+            source,
+            transform=offset_copy(
+                ax.transAxes, ax.figure, y=-source_dy, units="points"
+            ),
+            ha="left",
+            va="top",
+            fontsize=0.8 * font_size,
+            color=INK,
+            gid=SOURCE_GID,
         )
 
 
@@ -311,7 +401,11 @@ def align_headers(fig: Figure) -> None:
 
 
 def highlight_bars(
-    ax: Axes, bars: Sequence[Rectangle], highlight: Iterable[int], color: str = HIGHLIGHT_COLOR, muted: str = MUTED_COLOR
+    ax: Axes,
+    bars: Sequence[Rectangle],
+    highlight: Iterable[int],
+    color: str = HIGHLIGHT_COLOR,
+    muted: str = MUTED_COLOR,
 ) -> None:
     """Color the highlighted bars and mute the rest. Bars start the value axis at zero.
 
@@ -334,7 +428,12 @@ def highlight_bars(
         ax.set_ylim(bottom=0)
 
 
-def label_bars(ax: Axes, bars: Sequence[Rectangle], highlight: Iterable[int] = (), fmt: str = "{:.0f}") -> None:
+def label_bars(
+    ax: Axes,
+    bars: Sequence[Rectangle],
+    highlight: Iterable[int] = (),
+    fmt: str = "{:.0f}",
+) -> None:
     """Write each vertical bar's value just past its end. Bold the highlighted labels.
 
     Args:
@@ -348,13 +447,20 @@ def label_bars(ax: Axes, bars: Sequence[Rectangle], highlight: Iterable[int] = (
         value: float = bar.get_height()
         above: bool = value >= 0
         ax.annotate(
-            _minus(fmt.format(value)), xy=(bar.get_x() + bar.get_width() / 2, value),
-            xytext=(0, 3 if above else -3), textcoords="offset points", ha="center",
-            va="bottom" if above else "top", color=INK, fontweight="bold" if i in marked else "normal",
+            _minus(fmt.format(value)),
+            xy=(bar.get_x() + bar.get_width() / 2, value),
+            xytext=(0, 3 if above else -3),
+            textcoords="offset points",
+            ha="center",
+            va="bottom" if above else "top",
+            color=INK,
+            fontweight="bold" if i in marked else "normal",
         )
 
 
-def direct_label(ax: Axes, x: float, y: float, text: str, color: str, dy: float = 0, **kwargs: Any) -> Any:
+def direct_label(
+    ax: Axes, x: float, y: float, text: str, color: str, dy: float = 0, **kwargs: Any
+) -> Any:
     """Write a label at a mark, so the reader need not look up a legend.
 
     Args:
@@ -402,23 +508,53 @@ def example_lines(ax: Axes) -> None:
     """
     x: np.ndarray = np.arange(0, 11)
     series: list[tuple[str, list[float], str, str, str]] = [
-        ("Product A", [1.2, 1.5, 1.9, 2.3, 2.8, 3.2, 3.6, 3.9, 4.2, 4.5, 4.8], INDIGO, "o", "-"),
-        ("Product B", [1.0, 1.1, 1.3, 1.2, 1.4, 1.5, 1.4, 1.6, 1.5, 1.7, 1.6], SIENNA, "s", "--"),
-        ("Product C", [0.8, 0.9, 0.8, 1.0, 0.9, 1.1, 1.0, 1.1, 1.2, 1.1, 1.2], GREY, "^", ":"),
-        ("Product D", [0.6, 0.5, 0.7, 0.6, 0.7, 0.6, 0.8, 0.7, 0.8, 0.7, 0.8], RUST, "D", "-."),
+        (
+            "Product A",
+            [1.2, 1.5, 1.9, 2.3, 2.8, 3.2, 3.6, 3.9, 4.2, 4.5, 4.8],
+            INDIGO,
+            "o",
+            "-",
+        ),
+        (
+            "Product B",
+            [1.0, 1.1, 1.3, 1.2, 1.4, 1.5, 1.4, 1.6, 1.5, 1.7, 1.6],
+            SIENNA,
+            "s",
+            "--",
+        ),
+        (
+            "Product C",
+            [0.8, 0.9, 0.8, 1.0, 0.9, 1.1, 1.0, 1.1, 1.2, 1.1, 1.2],
+            GREY,
+            "^",
+            ":",
+        ),
+        (
+            "Product D",
+            [0.6, 0.5, 0.7, 0.6, 0.7, 0.6, 0.8, 0.7, 0.8, 0.7, 0.8],
+            RUST,
+            "D",
+            "-.",
+        ),
     ]
     for name, values, color, marker, style in series:
         ax.plot(x, values, color=color, marker=marker, markersize=4.5, linestyle=style)
         direct_label(
-            ax, x[-1] + 0.3, values[-1], f"{name} {values[-1]:.1f}", color,
+            ax,
+            x[-1] + 0.3,
+            values[-1],
+            f"{name} {values[-1]:.1f}",
+            color,
             fontweight="bold" if color == INDIGO else "normal",
         )
     ax.set_xlim(0, 14)
     ax.set_ylim(0, 5.5)
     _grid(ax, "y")
     chart_header(
-        ax, "Product A pulls ahead of the other three lines",
-        "Demand index by week, weeks 0 to 10; axis starts at 0", _SOURCE,
+        ax,
+        "Product A pulls ahead of the other three lines",
+        "Demand index by week, weeks 0 to 10; axis starts at 0",
+        _SOURCE,
     )
 
 
@@ -436,8 +572,10 @@ def example_highlight_bar(ax: Axes) -> None:
     ax.set_ylim(0, 95)
     hide_value_axis(ax)
     chart_header(
-        ax, "Item D outsells every other item",
-        "Shipments, thousand units; highlighted bar is the focal item", _SOURCE,
+        ax,
+        "Item D outsells every other item",
+        "Shipments, thousand units; highlighted bar is the focal item",
+        _SOURCE,
     )
 
 
@@ -452,14 +590,34 @@ def example_scatter_outlier(ax: Axes, rng: np.random.Generator | None = None) ->
     g1: np.ndarray = rng.normal([1.0, 1.2], [0.8, 0.7], size=(18, 2))
     g2: np.ndarray = rng.normal([2.2, 2.0], [0.7, 0.8], size=(16, 2))
     g3: np.ndarray = rng.normal([0.2, 2.5], [0.6, 0.6], size=(14, 2))
-    ax.scatter(g1[:, 0], g1[:, 1], marker="o", s=28, color=INDIGO, alpha=0.8, label="Tier 1")
-    ax.scatter(g2[:, 0], g2[:, 1], marker="s", s=28, color=OCHRE, alpha=0.85, label="Tier 2")
-    ax.scatter(g3[:, 0], g3[:, 1], marker="^", s=30, color=GREY, alpha=0.85, label="Tier 3")
+    ax.scatter(
+        g1[:, 0], g1[:, 1], marker="o", s=28, color=INDIGO, alpha=0.8, label="Tier 1"
+    )
+    ax.scatter(
+        g2[:, 0], g2[:, 1], marker="s", s=28, color=OCHRE, alpha=0.85, label="Tier 2"
+    )
+    ax.scatter(
+        g3[:, 0], g3[:, 1], marker="^", s=30, color=GREY, alpha=0.85, label="Tier 3"
+    )
     ax.scatter([5.4], [-1.2], marker="o", s=36, color=RUST, zorder=5)
-    ax.add_patch(Circle((5.4, -1.2), radius=0.55, fill=False, edgecolor=RUST, linewidth=1.4, linestyle="--"))
+    ax.add_patch(
+        Circle(
+            (5.4, -1.2),
+            radius=0.55,
+            fill=False,
+            edgecolor=RUST,
+            linewidth=1.4,
+            linestyle="--",
+        )
+    )
     ax.annotate(
-        _minus("Outlier (5.4, -1.2)"), xy=(5.4, -1.2), xytext=(3.7, -2.1), color=RUST, fontsize=8,
-        fontweight="bold", arrowprops={"arrowstyle": "->", "color": RUST, "lw": 1.0},
+        _minus("Outlier (5.4, -1.2)"),
+        xy=(5.4, -1.2),
+        xytext=(3.7, -2.1),
+        color=RUST,
+        fontsize=8,
+        fontweight="bold",
+        arrowprops={"arrowstyle": "->", "color": RUST, "lw": 1.0},
     )
     ax.set_xlim(-1.5, 6.5)
     ax.set_ylim(-2.6, 4.2)
@@ -468,8 +626,11 @@ def example_scatter_outlier(ax: Axes, rng: np.random.Generator | None = None) ->
     ax.legend(frameon=False, loc="upper left", ncol=3)
     n: int = len(g1) + len(g2) + len(g3) + 1
     chart_header(
-        ax, "One account sits far from the pack", f"Metric Y against Metric X by tier, n = {n} accounts",
-        _SOURCE, source_dy=45,
+        ax,
+        "One account sits far from the pack",
+        f"Metric Y against Metric X by tier, n = {n} accounts",
+        _SOURCE,
+        source_dy=45,
     )
 
 
@@ -483,28 +644,58 @@ def example_waterfall(ax: Axes) -> None:
     deltas: list[int] = [100, 24, 9, -7, -5, 121]
     last: int = len(deltas) - 1
     ax.bar(0, deltas[0], width=0.55, color=INK)
-    ax.text(0, deltas[0] - 3, str(deltas[0]), ha="center", va="top", color=PAPER, fontweight="bold")
+    ax.text(
+        0,
+        deltas[0] - 3,
+        str(deltas[0]),
+        ha="center",
+        va="top",
+        color=PAPER,
+        fontweight="bold",
+    )
     level: int = deltas[0]
     ends: list[int] = [level]
     for i in range(1, last):
         change: int = deltas[i]
         base: int = level if change >= 0 else level + change
-        ax.bar(i, abs(change), bottom=base, width=0.55, color=INDIGO if change >= 0 else RUST)
+        ax.bar(
+            i,
+            abs(change),
+            bottom=base,
+            width=0.55,
+            color=INDIGO if change >= 0 else RUST,
+        )
         # increases are labeled above the bar, decreases below it, so the label sits where the bar moves
         label_y: float = base + abs(change) + 2 if change >= 0 else base - 2
-        ax.text(i, label_y, _minus(f"{change:+d}"), ha="center", va="bottom" if change >= 0 else "top")
+        ax.text(
+            i,
+            label_y,
+            _minus(f"{change:+d}"),
+            ha="center",
+            va="bottom" if change >= 0 else "top",
+        )
         level += change
         ends.append(level)
     ax.bar(last, level, width=0.55, color=INK)
-    ax.text(last, level - 3, str(level), ha="center", va="top", color=PAPER, fontweight="bold")
+    ax.text(
+        last,
+        level - 3,
+        str(level),
+        ha="center",
+        va="top",
+        color=PAPER,
+        fontweight="bold",
+    )
     for i in range(last):
         ax.plot([i + 0.275, i + 0.725], [ends[i], ends[i]], color=LIGHT, linewidth=0.8)
     ax.set_xticks(range(len(labels)), labels)
     ax.set_ylim(0, 140)
     hide_value_axis(ax)
     chart_header(
-        ax, f"Volume added {deltas[1]}, more than the net gain of {level - deltas[0]}",
-        "Profit bridge 2024 to 2025, USD million; indigo up, rust down", _SOURCE,
+        ax,
+        f"Volume added {deltas[1]}, more than the net gain of {level - deltas[0]}",
+        "Profit bridge 2024 to 2025, USD million; indigo up, rust down",
+        _SOURCE,
     )
 
 
@@ -521,19 +712,34 @@ def example_target_line(ax: Axes) -> None:
     ax.axhline(target, color=INK, linestyle="--", linewidth=1.0)
     direct_label(ax, -0.2, target, f"Target {target}", INK, dy=1.0, ha="left")
     ax.plot(xm, actual, color=INDIGO, marker="o", markersize=4)
-    ax.fill_between(xm, actual, target, where=actual >= target, interpolate=True, color=INDIGO, alpha=0.22)
+    ax.fill_between(
+        xm,
+        actual,
+        target,
+        where=actual >= target,
+        interpolate=True,
+        color=INDIGO,
+        alpha=0.22,
+    )
     peak: int = 4
     ax.annotate(
-        f"May: {actual[peak]} ({actual[peak] - target:+d})", xy=(peak, actual[peak]), xytext=(peak + 0.6, 80.5),
-        color=INDIGO, fontsize=8, fontweight="bold", arrowprops={"arrowstyle": "->", "color": INDIGO, "lw": 1.0},
+        f"May: {actual[peak]} ({actual[peak] - target:+d})",
+        xy=(peak, actual[peak]),
+        xytext=(peak + 0.6, 80.5),
+        color=INDIGO,
+        fontsize=8,
+        fontweight="bold",
+        arrowprops={"arrowstyle": "->", "color": INDIGO, "lw": 1.0},
     )
     ax.set_xticks(xm, months)
     ax.set_ylim(55, 86)
     _grid(ax, "y")
     above: int = int(np.sum(actual >= target))
     chart_header(
-        ax, f"Throughput cleared the target in {above} of 12 months",
-        "Monthly index, 2025; axis starts at 55; shading = above target", _SOURCE,
+        ax,
+        f"Throughput cleared the target in {above} of 12 months",
+        "Monthly index, 2025; axis starts at 55; shading = above target",
+        _SOURCE,
     )
 
 
@@ -546,7 +752,13 @@ def example_dumbbell(ax: Axes) -> None:
     Args:
         ax: Axes to draw on.
     """
-    regions: list[str] = ["Region North", "Region Central", "Region East", "Region South", "Region West"]
+    regions: list[str] = [
+        "Region North",
+        "Region Central",
+        "Region East",
+        "Region South",
+        "Region West",
+    ]
     target: np.ndarray = np.array([70, 80, 68, 72, 75])
     actual: np.ndarray = np.array([68, 76, 65, 75, 81])
     ys: np.ndarray = np.arange(len(regions))
@@ -561,8 +773,10 @@ def example_dumbbell(ax: Axes) -> None:
     _grid(ax, "y")  # one light guide line per region
     beat: int = int(np.sum(actual >= target))
     chart_header(
-        ax, f"{beat} of five regions beat their target",
-        "Score against target, 2025; open circle = target, filled = actual", _SOURCE,
+        ax,
+        f"{beat} of five regions beat their target",
+        "Score against target, 2025; open circle = target, filled = actual",
+        _SOURCE,
     )
 
 
@@ -578,22 +792,34 @@ def example_histogram(ax: Axes, rng: np.random.Generator | None = None) -> None:
     thresh: float = 70.0
     med: float = float(np.median(samples))
     share: float = 100.0 * float(np.mean(samples > thresh))
-    counts, edges, patches = ax.hist(samples, bins=22, color=LIGHT, edgecolor=PAPER, linewidth=0.5)
+    counts, edges, patches = ax.hist(
+        samples, bins=22, color=LIGHT, edgecolor=PAPER, linewidth=0.5
+    )
     for edge, patch in zip(edges[:-1], patches):
         if edge >= thresh:
             patch.set_facecolor(INDIGO)
     ax.axvline(med, color=INK, linestyle="--", linewidth=1.2)
     direct_label(ax, med + 2.0, max(counts) * 0.9, f"Median {med:.0f}", INK)
     top_right: float = float(counts[edges[:-1] >= thresh].max())
-    direct_label(ax, thresh + 6.0, top_right + 0.04 * max(counts), f"{share:.0f}% above {thresh:.0f}", INDIGO,
-                 va="bottom", fontweight="bold")
+    direct_label(
+        ax,
+        thresh + 6.0,
+        top_right + 0.04 * max(counts),
+        f"{share:.0f}% above {thresh:.0f}",
+        INDIGO,
+        va="bottom",
+        fontweight="bold",
+    )
     ax.set_ylim(0, max(counts) * 1.15)
     ax.set_xlabel("Order size, units")
     ax.set_ylabel("Orders")
     _grid(ax, "y")
     chart_header(
-        ax, f"{share:.0f}% of orders are larger than {thresh:.0f} units",
-        f"Order size, n = {len(samples)} orders; indigo bins lie above {thresh:.0f} units", _SOURCE, source_dy=45,
+        ax,
+        f"{share:.0f}% of orders are larger than {thresh:.0f} units",
+        f"Order size, n = {len(samples)} orders; indigo bins lie above {thresh:.0f} units",
+        _SOURCE,
+        source_dy=45,
     )
 
 
@@ -612,15 +838,19 @@ def example_grouped_columns(ax: Axes) -> None:
     ax.bar(xr + width / 2, y25, width=width, color=SIENNA, label="2025")
     for x, a, b in zip(xr, y24, y25):
         ax.text(x - width / 2, a + 1.0, str(a), ha="center", color=INK)
-        ax.text(x + width / 2, b + 1.0, str(b), ha="center", color=SIENNA, fontweight="bold")
+        ax.text(
+            x + width / 2, b + 1.0, str(b), ha="center", color=SIENNA, fontweight="bold"
+        )
     ax.set_xticks(xr, regions)
     ax.set_ylim(0, 68)
     ax.legend(frameon=False, loc="upper right", ncol=2)
     hide_value_axis(ax)
     best: int = int(np.argmax(y25 - y24))
     chart_header(
-        ax, f"{regions[best]} posted the largest year-over-year gain",
-        "Regional volume, thousand units, 2024 and 2025", _SOURCE,
+        ax,
+        f"{regions[best]} posted the largest year-over-year gain",
+        "Regional volume, thousand units, 2024 and 2025",
+        _SOURCE,
     )
 
 
@@ -637,27 +867,59 @@ def example_fan_chart(ax: Axes) -> None:
     fc_lo: np.ndarray = np.array([76.5, 78.5, 82.5])
     fc_hi: np.ndarray = np.array([76.5, 85.5, 93.5])
     ax.plot(hist_x, hist_y, color=INDIGO, marker="o", markersize=4, linewidth=2.0)
-    ax.plot(fc_x, fc_mid, color=INDIGO, linestyle="--", marker="o", markersize=4, linewidth=1.8)
+    ax.plot(
+        fc_x,
+        fc_mid,
+        color=INDIGO,
+        linestyle="--",
+        marker="o",
+        markersize=4,
+        linewidth=1.8,
+    )
     ax.fill_between(fc_x, fc_lo, fc_hi, color=INDIGO, alpha=0.16)
     ax.axvline(2026, color=GREY, linestyle=":", linewidth=1.0)
     direct_label(ax, 2026.1, 61.5, "Forecast", GREY)
-    direct_label(ax, 2028, fc_mid[-1] + 6, f"{fc_mid[-1]:.0f}", INDIGO, ha="center", fontweight="bold")
+    direct_label(
+        ax,
+        2028,
+        fc_mid[-1] + 6,
+        f"{fc_mid[-1]:.0f}",
+        INDIGO,
+        ha="center",
+        fontweight="bold",
+    )
     ax.set_xticks(np.arange(2023, 2029))
     ax.set_ylim(58, 99)
     _grid(ax, "y")
     chart_header(
-        ax, f"Projected output reaches {fc_mid[-1]:.0f} by 2028",
-        "Index, 2023 to 2028; axis starts at 58; band = projection range", _SOURCE,
+        ax,
+        f"Projected output reaches {fc_mid[-1]:.0f} by 2028",
+        "Index, 2023 to 2028; axis starts at 58; band = projection range",
+        _SOURCE,
     )
 
 
-def _panel(inset: Axes, name: str, focal: np.ndarray, peers: Sequence[np.ndarray], months: np.ndarray) -> None:
+def _panel(
+    inset: Axes,
+    name: str,
+    focal: np.ndarray,
+    peers: Sequence[np.ndarray],
+    months: np.ndarray,
+) -> None:
     """Draw one small-multiple panel: peers in light grey and the focal series in indigo."""
     for peer in peers:
         inset.plot(months, peer, color=LIGHT, linewidth=1.0)
     inset.plot(months, focal, color=INDIGO, linewidth=2.0)
     inset.scatter([months[-1]], [focal[-1]], color=INDIGO, s=22, zorder=5)
-    direct_label(inset, months[-1] + 0.4, focal[-1], f"{focal[-1]:.0f}", INDIGO, fontsize=7.5, fontweight="bold")
+    direct_label(
+        inset,
+        months[-1] + 0.4,
+        focal[-1],
+        f"{focal[-1]:.0f}",
+        INDIGO,
+        fontsize=7.5,
+        fontweight="bold",
+    )
     inset.set_title(name, loc="left", fontsize=8.5, fontweight="bold", color=INK, pad=3)
     inset.set_xlim(1, 14.5)
     inset.set_ylim(94, 130)
@@ -676,9 +938,21 @@ def example_small_multiples(ax: Axes, rng: np.random.Generator | None = None) ->
     rng = np.random.default_rng(42) if rng is None else rng
     months: np.ndarray = np.arange(1, 13)
     names: list[str] = ["Region North", "Region South", "Region East", "Region West"]
-    trends: list[np.ndarray] = [np.linspace(100, 124, 12), np.linspace(100, 106, 12), np.linspace(100, 99, 12), np.linspace(100, 109, 12)]
-    series: dict[str, np.ndarray] = {n: t + rng.normal(0, 1.5, 12) for n, t in zip(names, trends)}
-    boxes: list[tuple[float, float]] = [(0.0, 0.5), (0.55, 0.5), (0.0, 0.0), (0.55, 0.0)]
+    trends: list[np.ndarray] = [
+        np.linspace(100, 124, 12),
+        np.linspace(100, 106, 12),
+        np.linspace(100, 99, 12),
+        np.linspace(100, 109, 12),
+    ]
+    series: dict[str, np.ndarray] = {
+        n: t + rng.normal(0, 1.5, 12) for n, t in zip(names, trends)
+    }
+    boxes: list[tuple[float, float]] = [
+        (0.0, 0.5),
+        (0.55, 0.5),
+        (0.0, 0.0),
+        (0.55, 0.0),
+    ]
     for (x0, y0), name in zip(boxes, names):
         peers: list[np.ndarray] = [v for n, v in series.items() if n != name]
         inset: Axes = ax.inset_axes([x0, y0, 0.45, 0.38])
@@ -690,8 +964,10 @@ def example_small_multiples(ax: Axes, rng: np.random.Generator | None = None) ->
             inset.set_xticks([])
     ax.set_axis_off()
     chart_header(
-        ax, "Region North ends the year highest of four regions",
-        "Index, month 1 = 100; North in indigo, peer regions in light grey", _SOURCE,
+        ax,
+        "Region North ends the year highest of four regions",
+        "Index, month 1 = 100; North in indigo, peer regions in light grey",
+        _SOURCE,
     )
 
 
@@ -709,17 +985,35 @@ def example_slope(ax: Axes) -> None:
             color, weight = INDIGO, "bold"
         else:
             color, weight = (GREY if s1 >= s0 else RUST), "normal"
-        ax.plot([0, 1], [s0, s1], color=color, marker="o", markersize=4.5, linewidth=2.2 if name == "Line A" else 1.4)
+        ax.plot(
+            [0, 1],
+            [s0, s1],
+            color=color,
+            marker="o",
+            markersize=4.5,
+            linewidth=2.2 if name == "Line A" else 1.4,
+        )
         direct_label(ax, -0.06, s0, f"{name} {s0}", INK, ha="right", fontsize=7.8)
-        direct_label(ax, 1.06, s1, f"{s1} {name}", color, ha="left", fontsize=7.8, fontweight=weight)
+        direct_label(
+            ax,
+            1.06,
+            s1,
+            f"{s1} {name}",
+            color,
+            ha="left",
+            fontsize=7.8,
+            fontweight=weight,
+        )
     ax.set_xticks([0, 1], ["2023", "2025"])
     ax.set_xlim(-0.6, 1.6)
     ax.set_ylim(12, 64)
     _grid(ax, "x")
     gain: int = v_end[0] - v_start[0]
     chart_header(
-        ax, f"Line A gained {gain} units, the most of five lines",
-        "Units by product line, 2023 and 2025; indigo = focal line", _SOURCE,
+        ax,
+        f"Line A gained {gain} units, the most of five lines",
+        "Units by product line, 2023 and 2025; indigo = focal line",
+        _SOURCE,
     )
 
 
@@ -737,7 +1031,15 @@ def example_ranked_dots(ax: Axes) -> None:
     ax.hlines(ys, xmin=0, xmax=values, color=LIGHT, linewidth=1.6)
     ax.scatter(values, ys, color=colors, s=36, zorder=4)
     for y, v, c in zip(ys, values, colors):
-        direct_label(ax, v + 1.5, y, f"{v}", c, fontsize=7.8, fontweight="bold" if c == INDIGO else "normal")
+        direct_label(
+            ax,
+            v + 1.5,
+            y,
+            f"{v}",
+            c,
+            fontsize=7.8,
+            fontweight="bold" if c == INDIGO else "normal",
+        )
     ax.axvline(mean, color=INK, linestyle="--", linewidth=1.1)
     direct_label(ax, mean + 1.2, -0.7, f"Mean {mean:.0f}", INK, fontsize=7.8)
     ax.set_ylim(-1.0, len(markets) - 0.5)
@@ -746,8 +1048,11 @@ def example_ranked_dots(ax: Axes) -> None:
     ax.set_xlabel("Sales volume, thousand units")
     gap: int = int(values[-1] - values[-2])
     chart_header(
-        ax, f"Market 8 sells {gap} thousand units more than the next market",
-        "Sales volume, thousand units, 2025; sorted; dashed line = mean", _SOURCE, source_dy=45,
+        ax,
+        f"Market 8 sells {gap} thousand units more than the next market",
+        "Sales volume, thousand units, 2025; sorted; dashed line = mean",
+        _SOURCE,
+        source_dy=45,
     )
 
 
@@ -765,16 +1070,37 @@ def example_diverging_bars(ax: Axes) -> None:
     ax.axvline(0, color=INK, linewidth=0.9)
     for y, v, c in zip(ys, values, colors):
         if v >= 0:
-            direct_label(ax, v + 0.4, y, f"{v:+.1f}", c, ha="left", fontsize=7.8, fontweight="bold")
+            direct_label(
+                ax,
+                v + 0.4,
+                y,
+                f"{v:+.1f}",
+                c,
+                ha="left",
+                fontsize=7.8,
+                fontweight="bold",
+            )
         else:
-            direct_label(ax, v - 0.4, y, f"{v:+.1f}", c, ha="right", fontsize=7.8, fontweight="bold")
+            direct_label(
+                ax,
+                v - 0.4,
+                y,
+                f"{v:+.1f}",
+                c,
+                ha="right",
+                fontsize=7.8,
+                fontweight="bold",
+            )
     ax.set_yticks(ys, names)
     ax.set_xlim(-12, 16)
     ax.set_xlabel("Net change, percentage points")
     up: int = int(np.sum(values >= 0))
     chart_header(
-        ax, f"{up} of {len(names)} products grew, and {len(names) - up} declined",
-        "Change, percentage points, 2024 to 2025; gains indigo, losses rust", _SOURCE, source_dy=45,
+        ax,
+        f"{up} of {len(names)} products grew, and {len(names) - up} declined",
+        "Change, percentage points, 2024 to 2025; gains indigo, losses rust",
+        _SOURCE,
+        source_dy=45,
     )
 
 
@@ -791,19 +1117,47 @@ def example_stacked_columns(ax: Axes) -> None:
     xs: np.ndarray = np.arange(len(years))
     ax.bar(xs, under_30, width=0.52, color=OCHRE, label="Under 30")
     ax.bar(xs, mid, bottom=under_30, width=0.52, color=INDIGO, label="30 to 50")
-    ax.bar(xs, over_50, bottom=under_30 + mid, width=0.52, color=SIENNA, label="Over 50")
+    ax.bar(
+        xs, over_50, bottom=under_30 + mid, width=0.52, color=SIENNA, label="Over 50"
+    )
     for i in xs:
-        ax.text(i, under_30[i] / 2, f"{under_30[i]}%", ha="center", va="center", color=INK, fontweight="bold")
-        ax.text(i, under_30[i] + mid[i] / 2, f"{mid[i]}%", ha="center", va="center", color=PAPER, fontweight="bold")
-        ax.text(i, under_30[i] + mid[i] + over_50[i] / 2, f"{over_50[i]}%", ha="center", va="center", color=PAPER, fontweight="bold")
+        ax.text(
+            i,
+            under_30[i] / 2,
+            f"{under_30[i]}%",
+            ha="center",
+            va="center",
+            color=INK,
+            fontweight="bold",
+        )
+        ax.text(
+            i,
+            under_30[i] + mid[i] / 2,
+            f"{mid[i]}%",
+            ha="center",
+            va="center",
+            color=PAPER,
+            fontweight="bold",
+        )
+        ax.text(
+            i,
+            under_30[i] + mid[i] + over_50[i] / 2,
+            f"{over_50[i]}%",
+            ha="center",
+            va="center",
+            color=PAPER,
+            fontweight="bold",
+        )
     ax.set_xticks(xs, years)
     ax.set_ylim(0, 100)
     ax.set_ylabel("Share of buyers, %")
     ax.legend(frameon=False, loc="center left", bbox_to_anchor=(1.02, 0.5))
     hide_value_axis(ax)
     chart_header(
-        ax, f"Buyers over 50 rise from {over_50[0]}% to {over_50[-1]}% of the total",
-        "Share of total buyers by age bracket, %, 2021 to 2025", _SOURCE,
+        ax,
+        f"Buyers over 50 rise from {over_50[0]}% to {over_50[-1]}% of the total",
+        "Share of total buyers by age bracket, %, 2021 to 2025",
+        _SOURCE,
     )
 
 
@@ -814,31 +1168,65 @@ def example_annotated_timeline(ax: Axes) -> None:
         ax: Axes to draw on.
     """
     t: np.ndarray = np.arange(0, 15)
-    values: np.ndarray = np.array([50, 52, 54, 53, 56, 59, 61, 68, 74, 76, 80, 84, 88, 92, 97])
+    values: np.ndarray = np.array(
+        [50, 52, 54, 53, 56, 59, 61, 68, 74, 76, 80, 84, 88, 92, 97]
+    )
     ax.plot(t[:12], values[:12], color=INK, linewidth=1.8)
     ax.plot(t[11:], values[11:], color=INDIGO, linestyle="--", linewidth=1.8)
     ax.axvspan(11, 14, color=LIGHT, alpha=0.45)
     ax.axvline(6.5, color=RUST, linestyle=":", linewidth=1.2)
     ax.annotate(
-        "Price reset", xy=(6.5, 65), xytext=(2.2, 74), color=RUST, fontsize=8, fontweight="bold",
+        "Price reset",
+        xy=(6.5, 65),
+        xytext=(2.2, 74),
+        color=RUST,
+        fontsize=8,
+        fontweight="bold",
         arrowprops={"arrowstyle": "->", "color": RUST, "lw": 1.0},
     )
-    direct_label(ax, 14, values[-1] + 1.5, f"{values[-1]}*", INDIGO, ha="center", fontsize=8.5, fontweight="bold")
+    direct_label(
+        ax,
+        14,
+        values[-1] + 1.5,
+        f"{values[-1]}*",
+        INDIGO,
+        ha="center",
+        fontsize=8.5,
+        fontweight="bold",
+    )
     ax.set_xticks([0, 3, 6, 9, 12], ["Q1 '22", "Q4 '22", "Q3 '23", "Q2 '24", "Q1 '25*"])
     ax.set_ylim(45, 105)
     _grid(ax, "y")
     chart_header(
-        ax, "Sales rose every quarter after the price reset in late 2023",
-        "Quarterly sales index, Q1 2022 to Q3 2025; * = projected", _SOURCE,
+        ax,
+        "Sales rose every quarter after the price reset in late 2023",
+        "Quarterly sales index, Q1 2022 to Q3 2025; * = projected",
+        _SOURCE,
     )
 
 
 RECIPES: list[Callable[..., None]] = [
-    example_lines, example_highlight_bar, example_scatter_outlier, example_waterfall, example_target_line,
-    example_dumbbell, example_histogram, example_grouped_columns, example_fan_chart, example_small_multiples,
-    example_slope, example_ranked_dots, example_diverging_bars, example_stacked_columns, example_annotated_timeline,
+    example_lines,
+    example_highlight_bar,
+    example_scatter_outlier,
+    example_waterfall,
+    example_target_line,
+    example_dumbbell,
+    example_histogram,
+    example_grouped_columns,
+    example_fan_chart,
+    example_small_multiples,
+    example_slope,
+    example_ranked_dots,
+    example_diverging_bars,
+    example_stacked_columns,
+    example_annotated_timeline,
 ]
-_SEEDED: tuple[Callable[..., None], ...] = (example_scatter_outlier, example_histogram, example_small_multiples)
+_SEEDED: tuple[Callable[..., None], ...] = (
+    example_scatter_outlier,
+    example_histogram,
+    example_small_multiples,
+)
 
 
 def create_example_plots(context: str = "notebook") -> Figure:
@@ -858,7 +1246,9 @@ def create_example_plots(context: str = "notebook") -> Figure:
             recipe(ax, rng)
         else:
             recipe(ax)
-    fig.subplots_adjust(left=0.05, right=0.98, top=0.95, bottom=0.04, wspace=0.3, hspace=0.6)
+    fig.subplots_adjust(
+        left=0.05, right=0.98, top=0.95, bottom=0.04, wspace=0.3, hspace=0.6
+    )
     align_headers(fig)
     return fig
 
@@ -874,11 +1264,22 @@ def create_context_demo(panel_size: tuple[float, float] = (5.2, 4.2)) -> Figure:
     Returns:
         The figure with a 2 x 2 grid of panels.
     """
-    fig, axes = plt.subplots(2, 2, figsize=(panel_size[0] * 2, panel_size[1] * 2), facecolor=PAPER)
+    fig, axes = plt.subplots(
+        2, 2, figsize=(panel_size[0] * 2, panel_size[1] * 2), facecolor=PAPER
+    )
     for ax, context in zip(axes.flat, CONTEXT_SCALE):
         set_chart_style(context)
         example_highlight_bar(ax)
-        ax.text(0.99, 0.97, f"Context: {context}", transform=ax.transAxes, ha="right", va="top", color=INK, fontsize=8)
+        ax.text(
+            0.99,
+            0.97,
+            f"Context: {context}",
+            transform=ax.transAxes,
+            ha="right",
+            va="top",
+            color=INK,
+            fontsize=8,
+        )
     set_chart_style("notebook")
     fig.subplots_adjust(wspace=0.4, hspace=0.6)
     align_headers(fig)

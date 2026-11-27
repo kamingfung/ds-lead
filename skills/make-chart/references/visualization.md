@@ -2,7 +2,7 @@
 
 ## Colorblind Safety and Encoding
 
-- The palette follows Wong (2011), which recommends colors that stay distinct for readers with color-vision deficiency.
+- The palette is a hand-picked fall palette. Its hue roles follow the eight Okabe-Ito colors, which stay distinct for readers with color-vision deficiency. Only yellow and black are Okabe-Ito values; [README.md](../README.md) maps the others and lists the measured color distances.
 - `simulate_vision(hex_color, kind)` shows a color as a viewer with `deutan`, `protan` or `tritan` vision sees it. It applies the Machado matrices at full severity to linear sRGB. `show_all_palettes()` draws the three simulations of the categorical palette.
 - Every color needs a second cue: a marker shape, a line style, a direct label or a bold weight.
 
