@@ -4,6 +4,8 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+- `make-deck`, `make-chart`: new `template/chart.schema.json` states the chart grammar as a language-neutral JSON Schema. The chart grammar is the set of chart kinds a native, editable PowerPoint chart can draw. Tests fail when the schema, `ChartData`, the HTML renderer and the pptx renderer disagree on a kind or a field. New `make-chart/references/chart-grammar.md` maps each of the 15 recipes to its deck kind and its native pptx route, direct or trick.
+
 ## v1.1.0 (2026-11-27)
 
 Docs, checks and fixes since the first release: no skill was removed or renamed.
