@@ -4,6 +4,24 @@ Colors come from `palette.css`, or from the file named by the environment variab
 CHART_STYLE_PALETTE when that variable is set before this module is imported.
 Each recipe draws on one axes and calls `chart_header`, so a recipe can be copied
 and given new data.
+
+Public functions:
+
+    set_chart_style          Set matplotlib rcParams for one context
+    reset_style              Restore matplotlib's default rcParams
+    set_chart_seaborn_theme  Apply seaborn's white theme, then the house style
+    chart_header             Write the title, subtitle and source line of one axes
+    align_headers            Line up subtitles and source lines across a grid of axes
+    highlight_bars           Color some bars and mute the rest
+    label_bars               Write each bar's value at its end
+    direct_label             Write a label at a data point
+    hide_value_axis          Hide the value axis and gridlines of a fully labeled bar chart
+    read_palette             Read color tokens from a palette CSS file
+    show_color_palette       Draw the swatches of one palette
+    show_all_palettes        Draw every palette and the color-vision simulations
+    simulate_vision          Return a color as a viewer with one color-vision deficiency sees it
+    create_example_plots     Draw the 15 recipes on one grid
+    create_context_demo      Draw one chart in each of the four contexts
 """
 
 from __future__ import annotations

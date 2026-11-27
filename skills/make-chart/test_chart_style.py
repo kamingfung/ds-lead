@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import re
 from pathlib import Path
 
@@ -11,10 +12,11 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from matplotlib import font_manager  # noqa: E402
 from matplotlib.axes import Axes  # noqa: E402
-from matplotlib.colors import to_hex, to_rgba  # noqa: E402
+from matplotlib.colors import to_hex, to_rgb, to_rgba  # noqa: E402
 from matplotlib.text import Text  # noqa: E402
 
 HEX: re.Pattern[str] = re.compile(r"^#[0-9a-f]{6}$")
@@ -323,3 +325,32 @@ def test_waterfall_labels_decreases_below_their_bar() -> None:
     decreases = [t for t in ax.texts if t.get_text().startswith("\u2212")]
     assert decreases and all(t.get_va() == "top" for t in decreases)
     plt.close(fig)
+
+
+def _lab(hex_color: str) -> np.ndarray:
+    """Convert a hex color to CIELAB (D65 white), to measure color differences."""
+    rgb: np.ndarray = np.array(to_rgb(hex_color))
+    linear: np.ndarray = np.where(
+        rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055) ** 2.4
+    )
+    to_xyz: np.ndarray = np.array(
+        [[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]]
+    )
+    xyz: np.ndarray = to_xyz @ linear / np.array([0.95047, 1.0, 1.08883])
+    f: np.ndarray = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+    return np.array([116 * f[1] - 16, 500 * (f[0] - f[1]), 200 * (f[1] - f[2])])
+
+
+@pytest.mark.parametrize("kind", ["normal", "deutan", "protan", "tritan"])
+def test_categorical_colors_stay_apart_for_every_vision_type(kind: str) -> None:
+    """Every pair of series colors keeps a CIE 1976 color difference of at least 10."""
+    colors: list[str] = (
+        cs.CATEGORICAL
+        if kind == "normal"
+        else [cs.simulate_vision(c, kind) for c in cs.CATEGORICAL]
+    )
+    gaps: list[float] = [
+        float(np.linalg.norm(_lab(a) - _lab(b)))
+        for a, b in itertools.combinations(colors, 2)
+    ]
+    assert min(gaps) >= 10, f"{kind}: closest pair is {min(gaps):.1f} apart"
