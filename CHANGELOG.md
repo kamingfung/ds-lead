@@ -4,6 +4,10 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+## v1.1.0 (2026-11-27)
+
+Docs, checks and fixes since the first release: no skill was removed or renamed.
+
 - `workflows`: each workflow now opens with an arrow chain of its steps and a line for each branch, so an agent sees the path before the numbered steps.
 - `make-chart`, `make-deck`: new `scripts/check_palette_sync.py`, run by pre-commit when `palette.css` or `theme.py` changes, fails when the 11 colors the deck and the charts share differ.
 - `defaults` now covers only the challenge posture and reply style, so it loads less on every task. Parallel Work and Briefs moved into `defaults/references/delegation.md`; Remote Writes and Traceability moved into `write-pr` as "Push and Post" and "Tracker Issue" (its description now also triggers before a push or PR comment); the description is one case. `workflows` and `session` point to the new homes.
