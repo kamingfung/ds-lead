@@ -5,6 +5,7 @@ Use this guide when handing off a code change, test run, investigation, or draft
 ## 1. Split the work
 
 - Split large tasks into independent pieces (one module, one review comment, one report section), each with its own pass test.
+- Hand independent pieces to sub-agents at the same time. Sequence pieces only when one needs another's output.
 - Give parallel workers disjoint file scopes or separate git worktrees (skill [`worktrees`](../../worktrees/SKILL.md)). Never let two writers share one working tree.
 
 ## 2. Write a self-contained brief
@@ -16,6 +17,7 @@ Include every detail the worker needs in the brief itself. A subagent does not s
 - **Pass test:** Give the exact command that proves the work is done.
 - **Forbidden actions:** State what the worker must not do (for example: pushing, merging, editing `main`, or writing to external systems).
 - **For analyses:** Ask for the strongest rival explanation of the main finding and the check that separates the two.
+- **Report format:** Require every local file named in the report as a markdown link with an absolute path.
 - **For large tasks:** Ask the worker to list the weak points of its plan before starting.
 
 ## 3. Worker contract

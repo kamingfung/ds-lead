@@ -68,7 +68,7 @@ plan → tests → brief → verify → numbers → Opening a PR
 
 1. Plan the change, with its output contract and one check per step ([engineering-practice.md](references/engineering-practice.md), section 1; [`coding`](../coding/SKILL.md)).
 2. Write the tests first ([engineering-practice.md](references/engineering-practice.md), section 2).
-3. Brief each sub-agent, one brief per piece ([`defaults`](../defaults/SKILL.md), Briefs).
+3. Brief each sub-agent, one brief per piece ([delegation.md](../defaults/references/delegation.md), section 2).
 4. Verify each result ([engineering-practice.md](references/engineering-practice.md), section 4).
 5. If the change can move model outputs, compare the outputs on `main` and on the branch ([`write-pr`](../write-pr/SKILL.md), Results).
 6. Go on with Opening a PR.
