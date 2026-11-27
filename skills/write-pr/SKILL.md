@@ -90,7 +90,7 @@ Write the description from the diff, not from memory. Read the commits and the c
 - Why: give each decision, who made it, and when. Name the option you rejected and the reason.
 - Results: required when outputs can move. Name both runs by commit and run id. Give the metric table with the baseline, the evaluation window, and the row counts. Add one paragraph that reads the numbers. A pure refactor says that outputs are unchanged and how you checked.
 - Reviewer Notes: always include the merge-risk line first, then the unit-test result.
-- Keep the PR small enough to review in about 30 minutes. Split larger work into a stack of PRs, as the small-change guidance in Sources explains.
+- Keep the PR small enough to review in about 30 minutes. Split larger work into a stack of PRs.
 
 ## How to Test
 
@@ -103,9 +103,3 @@ Write the description from the diff, not from memory. Read the commits and the c
    - New feature: give the command that runs it and what to look for in the output.
 5. Leave out unit tests, because CI runs them. This section covers only checks that CI does not do.
 6. When you cannot find the entry points, ask the author which ones to run, and name the file you read.
-
-## Sources
-
-- Google. "Writing good CL descriptions", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/developer/cl-descriptions.html (CC BY 3.0)
-- Google. "Small CLs", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/developer/small-cls.html (CC BY 3.0)
-- Microsoft. "Pull Requests", Code-With Engineering Playbook. https://microsoft.github.io/code-with-engineering-playbook/code-reviews/pull-requests/ (CC BY 4.0)

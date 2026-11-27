@@ -60,7 +60,3 @@ Every push triggers CI, and every push or comment alerts the reviewers.
 - Verify the issue type before filing beneath it. Stories accept subtasks, and closed epics stay closed.
 - Put the ticket key in the pull request title, the page title and the changelog file name.
 - If no parent issue fits, state that fact and suggest a new one.
-
-## Sources
-
-- ASD-STE100, Simplified Technical English, AeroSpace and Defence Industries Association of Europe (ASD). It is the basis for the sentence and step rules in Reply Style.
