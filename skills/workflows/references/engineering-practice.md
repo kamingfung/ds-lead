@@ -55,8 +55,3 @@ Four habits apply to any code change: plan before a multi-step change, test firs
 | Test or assert          | Write tests for production code                               | Use inline asserts in experiments                                       | Tests for production code and inline asserts for experiments; see each fail once       |
 | Wait for CI or move on  | Never claim a green build before it finishes                  | Keep working while checks run                                           | Report the check as running, then continue                                             |
 | Verify or delegate      | Look up evidence by default                                   | Hand reruns to a delegate                                               | Look up evidence first; rerun only when it is missing or surprising, in a fresh agent  |
-
-## Sources
-
-- Winters, T., Manshreck, T. and Wright, H. (2020). _Software Engineering at Google_, chapter "Unit Testing". O'Reilly. https://abseil.io/resources/swe-book
-- Beyer, B. et al. (2016). _Site Reliability Engineering_, chapter "Postmortem Culture". O'Reilly. https://sre.google/sre-book/postmortem-culture/
