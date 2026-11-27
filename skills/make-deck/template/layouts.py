@@ -57,13 +57,22 @@ def _chart(a: int, b: int, takeaways: int) -> dict[str, Region]:
     text_x: int = MARGIN + left + GUTTER + 24
     return {
         "chart": Region(MARGIN, BODY_TOP, left, BODY_H, ("Chart",)),
-        "takeaways": Region(text_x, BODY_TOP, CANVAS_W - MARGIN - text_x, BODY_H, ("Bullets",), takeaways),
+        "takeaways": Region(
+            text_x,
+            BODY_TOP,
+            CANVAS_W - MARGIN - text_x,
+            BODY_H,
+            ("Bullets",),
+            takeaways,
+        ),
     }
 
 
 LAYOUTS: dict[str, dict[str, Region]] = {
     "cover": {
-        "title": Region(MARGIN, 150, BODY_W, 240, ("str",), required=False),  # room for three display lines
+        "title": Region(
+            MARGIN, 150, BODY_W, 240, ("str",), required=False
+        ),  # room for three display lines
         "subtitle": Region(MARGIN, 404, BODY_W, 96, ("Text",)),
         "meta": Region(MARGIN, 640, BODY_W, 40, ("Text",)),
     },
@@ -71,7 +80,9 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "heading": Region(MARGIN, 190, BODY_W, 180, ("str",), required=False),
         "lead": Region(MARGIN, 392, BODY_W, 60, ("Text",)),
     },
-    "cards3": {"cards": Region(MARGIN, BODY_TOP, BODY_W, BODY_H, ("Card",), 3, unit="block")},
+    "cards3": {
+        "cards": Region(MARGIN, BODY_TOP, BODY_W, BODY_H, ("Card",), 3, unit="block")
+    },
     "brief": {"body": Region(MARGIN, BODY_TOP, BODY_W, BODY_H, ("Text", "Bullets"), 3)},
     "kpi_split": {
         "tiles": Region(MARGIN, BODY_TOP, BODY_W, 150, ("Tile",), 4, unit="block"),
@@ -93,7 +104,11 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "table": Region(MARGIN, BODY_TOP, BODY_W, TABLE_H, ("Table",)),
         "note": Region(MARGIN, NOTE_Y, BODY_W, 32, ("Text",)),
     },
-    "grid4": {"blocks": Region(MARGIN, BODY_TOP, BODY_W, BODY_H, ("Bullets",), 4, unit="block")},
+    "grid4": {
+        "blocks": Region(
+            MARGIN, BODY_TOP, BODY_W, BODY_H, ("Bullets",), 4, unit="block"
+        )
+    },
     "chart_3to1": _chart(3, 1, 3),
     "chart_2to1": _chart(2, 1, 4),
     "chart_1to1": _chart(1, 1, 3),
@@ -107,12 +122,20 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "body": Region(MARGIN, BODY_TOP + 64, BODY_W, 360, ("Text",)),
         "print_note": Region(MARGIN, NOTE_Y, BODY_W, 32, ("Text",)),
     },
-    "matrix": {"diagram": Region(MARGIN + (BODY_W - 760) // 2, BODY_TOP, 760, BODY_H, ("Matrix",))},
+    "matrix": {
+        "diagram": Region(
+            MARGIN + (BODY_W - 760) // 2, BODY_TOP, 760, BODY_H, ("Matrix",)
+        )
+    },
     "flow": {
         "diagram": Region(MARGIN, BODY_TOP, BODY_W, 420, ("Flow",)),
         "note": Region(MARGIN, 620, BODY_W, 40, ("Text",)),
     },
-    "cycle": {"diagram": Region(MARGIN + (BODY_W - 900) // 2, BODY_TOP, 900, BODY_H, ("Cycle",))},
+    "cycle": {
+        "diagram": Region(
+            MARGIN + (BODY_W - 900) // 2, BODY_TOP, 900, BODY_H, ("Cycle",)
+        )
+    },
     "gantt": {
         "diagram": Region(MARGIN, BODY_TOP, BODY_W, 440, ("Gantt",)),
         "legend": Region(MARGIN, 632, BODY_W, 28, ("Text",)),

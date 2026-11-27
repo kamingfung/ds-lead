@@ -11,15 +11,41 @@ from pathlib import Path
 from charts import to_svg
 from layouts import GUTTER, LAYOUTS, Region, chrome
 from spec import (
-    STATUSES, Bullet, Bullets, Card, Chart, Cycle, Deck, Flow, Gantt, Matrix, Num, Panel,
-    Para, Run, Slide, Table, Tabs, Text, Tile, Timeline, Tree, slide_sources, sources_slides,
+    STATUSES,
+    Bullet,
+    Bullets,
+    Card,
+    Chart,
+    Cycle,
+    Deck,
+    Flow,
+    Gantt,
+    Matrix,
+    Num,
+    Panel,
+    Para,
+    Run,
+    Slide,
+    Table,
+    Tabs,
+    Text,
+    Tile,
+    Timeline,
+    Tree,
+    slide_sources,
+    sources_slides,
 )
 from theme import Theme, fit_px
 
 HERE: Path = Path(__file__).resolve().parent
 XMLNS: str = ' xmlns="http://www.w3.org/2000/svg"'
 TAB_BAR_H: int = 44
-TEXT_ROLES: dict[str, str] = {"small": "gray", "axis": "gray", "inverse": "white", "actual": "white"}
+TEXT_ROLES: dict[str, str] = {
+    "small": "gray",
+    "axis": "gray",
+    "inverse": "white",
+    "actual": "white",
+}
 
 
 def render_html(deck: Deck, theme: Theme) -> str:
@@ -34,18 +60,33 @@ def render_html(deck: Deck, theme: Theme) -> str:
     """
     slides: tuple[Slide, ...] = deck.slides + sources_slides(deck)
     sections: list[str] = [
-        html for number, slide in enumerate(slides, 1) for html in _sections(slide, number, theme)
+        html
+        for number, slide in enumerate(slides, 1)
+        for html in _sections(slide, number, theme)
     ]
     css: str = _root_vars(theme) + (HERE / "deck.css").read_text(encoding="utf-8")
     script: str = (HERE / "deck.js").read_text(encoding="utf-8")
-    return "\n".join([
-        "<!doctype html>", '<html lang="en">', "<head>", '<meta charset="utf-8">',
-        '<meta name="viewport" content="width=device-width, initial-scale=1">',
-        f"<title>{escape(deck.title)}</title>", f"<style>\n{css}\n</style>", "</head>", "<body>",
-        '<main class="viewport"><div class="stage" id="stage">' + "".join(sections) + "</div></main>",
-        '<div class="hint" id="hint" aria-live="polite"></div>',
-        f"<script>\n{script}\n</script>", "</body>", "</html>", "",
-    ])
+    return "\n".join(
+        [
+            "<!doctype html>",
+            '<html lang="en">',
+            "<head>",
+            '<meta charset="utf-8">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1">',
+            f"<title>{escape(deck.title)}</title>",
+            f"<style>\n{css}\n</style>",
+            "</head>",
+            "<body>",
+            '<main class="viewport"><div class="stage" id="stage">'
+            + "".join(sections)
+            + "</div></main>",
+            '<div class="hint" id="hint" aria-live="polite"></div>',
+            f"<script>\n{script}\n</script>",
+            "</body>",
+            "</html>",
+            "",
+        ]
+    )
 
 
 def _root_vars(theme: Theme) -> str:
@@ -62,23 +103,35 @@ def _root_vars(theme: Theme) -> str:
 
 
 def _sections(slide: Slide, number: int, theme: Theme) -> list[str]:
-    tabs: Tabs | None = next((v for v in slide.regions.values() if isinstance(v, Tabs)), None)
+    tabs: Tabs | None = next(
+        (v for v in slide.regions.values() if isinstance(v, Tabs)), None
+    )
     if tabs is None:
         return [_section(slide, number, theme, "slide", None)]
     copies: list[str] = [
-        _section(slide, number, theme, "slide print-only", i) for i in range(len(tabs.tabs))
+        _section(slide, number, theme, "slide print-only", i)
+        for i in range(len(tabs.tabs))
     ]
     return [_section(slide, number, theme, "slide tabbed", None), *copies]
 
 
-def _section(slide: Slide, number: int, theme: Theme, css: str, panel: int | None) -> str:
+def _section(
+    slide: Slide, number: int, theme: Theme, css: str, panel: int | None
+) -> str:
     boxes: dict[str, Region] = {**LAYOUTS[slide.layout], **chrome(slide.layout)}
-    texts: dict[str, str] = {"kicker": slide.kicker, "title": slide.title, "heading": slide.title, "lead": slide.lead}
+    texts: dict[str, str] = {
+        "kicker": slide.kicker,
+        "title": slide.title,
+        "heading": slide.title,
+        "lead": slide.lead,
+    }
     parts: list[str] = []
     if "chart" in boxes:
         chart: Region = boxes["chart"]
         x: int = chart.x + chart.w + GUTTER // 2
-        parts.append(f'<div class="region r-vline" style="left:{x}px;top:{chart.y}px;width:0;height:{chart.h}px"></div>')
+        parts.append(
+            f'<div class="region r-vline" style="left:{x}px;top:{chart.y}px;width:0;height:{chart.h}px"></div>'
+        )
     for name, box in boxes.items():
         if name == "footer":
             body: str = _footer(slide, number)
@@ -90,21 +143,34 @@ def _section(slide: Slide, number: int, theme: Theme, css: str, panel: int | Non
             continue
         style: str = f"left:{box.x}px;top:{box.y}px;width:{box.w}px;height:{box.h}px"
         parts.append(f'<div class="region r-{name}" style="{style}">{body}</div>')
-    return f'<section class="{css}" data-layout="{slide.layout}">' + "".join(parts) + "</section>"
+    return (
+        f'<section class="{css}" data-layout="{slide.layout}">'
+        + "".join(parts)
+        + "</section>"
+    )
 
 
-def _region(slide: Slide, name: str, box: Region, theme: Theme, panel: int | None) -> str:
+def _region(
+    slide: Slide, name: str, box: Region, theme: Theme, panel: int | None
+) -> str:
     """Render one region, with the treatments a layout needs: grid4 cells, numbered references,
     the options3 recommendation strip, and a default "Takeaways" heading on chart and tabs slides."""
     value: object = slide.regions[name]
     if slide.layout == "grid4":
         return _grid4(value)
     if slide.layout == "references" and isinstance(value, Text):
-        return "".join(_para(p, f"{number}. ") for number, p in enumerate(value.paras, 1))
+        return "".join(
+            _para(p, f"{number}. ") for number, p in enumerate(value.paras, 1)
+        )
     if slide.layout == "options3" and name == "recommendation":
         return f'<div class="strip">{_block(_recommendation(value), box.w, box.h, theme, panel)}</div>'
     takeaways: bool = slide.layout.startswith("chart_") or slide.layout == "tabs"
-    if takeaways and name == "takeaways" and isinstance(value, Bullets) and not value.heading:
+    if (
+        takeaways
+        and name == "takeaways"
+        and isinstance(value, Bullets)
+        and not value.heading
+    ):
         value = replace(value, heading="Takeaways")
     return _block(value, box.w, box.h, theme, panel)
 
@@ -114,7 +180,8 @@ def _grid4(value: object) -> str:
     blocks: tuple[Bullets, ...] = value if isinstance(value, tuple) else (value,)
     cells: str = "".join(
         f'<div class="cell"><h3><span class="n">{number}</span>{escape(block.heading)}</h3><ul>'
-        + "".join(_bullet(item) for item in block.items) + "</ul></div>"
+        + "".join(_bullet(item) for item in block.items)
+        + "</ul></div>"
         for number, block in enumerate(blocks, 1)
     )
     return f'<div class="grid4">{cells}</div>'
@@ -127,7 +194,9 @@ def _recommendation(value: object) -> object:
     first: tuple[Run, ...] = value.paras[0].runs
     text: str = "".join(run.text for run in first)
     if text.startswith("Recommendation:"):  # bold the existing lead-in
-        lead: Para = Para((Run("Recommendation:", bold=True), Run(text[len("Recommendation:"):])))
+        lead: Para = Para(
+            (Run("Recommendation:", bold=True), Run(text[len("Recommendation:") :]))
+        )
         return Text((lead, *value.paras[1:]), value.heading)
     lead = Para((Run("Recommendation:", bold=True), Run(" "), *first))
     return Text((lead, *value.paras[1:]), value.heading)
@@ -147,10 +216,18 @@ def _block(value: object, w: int, h: int, theme: Theme, panel: int | None) -> st
             return f"<p>{escape(value)}</p>"
         case tuple() if all(isinstance(v, (Text, Bullets)) for v in value):
             # prose blocks stack top to bottom in one column, as the pptx renderer flows them
-            return '<div class="stack">' + "".join(_block(v, w, h, theme, panel) for v in value) + "</div>"
+            return (
+                '<div class="stack">'
+                + "".join(_block(v, w, h, theme, panel) for v in value)
+                + "</div>"
+            )
         case tuple():
             cell_w: int = (w - GUTTER * (len(value) - 1)) // len(value)
-            return '<div class="multi">' + "".join(_block(v, cell_w, h, theme, panel) for v in value) + "</div>"
+            return (
+                '<div class="multi">'
+                + "".join(_block(v, cell_w, h, theme, panel) for v in value)
+                + "</div>"
+            )
         case Tabs():
             return _tabs(value, w, h, theme, panel)
         case Chart():
@@ -166,9 +243,15 @@ def _block(value: object, w: int, h: int, theme: Theme, panel: int | None) -> st
         case Card():
             return _card(value, w)
         case Tile():
-            caption: str = f'<div class="caption">{escape(value.caption)}</div>' if value.caption else ""
-            return (f'<div class="tile"><div class="kpi">{_num(value.value, w - 40, 56.0)}</div>'
-                    f'<div class="label">{escape(value.label)}</div>{caption}</div>')
+            caption: str = (
+                f'<div class="caption">{escape(value.caption)}</div>'
+                if value.caption
+                else ""
+            )
+            return (
+                f'<div class="tile"><div class="kpi">{_num(value.value, w - 40, 56.0)}</div>'
+                f'<div class="label">{escape(value.label)}</div>{caption}</div>'
+            )
         case Table():
             return _table(value)
         case Panel():
@@ -182,31 +265,53 @@ def _block(value: object, w: int, h: int, theme: Theme, panel: int | None) -> st
 def _num(num: Num, width: float = 0.0, max_px: float = 0.0) -> str:
     """Return a sourced number span. With max_px, the font size is fitted to width, at most max_px."""
     text: str = num.text()
-    style: str = f' style="font-size:{fit_px(text, width, max_px):.1f}px"' if max_px else ""
+    style: str = (
+        f' style="font-size:{fit_px(text, width, max_px):.1f}px"' if max_px else ""
+    )
     return f'<span class="num" title="{escape("Source: " + num.source)}"{style}>{escape(text)}</span>'
 
 
 def _para(para: Para, prefix: str = "") -> str:
-    runs: list[str] = [f"<strong>{escape(r.text)}</strong>" if r.bold else escape(r.text) for r in para.runs]
+    runs: list[str] = [
+        f"<strong>{escape(r.text)}</strong>" if r.bold else escape(r.text)
+        for r in para.runs
+    ]
     return "<p>" + prefix + "".join(runs) + "</p>"
 
 
 def _bullet(item: Bullet) -> str:
-    lead: str = f"<strong>{escape(item.lead.rstrip(':'))}:</strong> " if item.lead else ""
-    note: str = f' <span class="fn">{escape(item.footnote)}</span>' if item.footnote else ""
+    lead: str = (
+        f"<strong>{escape(item.lead.rstrip(':'))}:</strong> " if item.lead else ""
+    )
+    note: str = (
+        f' <span class="fn">{escape(item.footnote)}</span>' if item.footnote else ""
+    )
     return f"<li>{lead}{escape(item.text)}{note}</li>"
 
 
 def _card(card: Card, w: int) -> str:
-    badge: str = f'<span class="badge">{escape(card.badge)}</span>' if card.badge else ""
-    metric: str = f'<div class="metric">{_num(card.metric, w - 48, 80.0)}</div>' if card.metric is not None else ""
-    rows: str = "<ul>" + "".join(_bullet(r) for r in card.rows) + "</ul>" if card.rows else ""
-    return (f'<article class="card"><div class="tag">{escape(card.tag)}{badge}</div>{metric}'
-            f"<h3>{escape(card.statement)}</h3><p>{escape(card.body)}</p>{rows}</article>")
+    badge: str = (
+        f'<span class="badge">{escape(card.badge)}</span>' if card.badge else ""
+    )
+    metric: str = (
+        f'<div class="metric">{_num(card.metric, w - 48, 80.0)}</div>'
+        if card.metric is not None
+        else ""
+    )
+    rows: str = (
+        "<ul>" + "".join(_bullet(r) for r in card.rows) + "</ul>" if card.rows else ""
+    )
+    return (
+        f'<article class="card"><div class="tag">{escape(card.tag)}{badge}</div>{metric}'
+        f"<h3>{escape(card.statement)}</h3><p>{escape(card.body)}</p>{rows}</article>"
+    )
 
 
 def _table(table: Table) -> str:
-    head: str = "".join(f'<th class="a-{a}">{escape(c)}</th>' for c, a in zip(table.columns, table.align))
+    head: str = "".join(
+        f'<th class="a-{a}">{escape(c)}</th>'
+        for c, a in zip(table.columns, table.align)
+    )
     body: str = ""
     for row in table.rows:
         cells: str = "".join(
@@ -234,7 +339,9 @@ def _tabs(block: Tabs, w: int, h: int, theme: Theme, panel: int | None) -> str:
     panels: str = "".join(
         f'<div class="tab-panel{" is-active" if i == active else ""}" role="tabpanel" data-panel="{i}">'
         '<div class="pair">'
-        + "".join(_block(c, chart_w, h - TAB_BAR_H, theme, None) for c in block.tabs[i][1])
+        + "".join(
+            _block(c, chart_w, h - TAB_BAR_H, theme, None) for c in block.tabs[i][1]
+        )
         + "</div></div>"
         for i in shown
     )
@@ -243,7 +350,9 @@ def _tabs(block: Tabs, w: int, h: int, theme: Theme, panel: int | None) -> str:
 
 def _diagram(block: object, w: int, h: int, theme: Theme) -> str:
     """Draw a diagram block as an inline SVG sized to its region, with text fills set as attributes."""
-    parts: list[str] = [f'<svg viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img">']
+    parts: list[str] = [
+        f'<svg viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img">'
+    ]
     match block:
         case Matrix():
             parts += _matrix(block, w, h)
@@ -262,16 +371,25 @@ def _diagram(block: object, w: int, h: int, theme: Theme) -> str:
 
 
 def _text(
-    x: float, y: float, value: str, anchor: str = "middle", css: str = "", size: float = 0.0
+    x: float,
+    y: float,
+    value: str,
+    anchor: str = "middle",
+    css: str = "",
+    size: float = 0.0,
 ) -> str:
     """Return a text element whose fill attribute is a theme role, resolved by _diagram.
 
     A size in px is set inline, which overrides the stylesheet's svg text size.
     """
-    role: str = next((TEXT_ROLES[token] for token in css.split() if token in TEXT_ROLES), "ink")
+    role: str = next(
+        (TEXT_ROLES[token] for token in css.split() if token in TEXT_ROLES), "ink"
+    )
     style: str = f' style="font-size:{size:.1f}px"' if size else ""
-    return (f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" fill="@{role}" '
-            f'class="{css}"{style}>{escape(value)}</text>')
+    return (
+        f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" fill="@{role}" '
+        f'class="{css}"{style}>{escape(value)}</text>'
+    )
 
 
 def _fit(value: str, width: float, max_px: float) -> tuple[float, list[str]]:
@@ -288,13 +406,20 @@ def _fit(value: str, width: float, max_px: float) -> tuple[float, list[str]]:
 
 
 def _fit_text(
-    x: float, y: float, value: str, width: float, css: str = "", anchor: str = "middle", max_px: float = 16.0
+    x: float,
+    y: float,
+    value: str,
+    width: float,
+    css: str = "",
+    anchor: str = "middle",
+    max_px: float = 16.0,
 ) -> tuple[str, float]:
     """Return wrapped text markup inside width, and the height of the block of lines."""
     size, lines = _fit(value, width, max_px)
     step: float = size * 1.2
     markup: str = "".join(
-        _text(x, y + index * step, line, anchor, css, size) for index, line in enumerate(lines)
+        _text(x, y + index * step, line, anchor, css, size)
+        for index, line in enumerate(lines)
     )
     return markup, step * len(lines)
 
@@ -304,19 +429,31 @@ def _rect(x: float, y: float, w: float, h: float, css: str = "box", rx: int = 8)
 
 
 def _line(x1: float, y1: float, x2: float, y2: float, css: str = "edge") -> str:
-    return f'<line class="{css}" x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}"/>'
+    return (
+        f'<line class="{css}" x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}"/>'
+    )
 
 
 def _diamond(x: float, y: float, size: float, css: str) -> str:
-    pts: list[tuple[float, float]] = [(x, y - size), (x + size, y), (x, y + size), (x - size, y)]
-    return f'<polygon class="{css}" points="' + " ".join(f"{px:.1f},{py:.1f}" for px, py in pts) + '"/>'
+    pts: list[tuple[float, float]] = [
+        (x, y - size),
+        (x + size, y),
+        (x, y + size),
+        (x - size, y),
+    ]
+    return (
+        f'<polygon class="{css}" points="'
+        + " ".join(f"{px:.1f},{py:.1f}" for px, py in pts)
+        + '"/>'
+    )
 
 
 def _head(x1: float, y1: float, x2: float, y2: float) -> str:
     """Return a filled arrowhead whose tip sits at (x2, y2)."""
     angle: float = math.atan2(y2 - y1, x2 - x1)
     wings: list[str] = [
-        f"{x2 - 10 * math.cos(angle + s):.1f},{y2 - 10 * math.sin(angle + s):.1f}" for s in (-0.45, 0.45)
+        f"{x2 - 10 * math.cos(angle + s):.1f},{y2 - 10 * math.sin(angle + s):.1f}"
+        for s in (-0.45, 0.45)
     ]
     return f'<polygon class="head" points="{x2:.1f},{y2:.1f} {wings[0]} {wings[1]}"/>'
 
@@ -328,13 +465,17 @@ def _arrow(x1: float, y1: float, x2: float, y2: float) -> str:
 
 def _matrix(block: Matrix, w: int, h: int) -> list[str]:
     pad: float = 64.0
-    qw: float = (w - 2 * pad) / 2  # quadrants fill the region width, as in the pptx renderer
+    qw: float = (
+        w - 2 * pad
+    ) / 2  # quadrants fill the region width, as in the pptx renderer
     qh: float = (h - 2 * pad) / 2
     parts: list[str] = []
     for index, name in enumerate(block.quadrants):
         qx: float = pad + (index % 2) * qw
         qy: float = pad + (index // 2) * qh
-        parts.append(f'<rect class="quad" x="{qx:.1f}" y="{qy:.1f}" width="{qw:.1f}" height="{qh:.1f}"/>')
+        parts.append(
+            f'<rect class="quad" x="{qx:.1f}" y="{qy:.1f}" width="{qw:.1f}" height="{qh:.1f}"/>'
+        )
         parts.append(_text(qx + 12, qy + 24, name, "start", "small"))
     used: list[float] = [0.0, 0.0, 0.0, 0.0]
     for name, quadrant in block.items:
@@ -364,7 +505,11 @@ def _flow(block: Flow, w: int, h: int) -> list[str]:
         x: float = index * (box_w + gap)
         css: str = "box hot" if index == block.highlight else "box"
         parts.append(_rect(x, top, box_w, 180.0, css))
-        parts.append(_fit_text(x + box_w / 2, mid - 8, title, box_w - 16, "strong", max_px=19.0)[0])
+        parts.append(
+            _fit_text(x + box_w / 2, mid - 8, title, box_w - 16, "strong", max_px=19.0)[
+                0
+            ]
+        )
         parts.append(_fit_text(x + box_w / 2, mid + 22, detail, box_w - 16, "small")[0])
         if index < count - 1:
             parts.append(_arrow(x + box_w + 8, mid, x + box_w + gap - 8, mid))
@@ -398,10 +543,10 @@ def _cycle(block: Cycle, w: int, h: int) -> list[str]:
     return parts
 
 
-
 def _gantt(block: Gantt, w: int, h: int) -> list[str]:
     count: int = len(block.periods)
     span: float = w - 216.0
+
     def at(value: float) -> float:
         return 200.0 + value / count * span
 
@@ -458,14 +603,18 @@ def _timeline(block: Timeline, w: int, h: int) -> list[str]:
     parts: list[str] = [_line(step / 2, mid, w - step / 2, mid)]
     for index, (date, name, status) in enumerate(block.nodes):
         x: float = (index + 0.5) * step
-        date_y, name_y = (mid - 82, mid - 54) if index % 2 == 0 else (mid + 60, mid + 88)
+        date_y, name_y = (
+            (mid - 82, mid - 54) if index % 2 == 0 else (mid + 60, mid + 88)
+        )
         parts.append(_icon(x, mid, status))
         parts.append(_text(x, date_y, date, css="small"))
         parts.append(_text(x, name_y, name, css="strong"))
     for index, status in enumerate(STATUSES):
         legend_x: float = w - 360.0 + 120.0 * index
         parts.append(_icon(legend_x, h - 16.0, status))
-        parts.append(_text(legend_x + 24, h - 11.0, status.capitalize(), "start", "small"))
+        parts.append(
+            _text(legend_x + 24, h - 11.0, status.capitalize(), "start", "small")
+        )
     return parts
 
 
@@ -473,13 +622,20 @@ def _icon(x: float, y: float, status: str) -> str:
     """Draw a status marker from palette shapes: a sage circle with a white check, a loss square
     with a white cross, or an ochre diamond with two white bars."""
     if status == "kept":
-        shape: str = (f'<circle class="icon kept" cx="{x:.1f}" cy="{y:.1f}" r="16"/>'
-                      f'<polyline class="mark" points="{x - 6:.1f},{y:.1f} {x - 2:.1f},{y + 4:.1f} {x + 6:.1f},{y - 4:.1f}"/>')
+        shape: str = (
+            f'<circle class="icon kept" cx="{x:.1f}" cy="{y:.1f}" r="16"/>'
+            f'<polyline class="mark" points="{x - 6:.1f},{y:.1f} {x - 2:.1f},{y + 4:.1f} {x + 6:.1f},{y - 4:.1f}"/>'
+        )
     elif status == "dropped":
-        shape = (_rect(x - 16, y - 16, 32, 32, "icon dropped", 0)
-                 + _line(x - 6, y - 6, x + 6, y + 6, "mark") + _line(x + 6, y - 6, x - 6, y + 6, "mark"))
+        shape = (
+            _rect(x - 16, y - 16, 32, 32, "icon dropped", 0)
+            + _line(x - 6, y - 6, x + 6, y + 6, "mark")
+            + _line(x + 6, y - 6, x - 6, y + 6, "mark")
+        )
     else:
-        shape = (_diamond(x, y, 21, "icon open") + _rect(x - 6, y - 8, 4, 16, "mark-fill", 0)
-                 + _rect(x + 2, y - 8, 4, 16, "mark-fill", 0))
+        shape = (
+            _diamond(x, y, 21, "icon open")
+            + _rect(x - 6, y - 8, 4, 16, "mark-fill", 0)
+            + _rect(x + 2, y - 8, 4, 16, "mark-fill", 0)
+        )
     return f"<g><title>{escape(status)}</title>{shape}</g>"
-

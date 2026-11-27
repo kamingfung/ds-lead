@@ -9,18 +9,54 @@ from theme import HOUSE, points
 
 def test_house_colors_fonts_and_sizes_match_the_brief() -> None:
     colors: tuple[str, ...] = (
-        HOUSE.ink, HOUSE.accent, HOUSE.loss, HOUSE.ochre, HOUSE.sage, HOUSE.sienna, HOUSE.highlight,
-        HOUSE.light, HOUSE.panel, HOUSE.grid, HOUSE.gray, HOUSE.paper, HOUSE.tint, HOUSE.loss_tint,
-        HOUSE.white, HOUSE.surround,
+        HOUSE.ink,
+        HOUSE.accent,
+        HOUSE.loss,
+        HOUSE.ochre,
+        HOUSE.sage,
+        HOUSE.sienna,
+        HOUSE.highlight,
+        HOUSE.light,
+        HOUSE.panel,
+        HOUSE.grid,
+        HOUSE.gray,
+        HOUSE.paper,
+        HOUSE.tint,
+        HOUSE.loss_tint,
+        HOUSE.white,
+        HOUSE.surround,
     )
     assert colors == (
-        "#3b1a18", "#1d4a62", "#a04b2d", "#d69a2e", "#95a87f", "#6c2b27", "#7fb3cc", "#c6beb3",
-        "#f2ece1", "#e5ddd0", "#767676", "#fbf8f3", "#e6eff3", "#dfb8a6", "#ffffff", "#29221e",
+        "#3b1a18",
+        "#1d4a62",
+        "#a04b2d",
+        "#d69a2e",
+        "#95a87f",
+        "#6c2b27",
+        "#7fb3cc",
+        "#c6beb3",
+        "#f2ece1",
+        "#e5ddd0",
+        "#767676",
+        "#fbf8f3",
+        "#e6eff3",
+        "#dfb8a6",
+        "#ffffff",
+        "#29221e",
     )
-    assert (HOUSE.title_px, HOUSE.subheading_px, HOUSE.body_px, HOUSE.small_px) == (32, 24, 19, 16)
+    assert (HOUSE.title_px, HOUSE.subheading_px, HOUSE.body_px, HOUSE.small_px) == (
+        32,
+        24,
+        19,
+        16,
+    )
     assert (HOUSE.display_px, HOUSE.big_number_px) == (64, 120)
-    assert (HOUSE.head_font, HOUSE.body_font, HOUSE.mono_font_html, HOUSE.mono_font_pptx) == (
-        "Arial", "Arial", "Menlo", "Consolas")
+    assert (
+        HOUSE.head_font,
+        HOUSE.body_font,
+        HOUSE.mono_font_html,
+        HOUSE.mono_font_pptx,
+    ) == ("Arial", "Arial", "Menlo", "Consolas")
 
 
 def test_theme_is_frozen_and_points_convert_pixels() -> None:

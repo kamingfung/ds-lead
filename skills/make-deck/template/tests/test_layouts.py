@@ -1,6 +1,16 @@
 """Tests for canvas geometry, shared chrome and layout regions."""
 
-from layouts import BODY_BOTTOM, BODY_TOP, CANVAS_H, CANVAS_W, LAYOUTS, MARGIN, Region, chrome, split
+from layouts import (
+    BODY_BOTTOM,
+    BODY_TOP,
+    CANVAS_H,
+    CANVAS_W,
+    LAYOUTS,
+    MARGIN,
+    Region,
+    chrome,
+    split,
+)
 
 
 def _overlaps(a: Region, b: Region) -> bool:
@@ -10,11 +20,14 @@ def _overlaps(a: Region, b: Region) -> bool:
 def test_regions_lie_inside_canvas_and_do_not_overlap_in_a_layout() -> None:
     inside: list[bool] = [
         r.x >= 0 and r.y >= 0 and r.x + r.w <= CANVAS_W and r.y + r.h <= CANVAS_H
-        for layout in LAYOUTS.values() for r in layout.values()
+        for layout in LAYOUTS.values()
+        for r in layout.values()
     ]
     pairs: list[tuple[str, str]] = [
-        (name_a, name_b) for layout in LAYOUTS.values()
-        for name_a, a in layout.items() for name_b, b in layout.items()
+        (name_a, name_b)
+        for layout in LAYOUTS.values()
+        for name_a, a in layout.items()
+        for name_b, b in layout.items()
         if name_a < name_b and _overlaps(a, b)
     ]
     assert all(inside) and pairs == []
