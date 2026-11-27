@@ -59,7 +59,7 @@ Rules:
 
 - Each PR serves one purpose; leave out unrelated refactors.
 - Keep a PR small enough to review in about 30 minutes; split bigger work into stacked PRs.
-- Put the ticket key in the PR title ([`defaults`](../defaults/SKILL.md), Traceability).
+- Put the ticket key in the PR title ([`write-pr`](../write-pr/SKILL.md), Tracker Issue).
 - Cover the change itself, its motive and the test steps in the description (skill `write-pr`).
 - Note each simplification made on purpose, and say why it is acceptable.
 - Cite both run ids (main and branch) for a change that can move model outputs.

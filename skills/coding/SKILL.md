@@ -55,6 +55,7 @@ The detail sits in [python-pipeline.md, Where explanation belongs](references/py
 
 ## Prove It Works
 
+- When a number, file or check must come out the same twice, write it as a script and run the script. Do not redo it by hand.
 - A bug fix starts with a test that fails on the current code, then passes after the fix.
 - A refactor passes the same tests before and after.
 - Check that each test fails when the code it covers is broken.

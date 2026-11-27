@@ -25,7 +25,7 @@ DRY_RUN = re.compile(r"\s(?:-n|--dry-run)\b")
 
 REASON = (
     "This command writes to a remote. Push only when a unit of work is complete "
-    "(skill `defaults`, Remote Writes), and ask the user first."
+    "(skill `write-pr`, Push and Post), and ask the user first."
 )
 
 

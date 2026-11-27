@@ -1,6 +1,6 @@
 ---
 name: write-pr
-description: "Use when writing or updating a pull request description, covering what changed (every new, changed and deleted function), why it changed, test commands that run, reviewer notes, and a results table when outputs can move."
+description: "Use when writing or updating a pull request description, or before a push or PR comment, covering what changed (every new, changed and deleted function), why it changed, test commands that run, reviewer notes, and a results table when outputs can move."
 ---
 
 # Write a PR Description
@@ -14,7 +14,22 @@ Write the description from the diff, not from memory. Read the commits and the c
 3. Run `git diff origin/main --stat` to size the change by files and lines.
 4. List changed function definitions with `git diff origin/main -U0 | grep -E '^[+-][[:space:]]*def '`. For other languages, adapt the pattern.
 5. List added files with `git diff origin/main --diff-filter=A --name-only`, and deleted files with `git diff origin/main --diff-filter=D --name-only`.
-6. Find the tracker issue the PR belongs to. A key in the branch name or a commit subject is a hint, not proof; ask the author when no issue fits.
+6. Find the tracker issue the PR belongs to. A key in the branch name or a commit subject is a hint, not proof; locate the parent issue first, and ask the author when no issue fits.
+
+## Tracker Issue
+
+- Link each deliverable (PR, changelog, wiki page or task list) to a tracker issue chosen before work begins.
+- Verify the issue type before filing beneath it. Stories accept subtasks, and closed epics stay closed.
+- Put the ticket key in the PR title, the page title and the changelog file name.
+- If no parent issue fits, state that and suggest a new one.
+
+## Push and Post
+
+Every push triggers CI, and every push or comment alerts the reviewers.
+
+- Commit locally whenever it helps, but push only once a unit of work is complete.
+- Check content before posting, so no follow-up comment has to fix an earlier one.
+- After a network failure, inspect what the server already holds before retrying.
 
 ## Template
 

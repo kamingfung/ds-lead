@@ -6,7 +6,7 @@ A skill is a rule the agent can skip. A hook is a check Claude Code runs itself,
 
 Makes every `git push` and every `gh pr` or `gh issue` write (create, comment, review, merge, edit, close) ask the user first. It answers `ask`, not `deny`, so one click approves a push you want. A dry run (`git push -n`) passes.
 
-It backs the rule "push only once a unit of work is complete" in skill `defaults`, section Remote Writes. The hook cannot judge whether the work is complete. It makes sure a person decides.
+It backs the rule "push only once a unit of work is complete" in skill `write-pr`, section Push and Post. The hook cannot judge whether the work is complete. It makes sure a person decides.
 
 Turn it on by adding this to `~/.claude/settings.json` (all projects) or `.claude/settings.json` (one project), with the path to your clone of this repository:
 
