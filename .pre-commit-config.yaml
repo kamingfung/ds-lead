@@ -44,6 +44,18 @@ repos:
         language: system
         pass_filenames: false
         files: ^skills/(make-chart/palette\.css|make-deck/template/theme\.py)$
+      - id: check-skill-files
+        name: skill files stay within 200 lines and no two files are identical
+        entry: python3 scripts/check_skill_files.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: test-ask-before-push
+        name: the push-gate hook asks on every push form
+        entry: python3 hooks/ask_before_push.py --selftest
+        language: system
+        pass_filenames: false
+        files: ^hooks/
       - id: check-changelog
         name: CHANGELOG.md has a line for this branch
         entry: python3 scripts/check_changelog.py --base origin/main

@@ -44,6 +44,10 @@ Each brief written for a sub-agent, a different model or another session obeys t
 - Require at least one evidence item per claim, such as a query id, a file, a run id or a row count.
 - Require every local file named in the report to appear as a markdown link with an absolute path.
 
+## Repeatable Results
+
+- When a number, file or check must come out the same twice, write it as a script and run the script. Do not redo it by hand.
+
 ## Remote Writes
 
 Every push triggers CI, and every push or comment alerts the reviewers.
