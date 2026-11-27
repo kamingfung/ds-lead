@@ -35,7 +35,7 @@ Ink and burnt sienna are hard to tell apart on thin lines and small markers unde
 
 1. Edit the hex values in `palette.css`. Keep the token names, because `chart_style.py` and the deck theme read them. To try a variant, copy the file and set `CHART_STYLE_PALETTE` to its path before you import `chart_style`.
 2. Keep each token's role. The comment on each line says what the color is for.
-3. Change the same colors in `Theme` in [`skills/make-deck/template/theme.py`](../make-deck/template/theme.py). The deck and the charts share one palette.
+3. Change the same colors in `Theme` in [`skills/make-deck/template/theme.py`](../make-deck/template/theme.py). The deck and the charts share one palette, and `scripts/check_palette_sync.py` fails the commit when the 11 shared colors differ.
 4. Run the tests from `skills/make-chart/`. A test fails when two series colors come closer than ΔE 10 under any vision type.
 
    ```bash

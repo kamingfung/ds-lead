@@ -4,6 +4,7 @@ What changed for a user of the `ds-lead` plugin, newest release first. A release
 
 ## Unreleased
 
+- `make-chart`, `make-deck`: new `scripts/check_palette_sync.py`, run by pre-commit when `palette.css` or `theme.py` changes, fails when the 11 colors the deck and the charts share differ.
 - `coding`: `python-pipeline.md` now points to the repository's English variant rule, matching `SKILL.md`.
 - Removed every remaining mention of the deleted `check-backtest` skill: the README table, install line and workflow picture, `THIRD_PARTY_NOTICES.md`, and a broken link in `workflows` (step 5 now points to `write-pr`, Results). The README's "Customize colors and fonts" section no longer points to deleted deck files.
 - `make-deck`: a waterfall now labels a decrease below its bar and an increase above it, in both the HTML and the `.pptx` renderer, as `make-chart` does; the example and gallery are regenerated.

@@ -180,7 +180,7 @@ Charts and decks keep their colors in two places today, so you can rebrand both 
 
 - **Decks:** edit the `Theme` fields in [`skills/make-deck/template/theme.py`](skills/make-deck/template/theme.py). Both renderers, HTML and `.pptx`, read the same `HOUSE` theme.
 - **Charts:** edit [`skills/make-chart/palette.css`](skills/make-chart/palette.css), or set `CHART_STYLE_PALETTE=/path/to/palette.css` before importing `chart_style.py`. [`skills/make-chart/README.md`](skills/make-chart/README.md) gives the steps and the color-distance test.
-- **Shared colors:** the deck's `ink`, `accent`, `loss`, `ochre`, `sage`, `sienna`, `highlight`, `light`, `panel`, `tint` and `paper` match the chart tokens of the same role. No test pins them yet, so change both files together.
+- **Shared colors:** the deck's `ink`, `accent`, `loss`, `ochre`, `sage`, `sienna`, `highlight`, `light`, `panel`, `tint` and `paper` match the chart tokens of the same role. `scripts/check_palette_sync.py` checks that they match, and runs as a pre-commit hook when either file changes.
 
 ## Releases
 
