@@ -45,7 +45,7 @@ Sizes are in CSS pixels. In pptx, each pixel is 0.75 points (`points()`), so a 1
 ## Charts
 
 - Every chart kind draws as a native, editable pptx chart. Add a kind only when pptx can draw it natively. [docs/decisions.md](../../docs/decisions.md) says why.
-- Put any other chart, such as a histogram or a fan chart, in an `Image`: a PNG drawn with `make-chart`. The pptx places it at its own aspect ratio, centered in the chart region.
+- Put any other chart, such as a histogram or a fan chart, in an `Image`: a PNG drawn with `make-chart`. The pptx places it at its own aspect ratio, centered in the chart region. Draw the PNG without `chart_header`: the slide title, the lead line and the footer already carry the claim, the metric and the source.
 - Series use the colors in order: `ink`, `accent`, `ochre`, `sage` and `sienna`.
 - Line charts add a second encoding. Series 1 is solid, series 2 dashed and series 3 dotted. Each point has a circle marker, and each series ends in a label.
 - A gray dashed line marks a reference, such as a target, with its label.
