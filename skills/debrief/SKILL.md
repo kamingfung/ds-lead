@@ -101,9 +101,3 @@ For several workstreams, follow [references/progress-update.md](references/progr
 - [references/progress-update.md](references/progress-update.md) covers status updates across several workstreams.
 - [references/summaries-and-qa.md](references/summaries-and-qa.md) holds summary patterns, ways to turn tables into charts, and answers to hard questions.
 - Slide layout lives in [../make-deck/SKILL.md](../make-deck/SKILL.md), and problem framing lives in [../solve/SKILL.md](../solve/SKILL.md).
-
-## Sources
-
-- Minto, B. _The Pyramid Principle: Logic in Writing and Thinking_ (Pearson, 2009).
-- Cheng, V. _Case Interview Secrets_ (Innovation Press, 2012). ISBN 978-0-9841835-3-1.
-- Cosentino, M. P. _Case in Point_, 9th ed. (Burgee Press, 2016). ISBN 978-0-9863707-1-7.
