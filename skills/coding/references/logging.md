@@ -12,18 +12,18 @@ Standards for structured, actionable logging across Python data and ML pipelines
 
 Pipeline orchestrators (such as Kedro, Dagster, Prefect, or Airflow) automatically emit:
 
-- **Node start and finish:** `Running node: ...` / `Completed node: ...`
+- **Step start and finish:** `Running step: ...` / `Completed step: ...`
 - **Dataset loading and saving:** `Loading data from ...` / `Saving data to ...`
 - **Task progress:** `Completed N out of M tasks`
 - **Pipeline completion time:** `Pipeline execution completed successfully in ...`
 
-Do not add `logger.info("Starting node X")` or `logger.info("Saving output")`.
+Do not add `logger.info("Starting step X")` or `logger.info("Saving output")`.
 
 ## 3. Mandatory Log Context
 
 Every `WARNING` and `ERROR` log must tell an on-call engineer what happened without opening a debugger:
 
-- **Entity:** dataset, node, or group identifier (`company_id`, `shuttle_type`)
+- **Entity:** dataset, step, or group identifier (`company_id`, `shuttle_type`)
 - **Time window:** date range or period affected (formatted as `YYYY-MM-DD`)
 - **Volume:** how many rows or groups the problem touched
 

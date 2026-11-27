@@ -62,13 +62,10 @@ The detail sits in [python-pipeline.md, Where explanation belongs](references/py
 - Compare outputs on `main` and on the branch before review when a change can move them.
 - A pure refactor or deletion shows that outputs are unchanged.
 
-## American English
+## Consistent Language Style
 
-Write American English in code, comments, commit messages and new names.
+Match the English variant of the repository in code, comments, commit messages and new names.
 
-- Use -ize and -ization, as in "normalize".
-- Use -or, as in "behavior".
-- Use one l before a suffix, as in "modeled" and "labeled".
-- Use -er, as in "center".
-- Words such as analysis, basis, exercise and surprise are spelled the same in both. Do not change them.
-- Keep an existing identifier's spelling, even when British. A rename is a separate change.
+- Pick one variant (such as American or British English) when starting a repository, and use it throughout.
+- Do not mix variants within a file or across new identifiers (for example, `normalize` and `colour` together).
+- Keep an existing identifier's spelling, even when it uses another variant. A rename is a separate change.
