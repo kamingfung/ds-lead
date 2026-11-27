@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ds-lead",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Agent skills for data science work that ends in a decision: plan the work, frame a falsifiable hypothesis, build tested pipeline code, review soundness first, and deliver answer-first messages, reports, HTML decks and colorblind-safe charts.",
   "author": {
     "name": "Ka Ming Fung",
