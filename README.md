@@ -176,11 +176,11 @@ Each rule lives in one skill; the others name it instead of repeating it.
 
 ## Customize colors and fonts
 
-All colors and font stacks live in two `palette.css` files, so you can rebrand decks and charts without touching code.
+Charts and decks keep their colors in two places today, so you can rebrand both without touching other code.
 
-- **Decks:** edit [`skills/make-deck/template/palette.css`](skills/make-deck/template/palette.css), or pass your own file with the same token names to `build(..., palette="my_palette.css")`. The `.pptx` exporter reads its theme colors from the deck's `:root` block.
-- **Charts:** edit [`skills/make-chart/palette.css`](skills/make-chart/palette.css), or set `CHART_STYLE_PALETTE=/path/to/palette.css` before importing `chart_style.py`.
-- **Shared tokens** (`--ink`, `--paper`, `--panel`, `--tint`, `--light`, `--blue`, `--red`, `--orange`, `--green`, `--sky`, `--purple`) must match in both files; [`test_palette.py`](skills/make-deck/template/test_palette.py) checks it.
+- **Decks:** edit the `Theme` fields in [`skills/make-deck/template/theme.py`](skills/make-deck/template/theme.py). Both renderers, HTML and `.pptx`, read the same `HOUSE` theme.
+- **Charts:** edit [`skills/make-chart/palette.css`](skills/make-chart/palette.css), or set `CHART_STYLE_PALETTE=/path/to/palette.css` before importing `chart_style.py`. [`skills/make-chart/README.md`](skills/make-chart/README.md) gives the steps and the color-distance test.
+- **Shared colors:** the deck's `ink`, `accent`, `loss`, `ochre`, `sage`, `sienna`, `highlight`, `light`, `panel`, `tint` and `paper` match the chart tokens of the same role. No test pins them yet, so change both files together.
 
 ## Releases
 
