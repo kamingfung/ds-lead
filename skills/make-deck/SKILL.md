@@ -89,8 +89,3 @@ The footer source line and the `Backup · Sources` slides come from the `Num` so
 | `gallery.py`     | The sample deck with one slide per layout, and the command that writes it.                                |
 
 The pptx renderer needs `python-pptx`, which installs `lxml` with it. The tests live in `template/tests/`.
-
-## Sources
-
-- Zelazny, G. _Say It with Charts_, 4th ed. (McGraw-Hill, 2001).
-- Minto, B. _The Pyramid Principle_ (Pearson, 2009).

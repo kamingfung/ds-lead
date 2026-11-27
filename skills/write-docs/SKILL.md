@@ -100,7 +100,3 @@ Write in the spirit of ASD-STE100 (Simplified Technical English) and _The Elemen
 - Split a table that is too wide; do not shrink its font.
 - Put equations in `$$ ... $$` or `$ ... $`; define every symbol and unit at first use.
 - Put supporting material that interrupts the reading flow in an appendix after the back matter.
-
-## Sources
-
-- Strunk, W., Jr., and White, E. B. _The Elements of Style_ (first published 1920; E. B. White's revision, Macmillan, 1959). <https://en.wikipedia.org/wiki/The_Elements_of_Style>. Section 3 follows its rules on positive form, needless words, parallel form, related words together and emphatic words at the end of a sentence. The wording here is our own.

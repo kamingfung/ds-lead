@@ -73,8 +73,3 @@ For the detailed rules, see [python-pipeline.md](../../coding/references/python-
 - [ ] The test suite passes.
 - [ ] The PR holds no unrelated refactor.
 - [ ] Review replies go out as one round with one summary.
-
-## Sources
-
-- Google, "What to look for in a code review", Google Engineering Practices Documentation. https://google.github.io/eng-practices/review/reviewer/looking-for.html (CC BY 3.0)
-- Microsoft, "Reviewer Guidance", Code-With Engineering Playbook. https://microsoft.github.io/code-with-engineering-playbook/code-reviews/process-guidance/reviewer-guidance/ (CC BY 4.0)

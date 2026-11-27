@@ -52,5 +52,3 @@ Solve a problem by testing a stated hypothesis, not by intuition. A clear hypoth
 3. **A framework that tests nothing.** Branches that no data can confirm or reject add structure without insight.
 4. **Hopping between branches.** Switching before a branch closes leaves every question half answered.
 5. **Ending with a list of activities.** A list of what the team did, instead of what it found, leaves the decision maker without an answer.
-
-Sources: [citations.md](citations.md).
