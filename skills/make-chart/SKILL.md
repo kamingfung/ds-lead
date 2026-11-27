@@ -36,7 +36,6 @@ license: MIT
 - Tests: run `pytest test_chart_style.py` from `skills/make-chart/`. The tests render every recipe.
 - Rendered recipes: [`examples/make-chart/`](../../examples/make-chart/).
 - Chart choice and encoding: [references/visualization.md](references/visualization.md).
-- Deck charts: [references/chart-grammar.md](references/chart-grammar.md) maps each recipe to its deck chart kind and its native PowerPoint route.
 
 ## Gotchas
 
